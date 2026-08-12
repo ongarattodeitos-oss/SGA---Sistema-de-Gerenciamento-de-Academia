@@ -38,7 +38,7 @@ public class CadastroActivity extends AppCompatActivity {
     // ==========================================
 
     private static final String URL_CADASTRO =
-            "https://sga-api.miguel-r-hoff.workers.dev/";
+            "https://sga-api.miguel-r-hoff.workers.dev/cadastro";
 
 
     @Override
