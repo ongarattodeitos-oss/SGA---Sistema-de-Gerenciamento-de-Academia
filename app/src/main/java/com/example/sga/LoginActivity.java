@@ -205,49 +205,43 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
 
-                            // ==================================
-                            // AQUI VAI A PRÓXIMA TELA
-                            // ==================================
+                            // ==========================================
+// ABRIR MAIN ACTIVITY
+// ==========================================
 
-                            /*
-                             *
-                             * Exemplo:
-                             *
-                             * Intent intent = new Intent(
-                             *      LoginActivity.this,
-                             *      MainActivity.class
-                             * );
-                             *
-                             * intent.putExtra(
-                             *      "id_user",
-                             *      idUser
-                             * );
-                             *
-                             * intent.putExtra(
-                             *      "nome_completo",
-                             *      nomeCompleto
-                             * );
-                             *
-                             * intent.putExtra(
-                             *      "nome_user",
-                             *      nomeUser
-                             * );
-                             *
-                             * intent.putExtra(
-                             *      "email",
-                             *      email
-                             * );
-                             *
-                             * intent.putExtra(
-                             *      "tipo",
-                             *      tipo
-                             * );
-                             *
-                             * startActivity(intent);
-                             *
-                             * finish();
-                             *
-                             */
+                            Intent intent = new Intent(
+                                    LoginActivity.this,
+                                    MainActivity.class
+                            );
+
+                            intent.putExtra(
+                                    "id_user",
+                                    idUser
+                            );
+
+                            intent.putExtra(
+                                    "nome_completo",
+                                    nomeCompleto
+                            );
+
+                            intent.putExtra(
+                                    "nome_user",
+                                    nomeUser
+                            );
+
+                            intent.putExtra(
+                                    "email",
+                                    email
+                            );
+
+                            intent.putExtra(
+                                    "tipo",
+                                    tipo
+                            );
+
+                            startActivity(intent);
+
+                            finish();
 
                         } catch (Exception e) {
 
