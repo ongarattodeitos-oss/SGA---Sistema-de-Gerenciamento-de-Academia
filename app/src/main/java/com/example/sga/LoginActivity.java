@@ -205,14 +205,36 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
 
-                            // ==========================================
-// ABRIR MAIN ACTIVITY
-// ==========================================
+                            Intent intent;
 
-                            Intent intent = new Intent(
-                                    LoginActivity.this,
-                                    MainActivity.class
-                            );
+                            if ("aluno".equalsIgnoreCase(tipo)) {
+
+                                intent = new Intent(
+                                        LoginActivity.this,
+                                        AlunoActivity.class
+                                );
+
+                            } else if ("professor".equalsIgnoreCase(tipo)) {
+
+                                intent = new Intent(
+                                        LoginActivity.this,
+                                        ProfessorActivity.class
+                                );
+
+                            } else {
+
+                                Toast.makeText(
+                                        LoginActivity.this,
+                                        "Tipo de usuário inválido.",
+                                        Toast.LENGTH_LONG
+                                ).show();
+
+                                return;
+                            }
+
+// ==========================================
+// ENVIA OS DADOS DO USUÁRIO
+// ==========================================
 
                             intent.putExtra(
                                     "id_user",
