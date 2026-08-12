@@ -89,6 +89,18 @@
             android:textSize="18sp"
             android:background="@drawable/bg_button"/>
 
+        <TextView
+            android:id="@+id/txtCriarConta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="14dp"
+            android:text="Não tem uma conta? Criar conta"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"/>
+
     </LinearLayout>
 
 </FrameLayout>
