@@ -1,10 +1,391 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AlunoActivity">
+    android:orientation="vertical"
+    android:background="#080B12">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- ================================================= -->
+    <!-- CONTEÚDO -->
+    <!-- ================================================= -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="24dp">
+
+            <!-- ========================================= -->
+            <!-- CABEÇALHO -->
+            <!-- ========================================= -->
+
+            <TextView
+                android:id="@+id/txtSaudacao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Olá, aluno!"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:letterSpacing="0.01" />
+
+            <TextView
+                android:id="@+id/txtSubtitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Seu progresso começa aqui."
+                android:textSize="15sp"
+                android:textColor="#8E9AAF" />
+
+            <!-- Linha decorativa -->
+
+            <View
+                android:layout_width="55dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="14dp"
+                android:background="#2df733" />
+
+
+            <!-- ========================================= -->
+            <!-- CARDS DE INDICADORES -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
+
+                <!-- PRESENÇA -->
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="135dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="7dp"
+                    android:orientation="vertical"
+                    android:padding="18dp"
+                    android:background="#111722">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PRESENÇA"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#7F8CA3"
+                        android:letterSpacing="0.08" />
+
+                    <TextView
+                        android:id="@+id/txtDiasPresenca"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="#2df733" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="dias este mês"
+                        android:textSize="12sp"
+                        android:textColor="#657086" />
+
+                </LinearLayout>
+
+
+                <!-- IMC -->
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="135dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="7dp"
+                    android:orientation="vertical"
+                    android:padding="18dp"
+                    android:background="#111722">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="IMC"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#7F8CA3"
+                        android:letterSpacing="0.08" />
+
+                    <TextView
+                        android:id="@+id/txtIMC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="0,0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="índice corporal"
+                        android:textSize="12sp"
+                        android:textColor="#657086" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- STATUS -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:paddingStart="16dp"
+                android:paddingTop="13dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="13dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="#0E1717">
+
+                <View
+                    android:layout_width="9dp"
+                    android:layout_height="9dp"
+                    android:background="#35E88A" />
+
+                <TextView
+                    android:id="@+id/txtStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="STATUS  •  ALUNO ATIVO"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#35E88A"
+                    android:letterSpacing="0.06" />
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- MINHA META -->
+            <!-- ========================================= -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="MINHA META"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#7F8CA3"
+                android:letterSpacing="0.12" />
+
+            <LinearLayout
+                android:id="@+id/cardMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="#111722">
+
+                <TextView
+                    android:id="@+id/txtMeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nenhuma meta definida"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Defina um objetivo e acompanhe sua evolução."
+                    android:textSize="13sp"
+                    android:textColor="#707D92" />
+
+                <!-- Barra de progresso -->
+
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="18dp"
+                    android:progress="0"
+                    android:max="100"
+                    android:indeterminate="false"
+                    android:progressTint="#2df733"
+                    android:backgroundTint="#202938" />
+
+                <Button
+                    android:id="@+id/btnNovaMeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:text="+  DEFINIR NOVA META"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#080B12"
+                    android:backgroundTint="#2df733" />
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- TREINO ATUAL -->
+            <!-- ========================================= -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="TREINO ATUAL"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#7F8CA3"
+                android:letterSpacing="0.12" />
+
+            <LinearLayout
+                android:id="@+id/cardTreino"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="#111722">
+
+                <TextView
+                    android:id="@+id/txtNomeTreino"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nenhum treino selecionado"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/txtDescricaoTreino"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Seu treino aparecerá aqui."
+                    android:textSize="13sp"
+                    android:textColor="#707D92" />
+
+                <Button
+                    android:id="@+id/btnVerTreino"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="18dp"
+                    android:text="VER TREINO  →"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#182334" />
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- DEFINIR TREINO -->
+            <!-- ========================================= -->
+
+            <Button
+                android:id="@+id/btnNovoTreino"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="14dp"
+                android:text="+  DEFINIR TREINO"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#2df733"
+                android:backgroundTint="#101923" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <!-- ================================================= -->
+    <!-- NAVEGAÇÃO INFERIOR -->
+    <!-- ================================================= -->
+
+    <LinearLayout
+        android:id="@+id/menuInferior"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#0B0F17"
+        android:elevation="12dp">
+
+        <Button
+            android:id="@+id/btnInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="⌂\nINÍCIO"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="#2df733"
+            android:backgroundTint="#0B0F17" />
+
+        <Button
+            android:id="@+id/btnTreinos"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="◈\nTREINOS"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="#657086"
+            android:backgroundTint="#0B0F17" />
+
+        <Button
+            android:id="@+id/btnPlanos"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="◇\nPLANOS"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="#657086"
+            android:backgroundTint="#0B0F17" />
+
+        <Button
+            android:id="@+id/btnPerfil"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="◎\nPERFIL"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="#657086"
+            android:backgroundTint="#0B0F17" />
+
+    </LinearLayout>
+
+</LinearLayout>
+    ```

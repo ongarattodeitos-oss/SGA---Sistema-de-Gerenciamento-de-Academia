@@ -256,11 +256,6 @@ public class LoginActivity extends AppCompatActivity {
                                     email
                             );
 
-                            intent.putExtra(
-                                    "tipo",
-                                    tipo
-                            );
-
                             startActivity(intent);
 
                             finish();
