@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SGA">
         <activity
+            android:name=".OpcoesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfessorActivity"
             android:exported="false" />
         <activity
