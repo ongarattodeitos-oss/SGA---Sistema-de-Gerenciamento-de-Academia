@@ -155,6 +155,11 @@ public class LoginActivity extends AppCompatActivity {
                                             "id_user"
                                     );
 
+                            preferences.edit()
+                                    .putInt("id_user", idUser)
+                                    .apply();
+
+
                             String nomeCompleto =
                                     usuarioJson.getString(
                                             "nome_completo"
@@ -194,9 +199,20 @@ public class LoginActivity extends AppCompatActivity {
 
                             } else {
 
-                                preferences.edit()
-                                        .clear()
-                                        .apply();
+                                if (checkLembrar.isChecked()) {
+
+                                    preferences.edit()
+                                            .putBoolean("lembrar", true)
+                                            .putString("usuario", usuario)
+                                            .apply();
+
+                                } else {
+
+                                    preferences.edit()
+                                            .remove("lembrar")
+                                            .remove("usuario")
+                                            .apply();
+                                }
                             }
 
                             Toast.makeText(
