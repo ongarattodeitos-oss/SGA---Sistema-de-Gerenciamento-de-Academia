@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menuInferiorProfessor"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="#0B0F17"
+    android:elevation="12dp">
+
+    <!-- INÍCIO -->
+
+    <Button
+        android:id="@+id/btnInicioProfessor"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="⌂\nINÍCIO"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#03C6FC"
+        android:backgroundTint="#0B0F17" />
+
+    <!-- ALUNOS -->
+
+    <Button
+        android:id="@+id/btnAlunosProfessor"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="◈\nALUNOS"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#657086"
+        android:backgroundTint="#0B0F17" />
+
+    <!-- TREINOS -->
+
+    <Button
+        android:id="@+id/btnTreinosProfessor"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="◇\nTREINOS"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#657086"
+        android:backgroundTint="#0B0F17" />
+
+    <!-- PERFIL -->
+
+    <Button
+        android:id="@+id/btnPerfilProfessor"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="◎\nPERFIL"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#657086"
+        android:backgroundTint="#0B0F17" />
+
+</LinearLayout>

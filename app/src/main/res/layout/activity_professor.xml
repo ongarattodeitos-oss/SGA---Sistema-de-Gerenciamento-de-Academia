@@ -1,11 +1,411 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#153FDE"
-    tools:context=".ProfessorActivity">
+    android:orientation="vertical"
+    android:background="#080B12">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- ================================================= -->
+    <!-- CONTEÚDO -->
+    <!-- ================================================= -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="24dp">
+
+            <!-- ========================================= -->
+            <!-- CABEÇALHO -->
+            <!-- ========================================= -->
+
+            <TextView
+                android:id="@+id/txtSaudacaoProfessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Olá, professor!"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:letterSpacing="0.01" />
+
+            <TextView
+                android:id="@+id/txtSubtituloProfessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Acompanhe seus alunos e treinos."
+                android:textSize="15sp"
+                android:textColor="#8E9AAF" />
+
+            <!-- Linha decorativa -->
+
+            <View
+                android:layout_width="55dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="14dp"
+                android:background="#03C6FC" />
+
+
+            <!-- ========================================= -->
+            <!-- CARDS DE INDICADORES -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
+
+                <!-- ALUNOS -->
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="135dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="7dp"
+                    android:orientation="vertical"
+                    android:padding="18dp"
+                    android:background="#111722">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ALUNOS"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#7F8CA3"
+                        android:letterSpacing="0.08" />
+
+                    <TextView
+                        android:id="@+id/txtQuantidadeAlunos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="#03C6FC" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="alunos acompanhados"
+                        android:textSize="12sp"
+                        android:textColor="#657086" />
+
+                </LinearLayout>
+
+
+                <!-- TREINOS -->
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="135dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="7dp"
+                    android:orientation="vertical"
+                    android:padding="18dp"
+                    android:background="#111722">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TREINOS"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#7F8CA3"
+                        android:letterSpacing="0.08" />
+
+                    <TextView
+                        android:id="@+id/txtQuantidadeTreinos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="treinos ativos"
+                        android:textSize="12sp"
+                        android:textColor="#657086" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- STATUS -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:paddingStart="16dp"
+                android:paddingTop="13dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="13dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="#0D171D">
+
+                <View
+                    android:layout_width="9dp"
+                    android:layout_height="9dp"
+                    android:background="#03C6FC" />
+
+                <TextView
+                    android:id="@+id/txtStatusProfessor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="STATUS  •  PROFESSOR ATIVO"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#03C6FC"
+                    android:letterSpacing="0.06" />
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- MEUS ALUNOS -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:id="@+id/cardAlunos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@drawable/bg_card_professor">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.12"
+                    android:text="MEUS ALUNOS"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtAlunoDestaque"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="Nenhum aluno selecionado"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/txtInfoAlunoDestaque"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Seus alunos aparecerão aqui."
+                    android:textSize="13sp"
+                    android:textColor="#707D92" />
+
+                <Button
+                    android:id="@+id/btnVerAlunos"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="18dp"
+                    android:text="VER MEUS ALUNOS  →"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#182334" />
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- TREINOS -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:id="@+id/cardTreinos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@drawable/bg_card_professor">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.12"
+                    android:text="TREINOS"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtTreinoDestaque"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="Nenhum treino recente"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/txtInfoTreinoDestaque"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Os treinos dos seus alunos aparecerão aqui."
+                    android:textSize="13sp"
+                    android:textColor="#707D92" />
+
+                <Button
+                    android:id="@+id/btnGerenciarTreinos"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="18dp"
+                    android:text="GERENCIAR TREINOS  →"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#182334" />
+
+            </LinearLayout>
+
+
+            <!-- ========================================= -->
+            <!-- AVALIAÇÕES FÍSICAS -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:id="@+id/cardAvaliacoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@drawable/bg_card_professor">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.12"
+                    android:text="AVALIAÇÕES FÍSICAS"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="Acompanhamento físico"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/txtResumoAvaliacoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Nenhuma avaliação registrada."
+                    android:textSize="13sp"
+                    android:textColor="#707D92" />
+
+                <Button
+                    android:id="@+id/btnAvaliacoesFisicas"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:text="VER AVALIAÇÕES  →"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#182334" />
+
+            </LinearLayout>
+
+            <!-- ========================================= -->
+            <!-- AÇÕES RÁPIDAS -->
+            <!-- ========================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@drawable/bg_card_professor">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.12"
+                    android:text="AÇÕES RÁPIDAS"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnCriarTreino"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="18dp"
+                    android:backgroundTint="#1E262F"
+                    android:text="+  CRIAR TREINO"
+                    android:textColor="#03C6FC"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnNovaAvaliacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#1E262F"
+                    android:text="+  NOVA AVALIAÇÃO"
+                    android:textColor="#03C6FC"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <!-- ================================================= -->
+    <!-- MENU INFERIOR -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/menuProfessor"
+        layout="@layout/menu_professor" />
+
+</LinearLayout>
