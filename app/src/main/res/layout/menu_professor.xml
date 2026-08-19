@@ -2,6 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menuInferiorProfessor"
     android:layout_width="match_parent"
     android:layout_height="72dp"
@@ -16,7 +17,7 @@
 
     <!-- INÍCIO -->
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnInicioProfessor"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -27,11 +28,15 @@
         android:textStyle="bold"
         android:textColor="#03C6FC"
         android:background="@drawable/bg_menu_professor"
-        android:padding="0dp" />
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
 
     <!-- ALUNOS -->
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnAlunosProfessor"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -43,11 +48,15 @@
         android:textStyle="bold"
         android:textColor="#657086"
         android:background="@drawable/bg_menu_professor"
-        android:padding="0dp" />
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
 
     <!-- TREINOS -->
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnTreinosProfessor"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -59,11 +68,15 @@
         android:textStyle="bold"
         android:textColor="#657086"
         android:background="@drawable/bg_menu_professor"
-        android:padding="0dp" />
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
 
     <!-- PERFIL -->
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnPerfilProfessor"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -74,6 +87,10 @@
         android:textStyle="bold"
         android:textColor="#657086"
         android:background="@drawable/bg_menu_professor"
-        android:padding="0dp" />
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
 
 </LinearLayout>
