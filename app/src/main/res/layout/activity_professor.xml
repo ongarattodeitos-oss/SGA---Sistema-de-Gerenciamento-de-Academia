@@ -21,8 +21,10 @@
         android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#0B0B0C"
             android:orientation="vertical"
             android:paddingStart="20dp"
             android:paddingTop="24dp"
@@ -37,11 +39,11 @@
                 android:id="@+id/txtSaudacaoProfessor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:letterSpacing="0.01"
                 android:text="Olá, professor!"
-                android:textSize="30sp"
-                android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:letterSpacing="0.01" />
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtSubtituloProfessor"
@@ -49,8 +51,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Acompanhe seus alunos e treinos."
-                android:textSize="15sp"
-                android:textColor="#8E9AAF" />
+                android:textColor="#8E9AAF"
+                android:textSize="15sp" />
 
             <!-- Linha decorativa -->
 
@@ -76,20 +78,20 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="135dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_professor"
                     android:orientation="vertical"
-                    android:padding="18dp"
-                    android:background="#111722">
+                    android:padding="18dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:letterSpacing="0.08"
                         android:text="ALUNOS"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
                         android:textColor="#7F8CA3"
-                        android:letterSpacing="0.08" />
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtQuantidadeAlunos"
@@ -97,16 +99,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="0"
+                        android:textColor="#03C6FC"
                         android:textSize="32sp"
-                        android:textStyle="bold"
-                        android:textColor="#03C6FC" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="alunos acompanhados"
-                        android:textSize="12sp"
-                        android:textColor="#657086" />
+                        android:textColor="#657086"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -116,20 +118,20 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="135dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_professor"
                     android:orientation="vertical"
-                    android:padding="18dp"
-                    android:background="#111722">
+                    android:padding="18dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:letterSpacing="0.08"
                         android:text="TREINOS"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
                         android:textColor="#7F8CA3"
-                        android:letterSpacing="0.08" />
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtQuantidadeTreinos"
@@ -137,16 +139,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="0"
+                        android:textColor="#FFFFFF"
                         android:textSize="32sp"
-                        android:textStyle="bold"
-                        android:textColor="#FFFFFF" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="treinos ativos"
-                        android:textSize="12sp"
-                        android:textColor="#657086" />
+                        android:textColor="#657086"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -161,13 +163,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
+                android:background="@drawable/bg_card_professor"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
                 android:paddingTop="13dp"
                 android:paddingEnd="16dp"
-                android:paddingBottom="13dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:background="#0D171D">
+                android:paddingBottom="13dp">
 
                 <View
                     android:layout_width="9dp"
@@ -179,14 +181,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:letterSpacing="0.06"
                     android:text="STATUS  •  PROFESSOR ATIVO"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     android:textColor="#03C6FC"
-                    android:letterSpacing="0.06" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
-
 
             <!-- ========================================= -->
             <!-- MEUS ALUNOS -->
@@ -197,9 +198,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:background="@drawable/bg_card_professor"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@drawable/bg_card_professor">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -216,9 +217,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
                     android:text="Nenhum aluno selecionado"
+                    android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtInfoAlunoDestaque"
@@ -226,19 +227,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:text="Seus alunos aparecerão aqui."
-                    android:textSize="13sp"
-                    android:textColor="#707D92" />
+                    android:textColor="#707D92"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnVerAlunos"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="18dp"
+                    android:backgroundTint="#182334"
                     android:text="VER MEUS ALUNOS  →"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#182334" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -252,9 +253,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card_professor"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@drawable/bg_card_professor">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -271,9 +272,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
                     android:text="Nenhum treino recente"
+                    android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtInfoTreinoDestaque"
@@ -281,19 +282,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:text="Os treinos dos seus alunos aparecerão aqui."
-                    android:textSize="13sp"
-                    android:textColor="#707D92" />
+                    android:textColor="#707D92"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnGerenciarTreinos"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="18dp"
+                    android:backgroundTint="#182334"
                     android:text="GERENCIAR TREINOS  →"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#182334" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -307,9 +308,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card_professor"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@drawable/bg_card_professor">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -325,9 +326,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
                     android:text="Acompanhamento físico"
+                    android:textColor="#FFFFFF"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtResumoAvaliacoes"
@@ -335,19 +336,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:text="Nenhuma avaliação registrada."
-                    android:textSize="13sp"
-                    android:textColor="#707D92" />
+                    android:textColor="#707D92"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/btnAvaliacoesFisicas"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="16dp"
+                    android:backgroundTint="#182334"
                     android:text="VER AVALIAÇÕES  →"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#182334" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -359,9 +360,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card_professor"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@drawable/bg_card_professor">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
