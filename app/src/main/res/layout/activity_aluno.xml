@@ -356,7 +356,12 @@
                     android:text="Nenhum documento anexado."
                     android:textSize="13sp"
                     android:textColor="#657086" />
-
+                <LinearLayout
+                    android:id="@+id/listaExames"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical" />
                 <TextView
                     android:id="@+id/txtNomeDocumento"
                     android:layout_width="match_parent"

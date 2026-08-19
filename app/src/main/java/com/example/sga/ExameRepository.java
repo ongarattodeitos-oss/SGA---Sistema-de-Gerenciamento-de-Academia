@@ -9,6 +9,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class ExameRepository {
 
@@ -302,7 +304,83 @@ public class ExameRepository {
 
         void onError(String mensagem);
     }
+    public interface ListaExamesCallback {
 
+        void onSuccess(
+                org.json.JSONArray exames
+        );
+
+        void onError(
+                String mensagem
+        );
+    }
+// =================================================
+// LISTAR EXAMES DO USUÁRIO
+// =================================================
+
+    public void listarExames(
+            int idUser,
+            ListaExamesCallback callback
+    ) {
+
+        String url =
+                URL_EXAMES + "/" + idUser;
+
+        JsonObjectRequest request =
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        url,
+                        null,
+
+                        response -> {
+
+                            try {
+
+                                boolean sucesso =
+                                        response.getBoolean(
+                                                "success"
+                                        );
+
+                                if (sucesso) {
+
+                                    org.json.JSONArray exames =
+                                            response.getJSONArray(
+                                                    "exames"
+                                            );
+
+                                    callback.onSuccess(
+                                            exames
+                                    );
+
+                                } else {
+
+                                    String erro =
+                                            response.optString(
+                                                    "error",
+                                                    "Erro ao buscar exames."
+                                            );
+
+                                    callback.onError(
+                                            erro
+                                    );
+                                }
+
+                            } catch (JSONException e) {
+
+                                callback.onError(
+                                        "Resposta inválida da API."
+                                );
+                            }
+                        },
+
+                        error ->
+                                callback.onError(
+                                        "Não foi possível buscar os exames."
+                                )
+                );
+
+        requestQueue.add(request);
+    }
     // =================================================
     // MULTIPART REQUEST
     // =================================================
@@ -405,14 +483,97 @@ public class ExameRepository {
             ByteArrayOutputStream output =
                     new ByteArrayOutputStream();
 
-            // código que monta o multipart
+            try {
 
-            return output.toByteArray();
+                // ==========================================
+                // CAMPOS DE TEXTO
+                // ==========================================
+
+                for (Map.Entry<String, String> entry
+                        : params.entrySet()) {
+
+                    output.write(
+                            ("--" + boundary + "\r\n")
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            ("Content-Disposition: form-data; name=\""
+                                    + entry.getKey()
+                                    + "\"\r\n\r\n")
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            entry.getValue()
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            "\r\n"
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+                }
+
+
+                // ==========================================
+                // ARQUIVOS
+                // ==========================================
+
+                for (Map.Entry<String, FilePart> entry
+                        : files.entrySet()) {
+
+                    FilePart file =
+                            entry.getValue();
+
+                    output.write(
+                            ("--" + boundary + "\r\n")
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            ("Content-Disposition: form-data; name=\""
+                                    + entry.getKey()
+                                    + "\"; filename=\""
+                                    + file.fileName
+                                    + "\"\r\n")
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            ("Content-Type: "
+                                    + file.mimeType
+                                    + "\r\n\r\n")
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(file.data);
+
+                    output.write(
+                            "\r\n"
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+                }
+
+
+                // ==========================================
+                // FINALIZA O MULTIPART
+                // ==========================================
+
+                output.write(
+                        ("--" + boundary + "--\r\n")
+                                .getBytes(StandardCharsets.UTF_8)
+                );
+
+                return output.toByteArray();
+
+            } catch (IOException e) {
+
+                throw new AuthFailureError(
+                        e.getMessage()
+                );
+            }
         }
-        // =================================================
-        // RESPOSTA DA API
-        // =================================================
-
         @Override
         protected Response<JSONObject>
         parseNetworkResponse(
