@@ -8,6 +8,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,6 +44,22 @@ public class LoginActivity extends AppCompatActivity {
         checkLembrar = findViewById(R.id.checkLembrar);
         btnLogin = findViewById(R.id.btnLogin);
         txtCriarConta = findViewById(R.id.txtCriarConta);
+
+        String texto = "Não tem uma conta? Criar conta";
+
+        SpannableString spannable = new SpannableString(texto);
+
+        int inicio = texto.indexOf("Criar conta");
+        int fim = inicio + "Criar conta".length();
+
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.rgb(38, 217, 22)),
+                inicio,
+                fim,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        txtCriarConta.setText(spannable);
 
         // ==========================================
         // REPOSITORY
@@ -197,15 +217,6 @@ public class LoginActivity extends AppCompatActivity {
                                         )
                                         .apply();
 
-                            } else {
-
-                                if (checkLembrar.isChecked()) {
-
-                                    preferences.edit()
-                                            .putBoolean("lembrar", true)
-                                            .putString("usuario", usuario)
-                                            .apply();
-
                                 } else {
 
                                     preferences.edit()
@@ -213,7 +224,6 @@ public class LoginActivity extends AppCompatActivity {
                                             .remove("usuario")
                                             .apply();
                                 }
-                            }
 
                             Toast.makeText(
                                     LoginActivity.this,

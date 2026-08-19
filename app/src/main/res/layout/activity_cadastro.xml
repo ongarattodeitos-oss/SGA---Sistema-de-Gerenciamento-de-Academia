@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Imagem de Fundo -->
+    <!-- FOTO DE FUNDO -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/cadastrobackground"
         android:scaleType="centerCrop" />
 
-    <!-- Overlay de Escurecimento -->
+    <!-- OVERLAY ESCURO -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#80000000" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none">
-
-        <!-- Container Card (Glassmorphism) -->
+        <!-- CARD GLASS -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="24dp"
-            android:layout_marginVertical="32dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginBottom="90dp"
             android:background="@drawable/bg_glass"
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Cabeçalho -->
+            <!-- ============================= -->
+            <!-- CABEÇALHO -->
+            <!-- ============================= -->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +51,10 @@
                 android:textColor="#B3FFFFFF"
                 android:textSize="14sp" />
 
-            <!-- Nome Completo -->
+            <!-- ============================= -->
+            <!-- NOME -->
+            <!-- ============================= -->
+
             <EditText
                 android:id="@+id/edtNome"
                 android:layout_width="match_parent"
@@ -65,7 +67,10 @@
                 android:textColorHint="#80FFFFFF"
                 android:textSize="14sp" />
 
-            <!-- E-mail -->
+            <!-- ============================= -->
+            <!-- EMAIL -->
+            <!-- ============================= -->
+
             <EditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
@@ -79,7 +84,10 @@
                 android:textColorHint="#80FFFFFF"
                 android:textSize="14sp" />
 
-            <!-- Telefone -->
+            <!-- ============================= -->
+            <!-- TELEFONE -->
+            <!-- ============================= -->
+
             <EditText
                 android:id="@+id/edtTelefone"
                 android:layout_width="match_parent"
@@ -93,7 +101,10 @@
                 android:textColorHint="#80FFFFFF"
                 android:textSize="14sp" />
 
-            <!-- Linha Dupla: CPF e Data de Nascimento -->
+            <!-- ============================= -->
+            <!-- CPF + DATA -->
+            <!-- ============================= -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,9 +138,13 @@
                     android:textColor="#FFFFFF"
                     android:textColorHint="#80FFFFFF"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
-            <!-- Usuário -->
+            <!-- ============================= -->
+            <!-- USUÁRIO -->
+            <!-- ============================= -->
+
             <EditText
                 android:id="@+id/edtUsuario"
                 android:layout_width="match_parent"
@@ -143,7 +158,10 @@
                 android:textColorHint="#80FFFFFF"
                 android:textSize="14sp" />
 
-            <!-- Linha Dupla: Senha e Confirmar Senha -->
+            <!-- ============================= -->
+            <!-- SENHA + CONFIRMAR -->
+            <!-- ============================= -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -177,21 +195,31 @@
                     android:textColor="#FFFFFF"
                     android:textColorHint="#80FFFFFF"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
-            <!-- Botão Cadastrar -->
-            <Button
+            <!-- ============================= -->
+            <!-- BOTÃO CADASTRAR -->
+            <!-- ============================= -->
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCadastrar"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_button"
+                android:backgroundTint="@null"
+                android:stateListAnimator="@null"
+                android:padding="0dp"
                 android:text="CADASTRAR"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <!-- Link para Login -->
+            <!-- ============================= -->
+            <!-- VOLTAR PARA LOGIN -->
+            <!-- ============================= -->
+
             <TextView
                 android:id="@+id/txtLogin"
                 android:layout_width="wrap_content"
@@ -200,10 +228,12 @@
                 android:layout_marginTop="16dp"
                 android:padding="8dp"
                 android:text="Já possui uma conta? Entrar"
-                android:textColor="#BB86FC"
+                android:textColor="#ffffff"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true" />
 
         </LinearLayout>
-    </ScrollView>
+
 </FrameLayout>

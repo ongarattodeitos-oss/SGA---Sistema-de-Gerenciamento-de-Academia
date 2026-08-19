@@ -5,6 +5,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +34,6 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText edtConfirmarSenha;
 
     private Button btnCadastrar;
-    private TextView txtLogin;
 
 
     // ==========================================
@@ -65,7 +68,23 @@ public class CadastroActivity extends AppCompatActivity {
         edtConfirmarSenha = findViewById(R.id.edtConfirmarSenha);
 
         btnCadastrar = findViewById(R.id.btnCadastrar);
-        txtLogin = findViewById(R.id.txtLogin);
+        TextView txtLogin = findViewById(R.id.txtLogin);
+
+        String texto = "Já possui uma conta? Entrar";
+
+        SpannableString spannable = new SpannableString(texto);
+
+        int inicio = texto.indexOf("Entrar");
+        int fim = inicio + "Entrar".length();
+
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.rgb(38, 217, 22)),
+                inicio,
+                fim,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        txtLogin.setText(spannable);
 
 
         // ==========================================

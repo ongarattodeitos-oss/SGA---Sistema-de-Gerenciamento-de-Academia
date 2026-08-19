@@ -78,7 +78,7 @@
             android:buttonTint="#26D916"
             android:layout_marginTop="10dp"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -87,7 +87,10 @@
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:background="@drawable/bg_button"/>
+            android:background="@drawable/bg_button"
+            android:backgroundTint="@null"
+            android:stateListAnimator="@null"
+            android:padding="0dp" />
 
         <TextView
             android:id="@+id/txtCriarConta"
@@ -98,6 +101,7 @@
             android:text="Não tem uma conta? Criar conta"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
+            android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"/>
 
