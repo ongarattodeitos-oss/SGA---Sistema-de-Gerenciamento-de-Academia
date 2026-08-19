@@ -8,7 +8,11 @@
     android:orientation="horizontal"
     android:gravity="center"
     android:background="#0B0F17"
-    android:elevation="12dp">
+    android:elevation="12dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp">
 
     <!-- INÍCIO -->
 
@@ -17,11 +21,13 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="⌂\nINÍCIO"
+        android:layout_marginEnd="4dp"
+        android:text="⌂&#10;INÍCIO"
         android:textSize="10sp"
         android:textStyle="bold"
         android:textColor="#03C6FC"
-        android:backgroundTint="#0B0F17" />
+        android:background="@drawable/bg_menu_professor"
+        android:padding="0dp" />
 
     <!-- ALUNOS -->
 
@@ -30,11 +36,14 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="◈\nALUNOS"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="◈&#10;ALUNOS"
         android:textSize="10sp"
         android:textStyle="bold"
         android:textColor="#657086"
-        android:backgroundTint="#0B0F17" />
+        android:background="@drawable/bg_menu_professor"
+        android:padding="0dp" />
 
     <!-- TREINOS -->
 
@@ -43,11 +52,14 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="◇\nTREINOS"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="◇&#10;TREINOS"
         android:textSize="10sp"
         android:textStyle="bold"
         android:textColor="#657086"
-        android:backgroundTint="#0B0F17" />
+        android:background="@drawable/bg_menu_professor"
+        android:padding="0dp" />
 
     <!-- PERFIL -->
 
@@ -56,10 +68,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="◎\nPERFIL"
+        android:layout_marginStart="4dp"
+        android:text="◎&#10;PERFIL"
         android:textSize="10sp"
         android:textStyle="bold"
         android:textColor="#657086"
-        android:backgroundTint="#0B0F17" />
+        android:background="@drawable/bg_menu_professor"
+        android:padding="0dp" />
 
 </LinearLayout>
