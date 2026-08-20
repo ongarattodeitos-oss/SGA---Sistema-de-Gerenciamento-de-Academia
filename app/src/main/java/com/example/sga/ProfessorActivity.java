@@ -70,7 +70,8 @@ public class ProfessorActivity extends AppCompatActivity {
         // =========================================================
 
         btnAlunos.setOnClickListener(v -> {
-
+            Intent intent = new Intent (ProfessorActivity.this, AlunosListaActivity.class);
+            startActivity(intent);
             selecionarBotao(btnAlunos);
 
         });

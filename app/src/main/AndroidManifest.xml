@@ -14,10 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SGA">
         <activity
-            android:name=".FotoPerfilRepository"
-            android:exported="false" />
+            android:name=".PerfilActivity"/>
         <activity
-            android:name=".PerfilActivity"
+            android:name=".AlunosListaActivity"
             android:exported="false" />
         <activity
             android:name=".OpcoesActivity"
