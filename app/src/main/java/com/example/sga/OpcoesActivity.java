@@ -1,5 +1,6 @@
 package com.example.sga;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -81,7 +82,13 @@ public class OpcoesActivity extends AppCompatActivity {
 
         btnPerfil.setOnClickListener(v -> {
 
-            mostrarOpcao("perfil");
+            Intent intent =
+                    new Intent(
+                            OpcoesActivity.this,
+                            PerfilActivity.class
+                    );
+
+            startActivity(intent);
 
         });
 

@@ -162,7 +162,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(
-                            JSONObject usuarioJson
+                            JSONObject usuarioJson,
+                            String token
                     ) {
 
                         btnLogin.setEnabled(true);
@@ -174,9 +175,19 @@ public class LoginActivity extends AppCompatActivity {
                                     usuarioJson.getInt(
                                             "id_user"
                                     );
-
+                            preferences.edit()
+                                    .putInt(
+                                            "id_user",
+                                            idUser
+                                    )
+                                    .putString(
+                                            "token",
+                                            token
+                                    )
+                                    .apply();
                             preferences.edit()
                                     .putInt("id_user", idUser)
+                                    .putString("token", token)
                                     .apply();
 
 

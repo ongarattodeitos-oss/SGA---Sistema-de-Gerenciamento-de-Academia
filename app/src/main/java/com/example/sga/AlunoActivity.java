@@ -115,7 +115,7 @@ public class AlunoActivity extends AppCompatActivity {
         // BOTÃO PERFIL
         // ==========================================
         btnPerfil.setOnClickListener(v -> {
-            Intent intent = new Intent(AlunoActivity.this, OpcoesActivity.class);
+            Intent intent = new Intent(AlunoActivity.this, PerfilActivity.class);
             intent.putExtra("opcao", "perfil");
             startActivity(intent);
         });

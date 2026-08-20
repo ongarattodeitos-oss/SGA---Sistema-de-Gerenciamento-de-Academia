@@ -58,7 +58,13 @@ public class LoginRepository {
                             JSONObject usuarioJson =
                                     response.getJSONObject("usuario");
 
-                            callback.onSuccess(usuarioJson);
+                            String token =
+                                    response.getString("token");
+
+                            callback.onSuccess(
+                                    usuarioJson,
+                                    token
+                            );
 
                         } else {
 
@@ -148,7 +154,10 @@ public class LoginRepository {
 
     public interface LoginCallback {
 
-        void onSuccess(JSONObject usuario);
+        void onSuccess(
+                JSONObject usuario,
+                String token
+        );
 
         void onError(String mensagem);
     }
