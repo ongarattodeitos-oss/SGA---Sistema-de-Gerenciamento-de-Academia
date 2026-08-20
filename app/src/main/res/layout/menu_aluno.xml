@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menuAluno"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="#0B0F17"
+    android:elevation="12dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp">
+
+    <!-- INÍCIO -->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnInicio"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginEnd="4dp"
+        android:text="⌂&#10;INÍCIO"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#2DF733"
+        android:background="@drawable/bg_menu_professor"
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
+
+    <!-- TREINOS -->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnTreinos"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="◈&#10;TREINOS"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#657086"
+        android:background="@drawable/bg_menu_professor"
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
+
+    <!-- PLANOS -->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPlanos"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="◇&#10;PLANOS"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#657086"
+        android:background="@drawable/bg_menu_professor"
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
+
+    <!-- PERFIL -->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPerfil"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="4dp"
+        android:text="◎&#10;PERFIL"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="#657086"
+        android:background="@drawable/bg_menu_professor"
+        app:backgroundTint="@null"
+        android:padding="0dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null" />
+
+</LinearLayout>

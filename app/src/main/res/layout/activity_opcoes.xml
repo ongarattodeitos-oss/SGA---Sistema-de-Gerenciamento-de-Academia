@@ -284,75 +284,8 @@
     </ScrollView>
 
 
-    <!-- ================================================= -->
-    <!-- MENU INFERIOR -->
-    <!-- ================================================= -->
-
-    <LinearLayout
-        android:id="@+id/menuInferiorOpcoes"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="#0B0F17"
-        android:elevation="12dp">
-
-
-        <!-- INÍCIO -->
-
-        <Button
-            android:id="@+id/btnInicioOpcoes"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="⌂\nINÍCIO"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:textColor="#657086"
-            android:backgroundTint="#0B0F17" />
-
-
-        <!-- TREINOS -->
-
-        <Button
-            android:id="@+id/btnTreinosOpcoes"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="◈\nTREINOS"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:textColor="#2df733"
-            android:backgroundTint="#0B0F17" />
-
-
-        <!-- PLANOS -->
-
-        <Button
-            android:id="@+id/btnPlanosOpcoes"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="◇\nPLANOS"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:textColor="#657086"
-            android:backgroundTint="#0B0F17" />
-
-
-        <!-- PERFIL -->
-
-        <Button
-            android:id="@+id/btnPerfilOpcoes"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="◎\nPERFIL"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:textColor="#657086"
-            android:backgroundTint="#0B0F17" />
-
-    </LinearLayout>
+    <include
+        android:id="@+id/menuAluno"
+        layout="@layout/menu_aluno" />
 
 </LinearLayout>

@@ -29,10 +29,10 @@ public class OpcoesActivity extends AppCompatActivity {
         txtTitulo = findViewById(R.id.txtTituloOpcao);
         txtSubtitulo = findViewById(R.id.txtSubtituloOpcao);
 
-        btnInicio = findViewById(R.id.btnInicioOpcoes);
-        btnTreinos = findViewById(R.id.btnTreinosOpcoes);
-        btnPlanos = findViewById(R.id.btnPlanosOpcoes);
-        btnPerfil = findViewById(R.id.btnPerfilOpcoes);
+        btnInicio = findViewById(R.id.btnInicio);
+        btnTreinos = findViewById(R.id.btnTreinos);
+        btnPlanos = findViewById(R.id.btnPlanos);
+        btnPerfil = findViewById(R.id.btnPerfil);
 
 
         // ==========================================
@@ -114,6 +114,12 @@ public class OpcoesActivity extends AppCompatActivity {
                         "Acompanhe seus exercícios e treinos."
                 );
 
+                // INÍCIO fica desmarcado
+                btnInicio.setTextColor(
+                        getColor(R.color.cinza_sga)
+                );
+
+                // TREINOS selecionado
                 btnTreinos.setTextColor(
                         getColor(R.color.ciano_sga)
                 );
@@ -137,10 +143,16 @@ public class OpcoesActivity extends AppCompatActivity {
                         "Consulte seu plano e sua evolução."
                 );
 
+                // INÍCIO fica desmarcado
+                btnInicio.setTextColor(
+                        getColor(R.color.cinza_sga)
+                );
+
                 btnTreinos.setTextColor(
                         getColor(R.color.cinza_sga)
                 );
 
+                // PLANOS selecionado
                 btnPlanos.setTextColor(
                         getColor(R.color.ciano_sga)
                 );
@@ -160,6 +172,11 @@ public class OpcoesActivity extends AppCompatActivity {
                         "Gerencie suas informações pessoais."
                 );
 
+                // INÍCIO fica desmarcado
+                btnInicio.setTextColor(
+                        getColor(R.color.cinza_sga)
+                );
+
                 btnTreinos.setTextColor(
                         getColor(R.color.cinza_sga)
                 );
@@ -168,6 +185,7 @@ public class OpcoesActivity extends AppCompatActivity {
                         getColor(R.color.cinza_sga)
                 );
 
+                // PERFIL selecionado
                 btnPerfil.setTextColor(
                         getColor(R.color.ciano_sga)
                 );
