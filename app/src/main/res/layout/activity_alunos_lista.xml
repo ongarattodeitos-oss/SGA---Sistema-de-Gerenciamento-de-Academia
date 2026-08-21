@@ -118,6 +118,23 @@
                 android:textStyle="bold"
                 android:letterSpacing="0.12" />
 
+            <EditText
+                android:id="@+id/edtPesquisarAluno"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_card_professor"
+                android:hint="Pesquisar aluno pelo nome..."
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#657086"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:inputType="text"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:drawablePadding="12dp"/>
+
 
             <!-- ================================================= -->
             <!-- LISTA -->

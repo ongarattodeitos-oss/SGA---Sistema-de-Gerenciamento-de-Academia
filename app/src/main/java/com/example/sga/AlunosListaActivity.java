@@ -24,6 +24,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import java.text.Normalizer;
+
 public class AlunosListaActivity extends AppCompatActivity {
 
     // =========================================================
@@ -57,6 +68,11 @@ public class AlunosListaActivity extends AppCompatActivity {
     private TextView txtQuantidadeAlunos;
     private TextView txtStatusLista;
     private LinearLayout cardNenhumAluno;
+
+    private EditText edtPesquisarAluno;
+
+    // Guarda todos os alunos carregados da API
+    private JSONArray todosAlunos = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +114,8 @@ public class AlunosListaActivity extends AppCompatActivity {
         txtStatusLista = findViewById(R.id.txtStatusLista);
         cardNenhumAluno = findViewById(R.id.cardNenhumAluno);
 
+        edtPesquisarAluno = findViewById(R.id.edtPesquisarAluno);
+
         // =========================================================
         // BOTÕES DO MENU
         // =========================================================
@@ -106,6 +124,34 @@ public class AlunosListaActivity extends AppCompatActivity {
         btnAlunos = findViewById(R.id.btnAlunosProfessor);
         btnTreinos = findViewById(R.id.btnTreinosProfessor);
         btnPerfil = findViewById(R.id.btnPerfilProfessor);
+
+        edtPesquisarAluno.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after
+            ) {
+            }
+
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count
+            ) {
+
+                filtrarAlunos(s.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         // =========================================================
         // BOTÃO INÍCIO
@@ -316,11 +362,11 @@ public class AlunosListaActivity extends AppCompatActivity {
                 alunos = new JSONArray();
             }
 
-            JSONArray alunosFinal = alunos;
+            todosAlunos = ordenarAlunosPorNome(alunos);
 
             runOnUiThread(() -> {
 
-                mostrarAlunos(alunosFinal);
+                mostrarAlunos(todosAlunos);
 
             });
 
@@ -352,10 +398,12 @@ public class AlunosListaActivity extends AppCompatActivity {
 
         containerAlunos.removeAllViews();
 
+        // Quantidade dos alunos que estão sendo exibidos
         int quantidade = alunos.length();
 
+// Sempre mostra a quantidade TOTAL cadastrada
         txtQuantidadeAlunos.setText(
-                String.valueOf(quantidade)
+                String.valueOf(todosAlunos.length())
         );
 
         if (quantidade == 0) {
@@ -480,4 +528,132 @@ public class AlunosListaActivity extends AppCompatActivity {
             }
         }
     }
+
+    // =============================================================
+// FILTRAR ALUNOS PELO NOME
+// =============================================================
+
+    private void filtrarAlunos(String textoPesquisa) {
+
+        JSONArray alunosFiltrados = new JSONArray();
+
+        String pesquisaNormalizada =
+                normalizarTexto(textoPesquisa);
+
+        try {
+
+            for (int i = 0; i < todosAlunos.length(); i++) {
+
+                JSONObject aluno =
+                        todosAlunos.getJSONObject(i);
+
+                String nome =
+                        aluno.optString(
+                                "nome_completo",
+                                ""
+                        );
+
+                String nomeNormalizado =
+                        normalizarTexto(nome);
+
+                // Se o nome contém o que foi pesquisado
+                if (nomeNormalizado.contains(
+                        pesquisaNormalizada
+                )) {
+
+                    alunosFiltrados.put(aluno);
+
+                }
+            }
+
+        } catch (Exception erro) {
+
+            erro.printStackTrace();
+
+        }
+
+        mostrarAlunos(alunosFiltrados);
+    }
+
+    // =============================================================
+// FILTRAR ALUNOS PELO NOME
+// =============================================================
+
+    private String normalizarTexto(String texto) {
+
+        if (texto == null) {
+            return "";
+        }
+
+        String textoNormalizado =
+                Normalizer.normalize(
+                        texto,
+                        Normalizer.Form.NFD
+                );
+
+        textoNormalizado =
+                textoNormalizado.replaceAll(
+                        "\\p{M}",
+                        ""
+                );
+
+        return textoNormalizado
+                .toLowerCase()
+                .trim();
+    }
+
+    private JSONArray ordenarAlunosPorNome(JSONArray alunos) {
+
+        List<JSONObject> listaAlunos = new ArrayList<>();
+
+        try {
+
+            // Coloca todos os alunos em uma lista
+            for (int i = 0; i < alunos.length(); i++) {
+
+                listaAlunos.add(
+                        alunos.getJSONObject(i)
+                );
+            }
+
+            // Ordena pelo nome
+            Collections.sort(
+                    listaAlunos,
+                    (aluno1, aluno2) -> {
+
+                        String nome1 = aluno1.optString(
+                                "nome_completo",
+                                ""
+                        );
+
+                        String nome2 = aluno2.optString(
+                                "nome_completo",
+                                ""
+                        );
+
+                        return normalizarTexto(nome1)
+                                .compareTo(
+                                        normalizarTexto(nome2)
+                                );
+                    }
+            );
+
+        } catch (Exception erro) {
+
+            erro.printStackTrace();
+
+        }
+
+        // Cria um novo JSONArray já ordenado
+        JSONArray alunosOrdenados = new JSONArray();
+
+        for (JSONObject aluno : listaAlunos) {
+
+            alunosOrdenados.put(aluno);
+
+        }
+
+        return alunosOrdenados;
+    }
+
 }
