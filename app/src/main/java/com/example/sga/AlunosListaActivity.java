@@ -58,6 +58,7 @@ public class AlunosListaActivity extends AppCompatActivity {
     private TextView txtStatusLista;
     private LinearLayout cardNenhumAluno;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -461,14 +462,34 @@ public class AlunosListaActivity extends AppCompatActivity {
                                     -1
                             );
 
-                    Toast.makeText(
-                            AlunosListaActivity.this,
-                            "Aluno selecionado: " + idAluno,
-                            Toast.LENGTH_SHORT
-                    ).show();
+                    // Verifica se o ID é válido
 
-                    // Depois vamos usar esse ID
-                    // para abrir o perfil do aluno.
+                    if (idAluno == -1) {
+
+                        Toast.makeText(
+                                AlunosListaActivity.this,
+                                "Erro: ID do aluno não encontrado.",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        return;
+                    }
+
+                    // Abre a tela de detalhes
+
+                    Intent intent = new Intent(
+                            AlunosListaActivity.this,
+                            AlunoDetalhesActivity.class
+                    );
+
+                    // Envia o ID do aluno
+
+                    intent.putExtra(
+                            "id_alunos",
+                            idAluno
+                    );
+
+                    startActivity(intent);
 
                 });
 
