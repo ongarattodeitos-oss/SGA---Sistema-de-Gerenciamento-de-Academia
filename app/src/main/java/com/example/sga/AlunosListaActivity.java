@@ -400,8 +400,10 @@ public class AlunosListaActivity extends AppCompatActivity {
 
         int quantidade = alunos.length();
 
+        int quantidadeTotal = todosAlunos.length();
+
         txtQuantidadeAlunos.setText(
-                String.valueOf(quantidade)
+                String.valueOf(quantidadeTotal)
         );
 
         if (quantidade == 0) {
