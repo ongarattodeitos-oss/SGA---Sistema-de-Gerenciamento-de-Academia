@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -273,8 +275,8 @@ public class PerfilActivity extends AppCompatActivity {
 
                             Toast.makeText(
                                     PerfilActivity.this,
-                                    resposta,
-                                    Toast.LENGTH_LONG
+                                    "Foto atualizada com sucesso!",
+                                    Toast.LENGTH_SHORT
                             ).show();
                         }
 
@@ -443,6 +445,30 @@ public class PerfilActivity extends AppCompatActivity {
                                 txtAltura.setText(
                                         "Não informado"
                                 );
+                            }
+
+
+                            // ==================================
+                            // FOTO DE PERFIL
+                            // ==========================================
+
+                            String fotoUrl =
+                                    usuario.optString(
+                                            "foto_url",
+                                            ""
+                                    );
+
+
+                            if (
+                                    !fotoUrl.isEmpty() &&
+                                            !fotoUrl.equals("null")
+                            ) {
+
+                                Glide.with(
+                                                PerfilActivity.this
+                                        )
+                                        .load(fotoUrl)
+                                        .into(imgPerfil);
                             }
 
 
