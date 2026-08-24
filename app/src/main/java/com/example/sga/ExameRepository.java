@@ -204,7 +204,108 @@ public class ExameRepository {
             callback.onError("Não foi possível conectar à API.");
         }
     }
+// =================================================
+// EXCLUIR EXAME
+// =================================================
 
+    public void excluirExame(
+            int idExame,
+            ExcluirExameCallback callback
+    ) {
+
+        String url =
+                URL_EXAMES + "/" + idExame;
+
+        JsonObjectRequest request =
+                new JsonObjectRequest(
+                        Request.Method.DELETE,
+                        url,
+                        null,
+
+                        response -> {
+
+                            try {
+
+                                boolean sucesso =
+                                        response.getBoolean("success");
+
+                                if (sucesso) {
+
+                                    callback.onSuccess();
+
+                                } else {
+
+                                    String erro =
+                                            response.optString(
+                                                    "error",
+                                                    "Erro ao excluir exame."
+                                            );
+
+                                    callback.onError(erro);
+                                }
+
+                            } catch (JSONException e) {
+
+                                callback.onError(
+                                        "Resposta inválida da API."
+                                );
+                            }
+                        },
+
+                        error -> {
+
+                            if (error.networkResponse != null) {
+
+                                int codigo =
+                                        error.networkResponse.statusCode;
+
+                                switch (codigo) {
+
+                                    case 404:
+
+                                        callback.onError(
+                                                "Exame não encontrado."
+                                        );
+
+                                        break;
+
+                                    case 405:
+
+                                        callback.onError(
+                                                "Método não permitido."
+                                        );
+
+                                        break;
+
+                                    case 500:
+
+                                        callback.onError(
+                                                "Erro interno no servidor."
+                                        );
+
+                                        break;
+
+                                    default:
+
+                                        callback.onError(
+                                                "Erro na API: HTTP "
+                                                        + codigo
+                                        );
+
+                                        break;
+                                }
+
+                            } else {
+
+                                callback.onError(
+                                        "Não foi possível conectar à API."
+                                );
+                            }
+                        }
+                );
+
+        requestQueue.add(request);
+    }
     // =================================================
     // CALLBACKS
     // =================================================
@@ -220,7 +321,12 @@ public class ExameRepository {
 
         void onError(String mensagem);
     }
+    public interface ExcluirExameCallback {
 
+        void onSuccess();
+
+        void onError(String mensagem);
+    }
     // =================================================
     // MULTIPART REQUEST
     // =================================================

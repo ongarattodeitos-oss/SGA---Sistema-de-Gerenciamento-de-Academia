@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -115,7 +116,7 @@ public class AlunoActivity extends AppCompatActivity {
         // BOTÃO PERFIL
         // ==========================================
         btnPerfil.setOnClickListener(v -> {
-            Intent intent = new Intent(AlunoActivity.this, OpcoesActivity.class);
+            Intent intent = new Intent(AlunoActivity.this, PerfilActivity.class);
             intent.putExtra("opcao", "perfil");
             startActivity(intent);
         });
@@ -171,61 +172,355 @@ public class AlunoActivity extends AppCompatActivity {
     // ADICIONAR EXAME NA TELA
     // ==========================================
 
-    private void adicionarExameNaTela(JSONObject exame) {
+    private void adicionarExameNaTela(
+            JSONObject exame
+    ) {
+
         try {
-            String nome = exame.optString("nome_arquivo", "Documento");
-            String tipo = exame.optString("tipo_arquivo", "");
-            String url = exame.optString("url_arquivo", "");
 
-            LinearLayout item = new LinearLayout(this);
-            item.setOrientation(LinearLayout.VERTICAL);
-            item.setPadding(16, 16, 16, 16);
-            item.setBackgroundColor(Color.rgb(14, 23, 23));
+            int idExame =
+                    exame.getInt("id_exame");
 
-            LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+            String nome =
+                    exame.optString(
+                            "nome_arquivo",
+                            "Documento"
+                    );
+
+            String tipo =
+                    exame.optString(
+                            "tipo_arquivo",
+                            ""
+                    );
+
+            String url =
+                    exame.optString(
+                            "url_arquivo",
+                            ""
+                    );
+
+
+            // =========================================
+            // ITEM DO DOCUMENTO
+            // =========================================
+
+            LinearLayout item =
+                    new LinearLayout(this);
+
+            item.setOrientation(
+                    LinearLayout.VERTICAL
             );
-            parametros.setMargins(0, 8, 0, 8);
+
+            item.setPadding(
+                    16,
+                    16,
+                    16,
+                    16
+            );
+
+            item.setBackgroundColor(
+                    Color.rgb(
+                            14,
+                            23,
+                            23
+                    )
+            );
+
+
+            LinearLayout.LayoutParams parametros =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
+            parametros.setMargins(
+                    0,
+                    8,
+                    0,
+                    8
+            );
+
             item.setLayoutParams(parametros);
 
-            TextView nomeTextView = new TextView(this);
+
+            // =========================================
+            // NOME
+            // =========================================
+
+            TextView nomeTextView =
+                    new TextView(this);
+
             nomeTextView.setText(nome);
+
             nomeTextView.setTextSize(15);
-            nomeTextView.setTypeface(null, Typeface.BOLD);
-            nomeTextView.setTextColor(Color.WHITE);
 
-            TextView tipoTextView = new TextView(this);
-            tipoTextView.setText("Tipo: " + tipo);
+            nomeTextView.setTypeface(
+                    null,
+                    Typeface.BOLD
+            );
+
+            nomeTextView.setTextColor(
+                    Color.WHITE
+            );
+
+
+            // =========================================
+            // TIPO
+            // =========================================
+
+            TextView tipoTextView =
+                    new TextView(this);
+
+            tipoTextView.setText(
+                    "Tipo: " + tipo
+            );
+
             tipoTextView.setTextSize(12);
-            tipoTextView.setTextColor(Color.rgb(45, 247, 51));
 
-            item.addView(nomeTextView);
-            item.addView(tipoTextView);
+            tipoTextView.setTextColor(
+                    Color.rgb(
+                            45,
+                            247,
+                            51
+                    )
+            );
 
-            // ==========================================
-            // CLIQUE NO DOCUMENTO
-            // ==========================================
-            if (!url.isEmpty() && !url.equals("null")) {
-                item.setOnClickListener(v -> {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Não foi possível abrir o documento.", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
-                item.setClickable(true);
+            item.addView(
+                    nomeTextView
+            );
+
+            item.addView(
+                    tipoTextView
+            );
+
+
+            // =========================================
+            // BOTÃO EXCLUIR
+            // =========================================
+
+            Button btnExcluir =
+                    new Button(this);
+
+            btnExcluir.setText(
+                    "EXCLUIR DOCUMENTO"
+            );
+
+            btnExcluir.setTextSize(11);
+
+            btnExcluir.setTextColor(
+                    Color.WHITE
+            );
+
+            btnExcluir.setBackgroundColor(
+                    Color.rgb(
+                            80,
+                            30,
+                            30
+                    )
+            );
+
+
+            int alturaBotao = (int) (56 * getResources().getDisplayMetrics().density);
+
+            LinearLayout.LayoutParams parametrosBotao =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            alturaBotao
+                    );
+
+            parametrosBotao.setMargins(
+                    0,
+                    14,
+                    0,
+                    0
+            );
+
+            btnExcluir.setLayoutParams(
+                    parametrosBotao
+            );
+
+            parametrosBotao.setMargins(
+                    0,
+                    14,
+                    0,
+                    0
+            );
+
+            btnExcluir.setLayoutParams(
+                    parametrosBotao
+            );
+
+
+            item.addView(
+                    btnExcluir
+            );
+
+
+            // =========================================
+            // ABRIR DOCUMENTO
+            // =========================================
+
+            if (!url.isEmpty() &&
+                    !url.equals("null")) {
+
+                nomeTextView.setOnClickListener(
+                        v -> {
+
+                            try {
+
+                                Intent intent =
+                                        new Intent(
+                                                Intent.ACTION_VIEW,
+                                                Uri.parse(url)
+                                        );
+
+                                startActivity(intent);
+
+                            } catch (Exception e) {
+
+                                Toast.makeText(
+                                        this,
+                                        "Não foi possível abrir o documento.",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+                );
+
+                nomeTextView.setClickable(true);
             }
 
-            listaExames.addView(item);
+
+            // =========================================
+            // EXCLUIR
+            // =========================================
+
+            btnExcluir.setOnClickListener(
+                    v -> confirmarExclusao(
+                            idExame,
+                            item
+                    )
+            );
+
+
+            // =========================================
+            // ADICIONA NA LISTA
+            // =========================================
+
+            listaExames.addView(
+                    item
+            );
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
 
+
+    private void confirmarExclusao(
+            int idExame,
+            LinearLayout item
+    ) {
+
+        new AlertDialog.Builder(this)
+
+                .setTitle("Excluir documento")
+
+                .setMessage(
+                        "Deseja realmente excluir este documento?"
+                )
+
+                .setNegativeButton(
+                        "CANCELAR",
+                        null
+                )
+
+                .setPositiveButton(
+                        "EXCLUIR",
+                        (dialog, which) -> {
+
+                            excluirExame(
+                                    idExame,
+                                    item
+                            );
+                        }
+                )
+
+                .show();
+    }
+
+    private void excluirExame(
+            int idExame,
+            LinearLayout item
+    ) {
+
+        Toast.makeText(
+                this,
+                "Excluindo documento...",
+                Toast.LENGTH_SHORT
+        ).show();
+
+
+        exameRepository.excluirExame(
+
+                idExame,
+
+                new ExameRepository.ExcluirExameCallback() {
+
+                    @Override
+                    public void onSuccess() {
+
+                        runOnUiThread(() -> {
+
+                            listaExames.removeView(
+                                    item
+                            );
+
+                            Toast.makeText(
+                                    AlunoActivity.this,
+                                    "Documento excluído com sucesso!",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+
+                            // ==================================
+                            // SE NÃO HOUVER MAIS DOCUMENTOS
+                            // ==================================
+
+                            if (listaExames.getChildCount() == 0) {
+
+                                txtNenhumDocumento
+                                        .setVisibility(
+                                                View.VISIBLE
+                                        );
+
+                                txtNenhumDocumento.setText(
+                                        "Nenhum documento anexado."
+                                );
+                            }
+                        });
+                    }
+
+
+                    @Override
+                    public void onError(
+                            String mensagem
+                    ) {
+
+                        runOnUiThread(() -> {
+
+                            Toast.makeText(
+                                    AlunoActivity.this,
+                                    mensagem,
+                                    Toast.LENGTH_LONG
+                            ).show();
+                        });
+                    }
+                }
+        );
+    }
     // ==========================================
     // ABRIR SELETOR DE DOCUMENTO
     // ==========================================

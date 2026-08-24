@@ -14,8 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SGA">
         <activity
+<<<<<<< HEAD
             android:name=".AlunoDetalhesActivity"
             android:exported="false" />
+=======
+            android:name=".PerfilActivity"/>
+>>>>>>> d15d37ea30f43cc0066e6360b0d5c665f010c89a
         <activity
             android:name=".AlunosListaActivity"
             android:exported="false" />
