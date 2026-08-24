@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 
 public class AlunosListaActivity extends AppCompatActivity {
 
@@ -57,6 +61,10 @@ public class AlunosListaActivity extends AppCompatActivity {
     private TextView txtQuantidadeAlunos;
     private TextView txtStatusLista;
     private LinearLayout cardNenhumAluno;
+
+    private EditText edtPesquisarAluno;
+
+    private JSONArray todosAlunos = new JSONArray();
 
 
     @Override
@@ -99,6 +107,8 @@ public class AlunosListaActivity extends AppCompatActivity {
         txtStatusLista = findViewById(R.id.txtStatusLista);
         cardNenhumAluno = findViewById(R.id.cardNenhumAluno);
 
+        edtPesquisarAluno = findViewById(R.id.edtPesquisarAluno);
+
         // =========================================================
         // BOTÕES DO MENU
         // =========================================================
@@ -107,7 +117,6 @@ public class AlunosListaActivity extends AppCompatActivity {
         btnAlunos = findViewById(R.id.btnAlunosProfessor);
         btnTreinos = findViewById(R.id.btnTreinosProfessor);
         btnPerfil = findViewById(R.id.btnPerfilProfessor);
-
         // =========================================================
         // BOTÃO INÍCIO
         // =========================================================
@@ -164,6 +173,38 @@ public class AlunosListaActivity extends AppCompatActivity {
         // =========================================================
 
         carregarAlunos();
+
+        edtPesquisarAluno.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after
+            ) {
+            }
+
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count
+            ) {
+
+                filtrarAlunos(
+                        s.toString()
+                );
+            }
+
+            @Override
+            public void afterTextChanged(
+                    Editable s
+            ) {
+            }
+
+        });
     }
 
     // =============================================================
@@ -321,7 +362,11 @@ public class AlunosListaActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
 
-                mostrarAlunos(alunosFinal);
+                // Salva todos os alunos carregados
+                todosAlunos = alunosFinal;
+
+                // Mostra a lista
+                mostrarAlunos(todosAlunos);
 
             });
 
@@ -500,5 +545,68 @@ public class AlunosListaActivity extends AppCompatActivity {
                 erro.printStackTrace();
             }
         }
+    }
+
+    // =============================================================
+// FILTRAR ALUNOS
+// =============================================================
+
+    private void filtrarAlunos(String textoPesquisa) {
+
+        JSONArray alunosFiltrados =
+                new JSONArray();
+
+        String pesquisa =
+                textoPesquisa
+                        .trim()
+                        .toLowerCase();
+
+        // Se a pesquisa estiver vazia,
+        // mostra todos os alunos
+
+        if (pesquisa.isEmpty()) {
+
+            mostrarAlunos(todosAlunos);
+
+            return;
+        }
+
+        // Percorre todos os alunos
+
+        for (int i = 0; i < todosAlunos.length(); i++) {
+
+            try {
+
+                JSONObject aluno =
+                        todosAlunos.getJSONObject(i);
+
+                String nome =
+                        aluno.optString(
+                                "nome_completo",
+                                ""
+                        );
+
+                // Verifica se o nome contém
+                // o texto pesquisado
+
+                if (
+                        nome.toLowerCase()
+                                .contains(pesquisa)
+                ) {
+
+                    alunosFiltrados.put(aluno);
+
+                }
+
+            } catch (Exception erro) {
+
+                erro.printStackTrace();
+
+            }
+        }
+
+        // Mostra apenas os alunos encontrados
+
+        mostrarAlunos(alunosFiltrados);
     }
 }
