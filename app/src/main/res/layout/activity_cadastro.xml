@@ -133,7 +133,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit"
                     android:hint="Data Nasc."
-                    android:inputType="date"
+                    android:inputType="number"
                     android:paddingHorizontal="16dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#80FFFFFF"

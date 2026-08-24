@@ -22,6 +22,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+
 public class CadastroActivity extends AppCompatActivity {
 
     private EditText edtNome;
@@ -63,6 +66,10 @@ public class CadastroActivity extends AppCompatActivity {
         edtTelefone = findViewById(R.id.edtTelefone);
         edtCpf = findViewById(R.id.edtCpf);
         edtNascimento = findViewById(R.id.edtNascimento);
+
+        aplicarMascaraCpf();
+        aplicarMascaraData();
+
         edtUsuario = findViewById(R.id.edtUsuario);
         edtSenha = findViewById(R.id.edtSenha);
         edtConfirmarSenha = findViewById(R.id.edtConfirmarSenha);
@@ -393,4 +400,160 @@ public class CadastroActivity extends AppCompatActivity {
 
         }).start();
     }
+
+    // ==========================================
+// MÁSCARA DE CPF
+// ==========================================
+
+    private void aplicarMascaraCpf() {
+
+        edtCpf.addTextChangedListener(new TextWatcher() {
+
+            private boolean editando = false;
+
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after) {
+            }
+
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (editando) {
+                    return;
+                }
+
+                editando = true;
+
+                // Remove tudo que não for número
+                String cpf = s.toString().replaceAll("[^0-9]", "");
+
+                // Limita a 11 números
+                if (cpf.length() > 11) {
+                    cpf = cpf.substring(0, 11);
+                }
+
+                String cpfFormatado = "";
+
+                if (cpf.length() > 0) {
+                    cpfFormatado = cpf.substring(0, Math.min(3, cpf.length()));
+                }
+
+                if (cpf.length() > 3) {
+                    cpfFormatado += "." + cpf.substring(3, Math.min(6, cpf.length()));
+                }
+
+                if (cpf.length() > 6) {
+                    cpfFormatado += "." + cpf.substring(6, Math.min(9, cpf.length()));
+                }
+
+                if (cpf.length() > 9) {
+                    cpfFormatado += "-" + cpf.substring(9, Math.min(11, cpf.length()));
+                }
+
+                edtCpf.setText(cpfFormatado);
+
+                // Mantém o cursor no final
+                edtCpf.setSelection(edtCpf.length());
+
+                editando = false;
+            }
+        });
+    }
+
+    // ==========================================
+// MÁSCARA DE DATA DE NASCIMENTO
+// ==========================================
+
+    private void aplicarMascaraData() {
+
+        edtNascimento.addTextChangedListener(new TextWatcher() {
+
+            private boolean editando = false;
+
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after) {
+            }
+
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (editando) {
+                    return;
+                }
+
+                editando = true;
+
+                // Remove tudo que não for número
+                String data = s.toString().replaceAll("[^0-9]", "");
+
+                // Limita a 8 números
+                if (data.length() > 8) {
+                    data = data.substring(0, 8);
+                }
+
+                String dataFormatada = "";
+
+                // DIA
+                if (data.length() > 0) {
+                    dataFormatada =
+                            data.substring(
+                                    0,
+                                    Math.min(2, data.length())
+                            );
+                }
+
+                // MÊS
+                if (data.length() > 2) {
+                    dataFormatada += "/" +
+                            data.substring(
+                                    2,
+                                    Math.min(4, data.length())
+                            );
+                }
+
+                // ANO
+                if (data.length() > 4) {
+                    dataFormatada += "/" +
+                            data.substring(
+                                    4,
+                                    Math.min(8, data.length())
+                            );
+                }
+
+                edtNascimento.setText(dataFormatada);
+
+                // Mantém o cursor no final
+                edtNascimento.setSelection(
+                        edtNascimento.length()
+                );
+
+                editando = false;
+            }
+        });
+    }
+
 }
