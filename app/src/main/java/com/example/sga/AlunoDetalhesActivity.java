@@ -1,6 +1,8 @@
 package com.example.sga;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +24,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Shader;
 
 public class AlunoDetalhesActivity extends AppCompatActivity {
 
@@ -533,14 +542,12 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
                     if (fotoUrl != null && !fotoUrl.trim().isEmpty()) {
 
                         // Tem foto cadastrada
-                        // Aqui vamos carregar a imagem da URL
+                        carregarFotoAluno(fotoUrl);
 
                     } else {
 
                         // Não tem foto cadastrada
-                        imgFotoAluno.setImageResource(
-                                R.drawable.img_perfil
-                        );
+                        setarIconePadraoRedondo();
                     }
 
                 });
@@ -600,5 +607,133 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
         // Deixa o selecionado azul
 
         botaoSelecionado.setTextColor(COR_SELECIONADO);
+    }
+
+    // =========================================================
+// CARREGAR FOTO DO ALUNO A PARTIR DA URL
+// =========================================================
+
+    private void carregarFotoAluno(String urlFoto) {
+
+        new Thread(() -> {
+
+            HttpURLConnection conexao = null;
+
+            try {
+
+                URL url = new URL(urlFoto);
+
+                conexao = (HttpURLConnection) url.openConnection();
+
+                conexao.setConnectTimeout(10000);
+                conexao.setReadTimeout(10000);
+                conexao.setDoInput(true);
+                conexao.connect();
+
+                InputStream inputStream =
+                        conexao.getInputStream();
+
+                Bitmap bitmap =
+                        BitmapFactory.decodeStream(inputStream);
+
+                inputStream.close();
+
+                if (bitmap != null) {
+
+                    Bitmap bitmapRedondo =
+                            deixarBitmapRedondo(bitmap);
+
+                    executarNaTela(() ->
+                            imgFotoAluno.setImageBitmap(bitmapRedondo)
+                    );
+
+                } else {
+
+                    executarNaTela(() ->
+                            imgFotoAluno.setImageResource(R.drawable.img_perfil)
+                    );
+                }
+
+            } catch (Exception erro) {
+
+                erro.printStackTrace();
+
+                // Se der erro ao baixar, cai no ícone padrão
+                executarNaTela(() ->
+                        imgFotoAluno.setImageResource(R.drawable.img_perfil)
+                );
+
+            } finally {
+
+                if (conexao != null) {
+                    conexao.disconnect();
+                }
+            }
+
+        }).start();
+    }
+
+    // =========================================================
+// TRANSFORMAR BITMAP EM CÍRCULO
+// =========================================================
+
+    private Bitmap deixarBitmapRedondo(Bitmap bitmapOriginal) {
+
+        int tamanho =
+                Math.min(
+                        bitmapOriginal.getWidth(),
+                        bitmapOriginal.getHeight()
+                );
+
+        Bitmap bitmapRedondo =
+                Bitmap.createBitmap(
+                        tamanho,
+                        tamanho,
+                        Bitmap.Config.ARGB_8888
+                );
+
+        Canvas canvas = new Canvas(bitmapRedondo);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+
+        BitmapShader shader =
+                new BitmapShader(
+                        bitmapOriginal,
+                        Shader.TileMode.CLAMP,
+                        Shader.TileMode.CLAMP
+                );
+
+        // Centraliza caso a imagem não seja quadrada
+        int dx = (bitmapOriginal.getWidth() - tamanho) / 2;
+        int dy = (bitmapOriginal.getHeight() - tamanho) / 2;
+
+        if (dx != 0 || dy != 0) {
+
+            android.graphics.Matrix matrix = new android.graphics.Matrix();
+            matrix.setTranslate(-dx, -dy);
+            shader.setLocalMatrix(matrix);
+        }
+
+        paint.setShader(shader);
+
+        float raio = tamanho / 2f;
+
+        canvas.drawCircle(raio, raio, raio, paint);
+
+        return bitmapRedondo;
+    }
+
+    private void setarIconePadraoRedondo() {
+
+        Bitmap bitmapPadrao =
+                BitmapFactory.decodeResource(
+                        getResources(),
+                        R.drawable.img_perfil
+                );
+
+        imgFotoAluno.setImageBitmap(
+                deixarBitmapRedondo(bitmapPadrao)
+        );
     }
 }

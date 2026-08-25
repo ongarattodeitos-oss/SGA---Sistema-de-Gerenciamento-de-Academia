@@ -37,7 +37,7 @@
                 android:id="@+id/btnVoltar"
                 android:layout_width="wrap_content"
                 android:layout_height="44dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="9dp"
                 android:backgroundTint="#182334"
                 android:text="← Voltar"
                 android:textColor="#FFFFFF"
@@ -63,7 +63,10 @@
                 android:layout_marginTop="18dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/img_perfil"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:cropToPadding="true"
+                android:background="@drawable/bg_professor_foto_perfil"
+                android:padding="3dp" />
 
             <TextView
                 android:id="@+id/txtNomeAluno"
