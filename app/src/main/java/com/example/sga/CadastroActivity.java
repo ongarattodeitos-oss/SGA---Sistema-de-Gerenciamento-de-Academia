@@ -395,7 +395,6 @@ public class CadastroActivity extends AppCompatActivity {
                     ).show();
 
                 });
-
             }
 
         }).start();
