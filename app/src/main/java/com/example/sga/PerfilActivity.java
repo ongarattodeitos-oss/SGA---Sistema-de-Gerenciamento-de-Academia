@@ -1,5 +1,5 @@
 package com.example.sga;
-
+import com.bumptech.glide.Glide;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,13 +8,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide;
-
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
@@ -253,10 +248,10 @@ public class PerfilActivity extends AppCompatActivity {
             // MOSTRAR FOTO IMEDIATAMENTE
             // ==========================================
 
-            imgPerfil.setImageURI(
-                    imagemUri
-            );
-
+            Glide.with(PerfilActivity.this)
+                    .load(imagemUri)
+                    .circleCrop()
+                    .into(imgPerfil);
 
             // ==========================================
             // ENVIAR PARA API
@@ -464,13 +459,11 @@ public class PerfilActivity extends AppCompatActivity {
                                             !fotoUrl.equals("null")
                             ) {
 
-                                Glide.with(
-                                                PerfilActivity.this
-                                        )
+                                Glide.with(PerfilActivity.this)
                                         .load(fotoUrl)
+                                        .circleCrop()
                                         .into(imgPerfil);
                             }
-
 
                         } catch (Exception e) {
 
