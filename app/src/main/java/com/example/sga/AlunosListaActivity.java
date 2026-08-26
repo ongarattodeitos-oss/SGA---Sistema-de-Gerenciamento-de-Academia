@@ -137,7 +137,6 @@ public class AlunosListaActivity extends AppCompatActivity {
         // =========================================================
 
         btnAlunos.setOnClickListener(v -> {
-
             selecionarBotao(btnAlunos);
 
         });
@@ -157,7 +156,8 @@ public class AlunosListaActivity extends AppCompatActivity {
         // =========================================================
 
         btnPerfil.setOnClickListener(v -> {
-
+            Intent intent = new Intent (AlunosListaActivity.this, UsuarioProfessorActivity.class );
+            startActivity(intent);
             selecionarBotao(btnPerfil);
 
         });

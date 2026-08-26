@@ -14,11 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SGA">
         <activity
-            android:name=".AlunoDetalhesActivity"
+            android:name=".UsuarioProfessorActivity"
             android:exported="false" />
         <activity
-            android:name=".PerfilActivity"/>
-
+            android:name=".AlunoDetalhesActivity"
+            android:exported="false" />
+        <activity android:name=".PerfilActivity" />
         <activity
             android:name=".AlunosListaActivity"
             android:exported="false" />

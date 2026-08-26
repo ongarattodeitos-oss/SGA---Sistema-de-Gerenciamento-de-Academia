@@ -94,6 +94,10 @@ public class ProfessorActivity extends AppCompatActivity {
 
             selecionarBotao(btnPerfil);
 
+            Intent intent = new Intent (ProfessorActivity.this, UsuarioProfessorActivity.class );
+            startActivity(intent);
+
+
         });
 
         // =========================================================

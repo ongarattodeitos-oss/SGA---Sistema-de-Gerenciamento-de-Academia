@@ -212,7 +212,8 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
 
             selecionarBotao(btnPerfil);
 
-            // Configuraremos a tela de perfil depois.
+            Intent intent = new Intent (AlunoDetalhesActivity.this, UsuarioProfessorActivity.class );
+            startActivity(intent);
 
         });
 
