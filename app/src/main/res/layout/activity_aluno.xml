@@ -47,11 +47,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Seu progresso começa aqui."
+                android:text="Acompanhe seus dados e seu progresso."
                 android:textSize="15sp"
                 android:textColor="#8E9AAF" />
 
-            <!-- Linha decorativa -->
+            <!-- LINHA DECORATIVA -->
 
             <View
                 android:layout_width="55dp"
@@ -61,93 +61,219 @@
 
 
             <!-- ========================================= -->
-            <!-- CARDS DE INDICADORES -->
+            <!-- DADOS FÍSICOS -->
             <!-- ========================================= -->
 
             <LinearLayout
+                android:id="@+id/cardDadosFisicos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@drawable/bg_card_professor">
 
-                <!-- PRESENÇA -->
+                <!-- TÍTULO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DADOS FÍSICOS"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#2DF733"
+                    android:letterSpacing="0.12" />
+
+                <!-- DESCRIÇÃO -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Informe seus dados para acompanhar seu IMC."
+                    android:textSize="13sp"
+                    android:textColor="#707D92" />
+
+
+                <!-- ===================================== -->
+                <!-- PESO -->
+                <!-- ===================================== -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:text="PESO"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#7F8CA3"
+                    android:letterSpacing="0.08" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="135dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="7dp"
-                    android:orientation="vertical"
-                    android:padding="18dp"
-                    android:background="@drawable/bg_card_professor">
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="#101722">
+
+                    <EditText
+                        android:id="@+id/edtPeso"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="Ex.: 70,0"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#536074"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="PRESENÇA"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="#7F8CA3"
-                        android:letterSpacing="0.08" />
-
-                    <TextView
-                        android:id="@+id/txtDiasPresenca"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="0"
-                        android:textSize="32sp"
+                        android:paddingEnd="15dp"
+                        android:text="kg"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#2DF733" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="dias este mês"
-                        android:textSize="12sp"
-                        android:textColor="#657086" />
 
                 </LinearLayout>
 
 
-                <!-- IMC -->
+                <!-- ===================================== -->
+                <!-- ALTURA -->
+                <!-- ===================================== -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="ALTURA"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#7F8CA3"
+                    android:letterSpacing="0.08" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="135dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="7dp"
-                    android:orientation="vertical"
-                    android:padding="18dp"
-                    android:background="@drawable/bg_card_professor">
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="#101722">
+
+                    <EditText
+                        android:id="@+id/edtAltura"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="Ex.: 1,75"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#536074"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="IMC"
-                        android:textSize="12sp"
+                        android:paddingEnd="15dp"
+                        android:text="m"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="#7F8CA3"
-                        android:letterSpacing="0.08" />
+                        android:textColor="#2DF733" />
+
+                </LinearLayout>
+
+
+                <!-- ===================================== -->
+                <!-- IMC -->
+                <!-- ===================================== -->
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="22dp"
+                    android:background="#202938" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="IMC"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#7F8CA3"
+                            android:letterSpacing="0.08" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Calculado automaticamente"
+                            android:textSize="12sp"
+                            android:textColor="#657086" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/txtIMC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="0,0"
-                        android:textSize="32sp"
+                        android:text="--"
+                        android:textSize="25sp"
                         android:textStyle="bold"
-                        android:textColor="#FFFFFF" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="índice corporal"
-                        android:textSize="12sp"
-                        android:textColor="#657086" />
+                        android:textColor="#2DF733" />
 
                 </LinearLayout>
+
+
+                <!-- ===================================== -->
+                <!-- STATUS DO IMC -->
+                <!-- ===================================== -->
+
+                <TextView
+                    android:id="@+id/txtClassificacaoIMC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Informe peso e altura para calcular."
+                    android:textSize="12sp"
+                    android:textColor="#707D92" />
+
+
+                <!-- ===================================== -->
+                <!-- BOTÃO SALVAR -->
+                <!-- ===================================== -->
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSalvarDadosFisicos"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:text="SALVAR DADOS"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#080B12"
+                    android:backgroundTint="#2DF733"
+                    android:padding="0dp" />
 
             </LinearLayout>
 
@@ -195,7 +321,7 @@
                 android:id="@+id/cardMeta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 android:padding="20dp"
                 android:background="@drawable/bg_card_professor">
@@ -226,8 +352,6 @@
                     android:text="Defina um objetivo e acompanhe sua evolução."
                     android:textSize="13sp"
                     android:textColor="#707D92" />
-
-                <!-- Barra de progresso -->
 
                 <ProgressBar
                     android:layout_width="match_parent"
@@ -267,8 +391,6 @@
                 android:padding="20dp"
                 android:background="@drawable/bg_card_professor">
 
-                <!-- TÍTULO -->
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -277,8 +399,6 @@
                     android:textStyle="bold"
                     android:textColor="#2DF733"
                     android:letterSpacing="0.12" />
-
-                <!-- CABEÇALHO DO CARD -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -322,9 +442,6 @@
 
                 </LinearLayout>
 
-
-                <!-- AVISO -->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -349,9 +466,6 @@
                         android:textColor="#8E9AAF" />
 
                 </LinearLayout>
-
-
-                <!-- DOCUMENTOS ANEXADOS -->
 
                 <TextView
                     android:id="@+id/txtNenhumDocumento"
@@ -387,8 +501,6 @@
                     android:text="Tipo: --"
                     android:textSize="12sp"
                     android:textColor="#2DF733" />
-
-                <!-- BOTÃO -->
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnAnexarDocumento"
@@ -481,8 +593,13 @@
 
     </ScrollView>
 
+
+    <!-- ================================================= -->
+    <!-- MENU INFERIOR -->
+    <!-- ================================================= -->
+
     <include
-    android:id="@+id/menuAluno"
-    layout="@layout/menu_aluno" />
+        android:id="@+id/menuAluno"
+        layout="@layout/menu_aluno" />
 
 </LinearLayout>
