@@ -9,10 +9,16 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import android.text.Editable;
+import android.text.TextWatcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,7 +40,13 @@ public class AlunoActivity extends AppCompatActivity {
     private TextView txtNenhumDocumento;
     private TextView txtNomeDocumento;
     private TextView txtTipoDocumento;
+    private EditText edtPeso;
+    private EditText edtAltura;
 
+    private TextView txtIMC;
+    private TextView txtClassificacaoIMC;
+
+    private Button btnSalvarDadosFisicos;
     private ExameRepository exameRepository;
 
     private int idUser = -1;
@@ -55,17 +67,56 @@ public class AlunoActivity extends AppCompatActivity {
         txtNenhumDocumento = findViewById(R.id.txtNenhumDocumento);
         txtNomeDocumento = findViewById(R.id.txtNomeDocumento);
         txtTipoDocumento = findViewById(R.id.txtTipoDocumento);
+        edtPeso = findViewById(R.id.edtPeso);
+        edtAltura = findViewById(R.id.edtAltura);
+
+        txtIMC = findViewById(R.id.txtIMC);
+        txtClassificacaoIMC = findViewById(R.id.txtClassificacaoIMC);
+
+        btnSalvarDadosFisicos = findViewById(R.id.btnSalvarDadosFisicos);
         btnAnexarDocumento = findViewById(R.id.btnAnexarDocumento);
         btnInicio = findViewById(R.id.btnInicio);
         btnTreinos = findViewById(R.id.btnTreinos);
         btnPlanos = findViewById(R.id.btnPlanos);
         btnPerfil = findViewById(R.id.btnPerfil);
+// ==========================================
+// CALCULAR IMC ENQUANTO DIGITA
+// ==========================================
 
+        TextWatcher calculadoraIMC = new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after) {
+            }
+
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count) {
+
+                calcularIMC();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        edtPeso.addTextChangedListener(calculadoraIMC);
+        edtAltura.addTextChangedListener(calculadoraIMC);
         // ==========================================
         // RECUPERA ID DO USUÁRIO
         // ==========================================
         idUser = getIntent().getIntExtra("id_user", -1);
-
+        if (idUser > 0) {
+            buscarDadosFisicos();
+        }
         Toast.makeText(this, "ID DO ALUNO: " + idUser, Toast.LENGTH_LONG).show();
 
         // ==========================================
@@ -122,10 +173,326 @@ public class AlunoActivity extends AppCompatActivity {
         });
     }
 
-    // ==========================================
-    // CARREGAR EXAMES
-    // ==========================================
 
+// ==========================================
+// BUSCAR DADOS FÍSICOS
+// ==========================================
+
+    // ==========================================
+// BUSCAR DADOS FÍSICOS
+// ==========================================
+
+    private void buscarDadosFisicos() {
+
+        new Thread(() -> {
+
+            HttpURLConnection conexao = null;
+
+            try {
+
+                // ==========================================
+                // URL DA API
+                // ==========================================
+
+                String urlApi =
+                        "https://sga-api.miguel-r-hoff.workers.dev/alunos-lista?id_alunos="
+                                + idUser;
+
+                URL url = new URL(urlApi);
+
+                conexao = (HttpURLConnection) url.openConnection();
+
+                conexao.setRequestMethod("GET");
+                conexao.setConnectTimeout(10000);
+                conexao.setReadTimeout(10000);
+
+                // ==========================================
+                // RESPOSTA
+                // ==========================================
+
+                int codigoResposta = conexao.getResponseCode();
+
+                if (codigoResposta != HttpURLConnection.HTTP_OK) {
+
+                    runOnUiThread(() -> {
+
+                        edtPeso.setText("");
+                        edtAltura.setText("");
+                        txtIMC.setText("--");
+
+                        txtClassificacaoIMC.setText(
+                                "Não foi possível carregar os dados."
+                        );
+
+                    });
+
+                    return;
+                }
+
+                // ==========================================
+                // LER RESPOSTA
+                // ==========================================
+
+                BufferedReader leitor =
+                        new BufferedReader(
+                                new InputStreamReader(
+                                        conexao.getInputStream()
+                                )
+                        );
+
+                StringBuilder resultado = new StringBuilder();
+
+                String linha;
+
+                while ((linha = leitor.readLine()) != null) {
+                    resultado.append(linha);
+                }
+
+                leitor.close();
+
+                // ==========================================
+                // CONVERTER JSON
+                // ==========================================
+
+                JSONObject resposta =
+                        new JSONObject(resultado.toString());
+
+                boolean sucesso =
+                        resposta.optBoolean("sucesso", false);
+
+                if (!sucesso) {
+
+                    runOnUiThread(() -> {
+
+                        edtPeso.setText("");
+                        edtAltura.setText("");
+                        txtIMC.setText("--");
+
+                        txtClassificacaoIMC.setText(
+                                "Não foi possível carregar os dados."
+                        );
+
+                    });
+
+                    return;
+                }
+
+                // ==========================================
+                // OBJETO ALUNO
+                // ==========================================
+
+                JSONObject aluno =
+                        resposta.getJSONObject("aluno");
+
+                // ==========================================
+                // DADOS FÍSICOS
+                // ==========================================
+
+                double peso =
+                        aluno.optDouble("peso", 0);
+
+                double altura =
+                        aluno.optDouble("altura", 0);
+
+                double imc =
+                        aluno.optDouble("imc", 0);
+
+                // ==========================================
+                // ATUALIZAR TELA
+                // ==========================================
+
+                runOnUiThread(() -> {
+
+                    // ======================================
+                    // PESO
+                    // ======================================
+
+                    if (peso > 0) {
+
+                        edtPeso.setText(
+                                String.format(
+                                        java.util.Locale.getDefault(),
+                                        "%.1f",
+                                        peso
+                                )
+                        );
+
+                    } else {
+
+                        edtPeso.setText("");
+                    }
+
+                    // ======================================
+                    // ALTURA
+                    // ======================================
+
+                    if (altura > 0) {
+
+                        edtAltura.setText(
+                                String.format(
+                                        java.util.Locale.getDefault(),
+                                        "%.2f",
+                                        altura
+                                )
+                        );
+
+                    } else {
+
+                        edtAltura.setText("");
+                    }
+
+                    // ======================================
+                    // IMC
+                    // ======================================
+
+                    if (imc > 0) {
+
+                        txtIMC.setText(
+                                String.format(
+                                        java.util.Locale.getDefault(),
+                                        "%.2f",
+                                        imc
+                                )
+                        );
+
+                        txtClassificacaoIMC.setText(
+                                obterClassificacaoIMC(imc)
+                        );
+
+                    } else {
+
+                        txtIMC.setText("--");
+
+                        txtClassificacaoIMC.setText(
+                                "Informe peso e altura para calcular."
+                        );
+                    }
+
+                });
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+                runOnUiThread(() -> {
+
+                    edtPeso.setText("");
+                    edtAltura.setText("");
+                    txtIMC.setText("--");
+
+                    txtClassificacaoIMC.setText(
+                            "Não foi possível carregar os dados."
+                    );
+
+                    Toast.makeText(
+                            AlunoActivity.this,
+                            "Não foi possível carregar os dados físicos.",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                });
+
+            } finally {
+
+                if (conexao != null) {
+                    conexao.disconnect();
+                }
+            }
+
+        }).start();
+    }
+
+    // ==========================================
+// CLASSIFICAÇÃO DO IMC
+// ==========================================
+
+    private String obterClassificacaoIMC(double imc) {
+
+        if (imc < 18.5) {
+            return "Abaixo de 18,5";
+        }
+
+        if (imc < 25.0) {
+            return "Faixa de 18,5 a 24,9";
+        }
+
+        if (imc < 30.0) {
+            return "Faixa de 25,0 a 29,9";
+        }
+
+        return "30,0 ou mais";
+    }
+    // ==========================================
+// CALCULAR IMC AUTOMATICAMENTE
+// ==========================================
+
+    private void calcularIMC() {
+
+        try {
+
+            String pesoTexto = edtPeso.getText().toString().trim();
+            String alturaTexto = edtAltura.getText().toString().trim();
+
+            // Aceita vírgula ou ponto
+            pesoTexto = pesoTexto.replace(",", ".");
+            alturaTexto = alturaTexto.replace(",", ".");
+
+            if (pesoTexto.isEmpty() || alturaTexto.isEmpty()) {
+
+                txtIMC.setText("--");
+
+                txtClassificacaoIMC.setText(
+                        "Informe peso e altura para calcular."
+                );
+
+                return;
+            }
+
+            double peso = Double.parseDouble(pesoTexto);
+            double altura = Double.parseDouble(alturaTexto);
+
+            if (peso <= 0 || altura <= 0) {
+
+                txtIMC.setText("--");
+
+                txtClassificacaoIMC.setText(
+                        "Informe valores válidos."
+                );
+
+                return;
+            }
+
+            // ======================================
+            // CÁLCULO
+            // ======================================
+
+            double imc = peso / (altura * altura);
+
+            // ======================================
+            // MOSTRAR IMC
+            // ======================================
+
+            txtIMC.setText(
+                    String.format(
+                            java.util.Locale.getDefault(),
+                            "%.2f",
+                            imc
+                    )
+            );
+
+            txtClassificacaoIMC.setText(
+                    obterClassificacaoIMC(imc)
+            );
+
+        } catch (NumberFormatException e) {
+
+            txtIMC.setText("--");
+
+            txtClassificacaoIMC.setText(
+                    "Digite apenas números."
+            );
+        }
+    }
     private void carregarExames() {
         if (idUser <= 0) {
             txtNenhumDocumento.setText("Usuário não identificado.");
