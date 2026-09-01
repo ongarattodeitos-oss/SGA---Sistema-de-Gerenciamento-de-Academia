@@ -165,21 +165,6 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
                 );
 
         // =====================================================
-        // BOTÃO VOLTAR
-        // =====================================================
-
-        Button btnVoltar =
-                findViewById(
-                        R.id.btnVoltar
-                );
-
-        btnVoltar.setOnClickListener(v -> {
-
-            finish();
-
-        });
-
-        // =====================================================
         // CONFIGURAR MENU INFERIOR
         // =====================================================
 
@@ -197,8 +182,8 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
 
         btnEditarDados.setOnClickListener(v -> {
 
-           // Intent intent = new Intent(UsuarioProfessorActivity.this, EditarProfessorActivity.class);
-            // startActivity(intent);
+           Intent intent = new Intent(UsuarioProfessorActivity.this, EditarDadosActivity.class);
+             startActivity(intent);
 
         });
 
@@ -421,24 +406,5 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
                 "Sessão encerrada.",
                 Toast.LENGTH_SHORT
         ).show();
-
-        // =====================================================
-        // VOLTAR PARA LOGIN
-        // =====================================================
-
-        Intent intent =
-                new Intent(
-                        UsuarioProfessorActivity.this,
-                        MainActivity.class
-                );
-
-        intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
-        );
-
-        startActivity(intent);
-
-        finish();
     }
 }

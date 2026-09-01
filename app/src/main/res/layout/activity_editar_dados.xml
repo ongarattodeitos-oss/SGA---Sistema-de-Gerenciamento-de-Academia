@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#080B12">
+
+    <!-- CONTEÚDO PRINCIPAL -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#0B0B0C"
+            android:paddingStart="20dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="30dp">
+
+            <!-- VOLTAR -->
+
+            <Button
+                android:id="@+id/btnVoltar"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="9dp"
+                android:backgroundTint="#182334"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="← Voltar"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- CABEÇALHO -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="PERFIL"
+                android:textColor="#03C6FC"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.12" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Editar meus dados"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Atualize as informações da sua conta"
+                android:textColor="#8E9AAF"
+                android:textSize="14sp" />
+
+            <!-- FOTO -->
+
+            <ImageView
+                android:id="@+id/imgFotoPerfil"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/img_perfil"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_professor_foto_perfil"
+                android:padding="3dp" />
+
+            <Button
+                android:id="@+id/btnAlterarFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="12dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#182334"
+                android:text="Alterar foto"
+                android:textColor="#03C6FC"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- CARD DOS DADOS -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/bg_card_professor"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DADOS DA CONTA"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <!-- NOME -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="NOME COMPLETO"
+                    android:textColor="#657086"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtNome"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/bg_input_professor"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#657086"
+                    android:textSize="15sp"
+                    android:hint="Digite seu nome completo"
+                    android:singleLine="true" />
+
+                <!-- USUÁRIO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="USUÁRIO"
+                    android:textColor="#657086"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/bg_input_professor"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#657086"
+                    android:textSize="15sp"
+                    android:hint="Digite seu usuário"
+                    android:singleLine="true" />
+
+                <!-- E-MAIL -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="E-MAIL"
+                    android:textColor="#657086"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/bg_input_professor"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#657086"
+                    android:textSize="15sp"
+                    android:hint="Digite seu e-mail"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <!-- CARD SEGURANÇA -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_card_professor"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SEGURANÇA"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Altere sua senha apenas se desejar."
+                    android:textColor="#8E9AAF"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="NOVA SENHA"
+                    android:textColor="#657086"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtSenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/bg_input_professor"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:inputType="textPassword"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#657086"
+                    android:textSize="15sp"
+                    android:hint="Deixe em branco para não alterar" />
+
+            </LinearLayout>
+
+            <!-- SALVAR -->
+
+            <Button
+                android:id="@+id/btnSalvarAlteracoes"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="#03C6FC"
+                android:text="SALVAR ALTERAÇÕES"
+                android:textColor="#080B12"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

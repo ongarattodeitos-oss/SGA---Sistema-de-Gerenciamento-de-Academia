@@ -54,12 +54,6 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
 
     private Button btnVoltar;
 
-
-    private Button btnInicio;
-    private Button btnAlunos;
-    private Button btnTreinos;
-    private Button btnPerfil;
-
     private final int COR_SELECIONADO = 0xFF03C6FC;
     private final int COR_NORMAL = 0xFF657086;
 
@@ -129,11 +123,6 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
         txtPlano = findViewById(R.id.txtPlano);
         txtStatus = findViewById(R.id.txtStatusAluno);
 
-        btnInicio = findViewById(R.id.btnInicioProfessor);
-        btnAlunos = findViewById(R.id.btnAlunosProfessor);
-        btnTreinos = findViewById(R.id.btnTreinosProfessor);
-        btnPerfil = findViewById(R.id.btnPerfilProfessor);
-
         btnVoltar = findViewById(R.id.btnVoltar);
 
         // =====================================================
@@ -154,76 +143,6 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
 
             return;
         }
-
-
-
-// =========================================================
-// BOTÃO INÍCIO
-// =========================================================
-
-        btnInicio.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    AlunoDetalhesActivity.this,
-                    ProfessorActivity.class
-            );
-
-            startActivity(intent);
-            finish();
-
-        });
-
-
-// =========================================================
-// BOTÃO ALUNOS
-// =========================================================
-
-        btnAlunos.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    AlunoDetalhesActivity.this,
-                    AlunosListaActivity.class
-            );
-
-            startActivity(intent);
-            finish();
-
-        });
-
-
-// =========================================================
-// BOTÃO TREINOS
-// =========================================================
-
-        btnTreinos.setOnClickListener(v -> {
-
-            selecionarBotao(btnTreinos);
-
-            // Configuraremos a tela de treinos depois.
-
-        });
-
-
-// =========================================================
-// BOTÃO PERFIL
-// =========================================================
-
-        btnPerfil.setOnClickListener(v -> {
-
-            selecionarBotao(btnPerfil);
-
-            Intent intent = new Intent (AlunoDetalhesActivity.this, UsuarioProfessorActivity.class );
-            startActivity(intent);
-
-        });
-
-
-// =========================================================
-// DEIXA ALUNOS SELECIONADO
-// =========================================================
-
-        selecionarBotao(btnAlunos);
-
         // =====================================================
         // PRÓXIMO PASSO:
         // BUSCAR OS DADOS NA API
@@ -231,10 +150,6 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
 
         buscarDadosAluno();
     }
-
-    // =========================================================
-    // BUSCAR DADOS DO ALUNO
-    // =========================================================
 
     // =========================================================
 // BUSCAR DADOS DO ALUNO
@@ -592,23 +507,6 @@ public class AlunoDetalhesActivity extends AppCompatActivity {
         ).post(acao);
     }
 
-    // =============================================================
-// SELECIONAR BOTÃO DO MENU
-// =============================================================
-
-    private void selecionarBotao(Button botaoSelecionado) {
-
-        // Deixa todos normais
-
-        btnInicio.setTextColor(COR_NORMAL);
-        btnAlunos.setTextColor(COR_NORMAL);
-        btnTreinos.setTextColor(COR_NORMAL);
-        btnPerfil.setTextColor(COR_NORMAL);
-
-        // Deixa o selecionado azul
-
-        botaoSelecionado.setTextColor(COR_SELECIONADO);
-    }
 
     // =========================================================
 // CARREGAR FOTO DO ALUNO A PARTIR DA URL

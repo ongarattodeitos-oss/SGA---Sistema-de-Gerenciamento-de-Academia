@@ -304,12 +304,4 @@
 
     </ScrollView>
 
-    <!-- ================================================= -->
-    <!-- MENU DO PROFESSOR -->
-    <!-- ================================================= -->
-
-    <include
-        android:id="@+id/menuProfessor"
-        layout="@layout/menu_professor" />
-
 </LinearLayout>
