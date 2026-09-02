@@ -2,16 +2,16 @@ package com.example.sga;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.Color;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,13 +26,11 @@ public class LoginActivity extends AppCompatActivity {
     private TextView txtCriarConta;
 
     private LoginRepository loginRepository;
-
     private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
         // ==========================================
@@ -46,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
         txtCriarConta = findViewById(R.id.txtCriarConta);
 
         String texto = "Não tem uma conta? Criar conta";
-
         SpannableString spannable = new SpannableString(texto);
 
         int inicio = texto.indexOf("Criar conta");
@@ -62,39 +59,22 @@ public class LoginActivity extends AppCompatActivity {
         txtCriarConta.setText(spannable);
 
         // ==========================================
-        // REPOSITORY
+        // REPOSITORY E PREFERÊNCIAS
         // ==========================================
 
         loginRepository = new LoginRepository(this);
-
-        // ==========================================
-        // PREFERÊNCIAS
-        // ==========================================
-
-        preferences = getSharedPreferences(
-                "login",
-                MODE_PRIVATE
-        );
+        preferences = getSharedPreferences("login", MODE_PRIVATE);
 
         carregarLoginSalvo();
 
         // ==========================================
-        // BOTÃO LOGIN
+        // LISTENERS
         // ==========================================
 
         btnLogin.setOnClickListener(v -> fazerLogin());
 
-        // ==========================================
-        // CRIAR CONTA
-        // ==========================================
-
         txtCriarConta.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    LoginActivity.this,
-                    CadastroActivity.class
-            );
-
+            Intent intent = new Intent(LoginActivity.this, CadastroActivity.class);
             startActivity(intent);
         });
     }
@@ -105,55 +85,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void fazerLogin() {
 
-        String usuario =
-                edtUsuario.getText()
-                        .toString()
-                        .trim();
-
-        String senha =
-                edtSenha.getText()
-                        .toString();
-
-        // ==========================================
-        // VALIDA USUÁRIO
-        // ==========================================
+        String usuario = edtUsuario.getText().toString().trim();
+        String senha = edtSenha.getText().toString();
 
         if (usuario.isEmpty()) {
-
-            edtUsuario.setError(
-                    "Digite seu usuário ou email"
-            );
-
+            edtUsuario.setError("Digite seu usuário ou email");
             edtUsuario.requestFocus();
-
             return;
         }
-
-        // ==========================================
-        // VALIDA SENHA
-        // ==========================================
 
         if (senha.isEmpty()) {
-
-            edtSenha.setError(
-                    "Digite sua senha"
-            );
-
+            edtSenha.setError("Digite sua senha");
             edtSenha.requestFocus();
-
             return;
         }
-
-        // ==========================================
-        // DESABILITA BOTÃO
-        // ==========================================
 
         btnLogin.setEnabled(false);
         btnLogin.setText("ENTRANDO...");
-
-        // ==========================================
-        // ENVIA PARA API
-        // ==========================================
 
         loginRepository.fazerLogin(
                 usuario,
@@ -161,80 +109,38 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginRepository.LoginCallback() {
 
                     @Override
-                    public void onSuccess(
-                            JSONObject usuarioJson,
-                            String token
-                    ) {
+                    public void onSuccess(JSONObject usuarioJson, String token) {
 
                         btnLogin.setEnabled(true);
                         btnLogin.setText("ENTRAR");
 
                         try {
+                            int idUser = usuarioJson.getInt("id_user");
+                            String nomeCompleto = usuarioJson.getString("nome_completo");
+                            String nomeUser = usuarioJson.getString("nome_user");
+                            String email = usuarioJson.getString("email");
+                            String tipo = usuarioJson.getString("tipo");
 
-                            int idUser =
-                                    usuarioJson.getInt(
-                                            "id_user"
-                                    );
-                            preferences.edit()
-                                    .putInt(
-                                            "id_user",
-                                            idUser
-                                    )
-                                    .putString(
-                                            "token",
-                                            token
-                                    )
-                                    .apply();
-                            preferences.edit()
-                                    .putInt("id_user", idUser)
-                                    .putString("token", token)
-                                    .apply();
-
-
-                            String nomeCompleto =
-                                    usuarioJson.getString(
-                                            "nome_completo"
-                                    );
-
-                            String nomeUser =
-                                    usuarioJson.getString(
-                                            "nome_user"
-                                    );
-
-                            String email =
-                                    usuarioJson.getString(
-                                            "email"
-                                    );
-
-                            String tipo =
-                                    usuarioJson.getString(
-                                            "tipo"
-                                    );
-
-                            // ==================================
-                            // SALVA LOGIN SE "LEMBRAR-ME"
-                            // ==================================
+                            // ==========================================
+                            // SALVA DADOS NO SHAREDPFERENCES
+                            // ==========================================
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putInt("id_user", idUser);
+                            editor.putString("token", token);
+                            editor.putString("nome_completo", nomeCompleto);
+                            editor.putString("nome_user", nomeUser);
+                            editor.putString("email", email);
+                            editor.putString("tipo", tipo);
 
                             if (checkLembrar.isChecked()) {
+                                editor.putBoolean("lembrar", true);
+                                editor.putString("usuario", usuario);
+                            } else {
+                                editor.remove("lembrar");
+                                editor.remove("usuario");
+                            }
 
-                                preferences.edit()
-                                        .putBoolean(
-                                                "lembrar",
-                                                true
-                                        )
-                                        .putString(
-                                                "usuario",
-                                                usuario
-                                        )
-                                        .apply();
-
-                                } else {
-
-                                    preferences.edit()
-                                            .remove("lembrar")
-                                            .remove("usuario")
-                                            .apply();
-                                }
+                            editor.apply();
 
                             Toast.makeText(
                                     LoginActivity.this,
@@ -245,60 +151,27 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent;
 
                             if ("aluno".equalsIgnoreCase(tipo)) {
-
-                                intent = new Intent(
-                                        LoginActivity.this,
-                                        AlunoActivity.class
-                                );
-
+                                intent = new Intent(LoginActivity.this, AlunoActivity.class);
                             } else if ("professor".equalsIgnoreCase(tipo)) {
-
-                                intent = new Intent(
-                                        LoginActivity.this,
-                                        ProfessorActivity.class
-                                );
-
+                                intent = new Intent(LoginActivity.this, ProfessorActivity.class);
                             } else {
-
                                 Toast.makeText(
                                         LoginActivity.this,
                                         "Tipo de usuário inválido.",
                                         Toast.LENGTH_LONG
                                 ).show();
-
                                 return;
                             }
 
-// ==========================================
-// ENVIA OS DADOS DO USUÁRIO
-// ==========================================
-
-                            intent.putExtra(
-                                    "id_user",
-                                    idUser
-                            );
-
-                            intent.putExtra(
-                                    "nome_completo",
-                                    nomeCompleto
-                            );
-
-                            intent.putExtra(
-                                    "nome_user",
-                                    nomeUser
-                            );
-
-                            intent.putExtra(
-                                    "email",
-                                    email
-                            );
+                            intent.putExtra("id_user", idUser);
+                            intent.putExtra("nome_completo", nomeCompleto);
+                            intent.putExtra("nome_user", nomeUser);
+                            intent.putExtra("email", email);
 
                             startActivity(intent);
-
                             finish();
 
                         } catch (Exception e) {
-
                             Toast.makeText(
                                     LoginActivity.this,
                                     "Erro ao processar os dados do usuário.",
@@ -308,10 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(
-                            String mensagem
-                    ) {
-
+                    public void onError(String mensagem) {
                         btnLogin.setEnabled(true);
                         btnLogin.setText("ENTRAR");
 
@@ -325,26 +195,11 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    // ==========================================
-    // CARREGAR USUÁRIO SALVO
-    // ==========================================
-
     private void carregarLoginSalvo() {
-
-        boolean lembrar =
-                preferences.getBoolean(
-                        "lembrar",
-                        false
-                );
+        boolean lembrar = preferences.getBoolean("lembrar", false);
 
         if (lembrar) {
-
-            String usuario =
-                    preferences.getString(
-                            "usuario",
-                            ""
-                    );
-
+            String usuario = preferences.getString("usuario", "");
             edtUsuario.setText(usuario);
             checkLembrar.setChecked(true);
         }

@@ -1,7 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SGA" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+<resources>
+    <!-- Mude o parent para usar NoActionBar -->
+    <style name="Theme.SGA" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Define a cor padrão da barra de notificações -->
+        <item name="android:statusBarColor">#080B12</item>
     </style>
 </resources>

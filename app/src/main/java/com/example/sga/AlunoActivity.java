@@ -182,6 +182,17 @@ public class AlunoActivity extends AppCompatActivity {
             return;
         }
 
+        // Busca o token salvo no login
+        String token = getSharedPreferences("login", MODE_PRIVATE).getString("token", null);
+
+        if (token == null || token.isEmpty()) {
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_SHORT).show();
+                restaurarBotaoSalvar();
+            });
+            return;
+        }
+
         new Thread(() -> {
             HttpURLConnection conexao = null;
             try {
@@ -192,9 +203,9 @@ public class AlunoActivity extends AppCompatActivity {
                 conexao.setRequestMethod("POST");
                 conexao.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 conexao.setRequestProperty("Accept", "application/json");
+                conexao.setRequestProperty("Authorization", "Bearer " + token);
                 conexao.setDoOutput(true);
 
-                // Define limites de tempo para não ficar "SALVANDO..." infinitamente
                 conexao.setConnectTimeout(10000);
                 conexao.setReadTimeout(10000);
 
@@ -202,7 +213,6 @@ public class AlunoActivity extends AppCompatActivity {
                 body.put("peso", novoPeso);
                 body.put("altura", novaAltura);
 
-                // Escreve e FORÇA o envio (flush)
                 java.io.OutputStream os = conexao.getOutputStream();
                 os.write(body.toString().getBytes("UTF-8"));
                 os.flush();
@@ -210,7 +220,6 @@ public class AlunoActivity extends AppCompatActivity {
 
                 int codigo = conexao.getResponseCode();
 
-                // LER A RESPOSTA É OBRIGATÓRIO PARA DESTRAVAR A CONEXÃO
                 java.io.InputStream is = (codigo >= 200 && codigo < 300) ? conexao.getInputStream() : conexao.getErrorStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 StringBuilder resposta = new StringBuilder();
@@ -223,6 +232,11 @@ public class AlunoActivity extends AppCompatActivity {
                 if (codigo == 200) {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Dados salvos com sucesso!", Toast.LENGTH_SHORT).show();
+                        restaurarBotaoSalvar();
+                    });
+                } else if (codigo == 401) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_SHORT).show();
                         restaurarBotaoSalvar();
                     });
                 } else {
