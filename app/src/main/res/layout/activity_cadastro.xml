@@ -140,6 +140,41 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
+            <!-- Linha Dupla: Peso e Altura -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtPeso"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit"
+                    android:hint="Peso (kg)"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="16dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#80FFFFFF"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edtAltura"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit"
+                    android:hint="Altura (ex: 1.75)"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="16dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#80FFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <!-- ============================= -->
             <!-- USUÁRIO -->

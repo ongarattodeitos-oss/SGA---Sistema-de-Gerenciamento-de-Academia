@@ -279,106 +279,6 @@
 
 
             <!-- ========================================= -->
-            <!-- STATUS -->
-            <!-- ========================================= -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:paddingStart="16dp"
-                android:paddingTop="13dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="13dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_card_professor">
-
-                <View
-                    android:layout_width="9dp"
-                    android:layout_height="9dp"
-                    android:background="#35E88A" />
-
-                <TextView
-                    android:id="@+id/txtStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="STATUS  •  ALUNO ATIVO"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="#35E88A"
-                    android:letterSpacing="0.06" />
-
-            </LinearLayout>
-
-
-            <!-- ========================================= -->
-            <!-- MINHA META -->
-            <!-- ========================================= -->
-
-            <LinearLayout
-                android:id="@+id/cardMeta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@drawable/bg_card_professor">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MINHA META"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:textColor="#2DF733"
-                    android:letterSpacing="0.12" />
-
-                <TextView
-                    android:id="@+id/txtMeta"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Nenhuma meta definida"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Defina um objetivo e acompanhe sua evolução."
-                    android:textSize="13sp"
-                    android:textColor="#707D92" />
-
-                <ProgressBar
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_marginTop="18dp"
-                    android:progress="0"
-                    android:max="100"
-                    android:indeterminate="false"
-                    android:progressTint="#2DF733"
-                    android:backgroundTint="#202938" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnNovaMeta"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="16dp"
-                    android:text="+  DEFINIR NOVA META"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="#080B12"
-                    android:backgroundTint="#2DF733"
-                    android:padding="0dp" />
-
-            </LinearLayout>
-
-
-            <!-- ========================================= -->
             <!-- DOCUMENTOS MÉDICOS -->
             <!-- ========================================= -->
 
@@ -430,13 +330,6 @@
                             android:textStyle="bold"
                             android:textColor="#FFFFFF" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Envie documentos importantes para sua avaliação."
-                            android:textSize="12sp"
-                            android:textColor="#707D92" />
 
                     </LinearLayout>
 
@@ -516,78 +409,6 @@
 
             </LinearLayout>
 
-
-            <!-- ========================================= -->
-            <!-- TREINO ATUAL -->
-            <!-- ========================================= -->
-
-            <LinearLayout
-                android:id="@+id/cardTreino"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@drawable/bg_card_professor">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TREINO ATUAL"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:textColor="#2DF733"
-                    android:letterSpacing="0.12" />
-
-                <TextView
-                    android:id="@+id/txtNomeTreino"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Nenhum treino selecionado"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
-
-                <TextView
-                    android:id="@+id/txtDescricaoTreino"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Seu treino aparecerá aqui."
-                    android:textSize="13sp"
-                    android:textColor="#707D92" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnVerTreino"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="18dp"
-                    android:text="VER TREINO  →"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#182334"
-                    android:padding="0dp" />
-
-            </LinearLayout>
-
-
-            <!-- ========================================= -->
-            <!-- DEFINIR TREINO -->
-            <!-- ========================================= -->
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnNovoTreino"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="14dp"
-                android:text="+  DEFINIR TREINO"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="#2DF733"
-                android:backgroundTint="#101923"
-                android:padding="0dp" />
 
         </LinearLayout>
 
