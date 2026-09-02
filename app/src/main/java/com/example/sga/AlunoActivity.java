@@ -34,21 +34,19 @@ public class AlunoActivity extends AppCompatActivity {
     private Button btnPlanos;
     private Button btnPerfil;
     private Button btnAnexarDocumento;
-
+    private EditText edtPeso, edtAltura;
     private LinearLayout listaExames;
 
     private TextView txtNenhumDocumento;
     private TextView txtNomeDocumento;
     private TextView txtTipoDocumento;
-    private EditText edtPeso;
-    private EditText edtAltura;
 
     private TextView txtIMC;
     private TextView txtClassificacaoIMC;
 
     private Button btnSalvarDadosFisicos;
     private ExameRepository exameRepository;
-
+    private static final String URL_PERFIL = "https://sga-api.miguel-r-hoff.workers.dev/perfil?id_user=";
     private int idUser = -1;
 
     // ==========================================
@@ -60,128 +58,204 @@ public class AlunoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aluno);
 
-        // ==========================================
-        // REFERÊNCIAS DO XML
-        // ==========================================
+        // Referências do XML
         listaExames = findViewById(R.id.listaExames);
         txtNenhumDocumento = findViewById(R.id.txtNenhumDocumento);
         txtNomeDocumento = findViewById(R.id.txtNomeDocumento);
         txtTipoDocumento = findViewById(R.id.txtTipoDocumento);
         edtPeso = findViewById(R.id.edtPeso);
         edtAltura = findViewById(R.id.edtAltura);
-
         txtIMC = findViewById(R.id.txtIMC);
         txtClassificacaoIMC = findViewById(R.id.txtClassificacaoIMC);
-
         btnSalvarDadosFisicos = findViewById(R.id.btnSalvarDadosFisicos);
         btnAnexarDocumento = findViewById(R.id.btnAnexarDocumento);
         btnInicio = findViewById(R.id.btnInicio);
         btnTreinos = findViewById(R.id.btnTreinos);
         btnPlanos = findViewById(R.id.btnPlanos);
         btnPerfil = findViewById(R.id.btnPerfil);
-// ==========================================
-// CALCULAR IMC ENQUANTO DIGITA
-// ==========================================
 
+        exameRepository = new ExameRepository(this);
+
+        // Recupera ID do usuário
+        idUser = getIntent().getIntExtra("id_user", -1);
+
+        if (idUser == -1) {
+            Toast.makeText(this, "Usuário não identificado.", Toast.LENGTH_LONG).show();
+        } else {
+            // Usa apenas ESTA função para buscar os dados ao abrir a tela
+            buscarDadosFisicos();
+        }
+
+        // Cálculo de IMC em tempo real
         TextWatcher calculadoraIMC = new TextWatcher() {
-
             @Override
-            public void beforeTextChanged(
-                    CharSequence s,
-                    int start,
-                    int count,
-                    int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(
-                    CharSequence s,
-                    int start,
-                    int before,
-                    int count) {
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 calcularIMC();
             }
-
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         };
 
         edtPeso.addTextChangedListener(calculadoraIMC);
         edtAltura.addTextChangedListener(calculadoraIMC);
-        // ==========================================
-        // RECUPERA ID DO USUÁRIO
-        // ==========================================
-        idUser = getIntent().getIntExtra("id_user", -1);
-        if (idUser > 0) {
-            buscarDadosFisicos();
+
+        // Botões
+        if (btnSalvarDadosFisicos != null) {
+            btnSalvarDadosFisicos.setOnClickListener(v -> processarESalvarDados());
         }
-        Toast.makeText(this, "ID DO ALUNO: " + idUser, Toast.LENGTH_LONG).show();
-
-        // ==========================================
-        // VERIFICA ID
-        // ==========================================
-        if (idUser == -1) {
-            Toast.makeText(this, "Usuário não identificado.", Toast.LENGTH_LONG).show();
-        }
-
-        // ==========================================
-        // REPOSITORY DOS EXAMES
-        // ==========================================
-        exameRepository = new ExameRepository(this);
-
-        // ==========================================
-        // CARREGA EXAMES / BOTÃO ANEXAR DOCUMENTO
-        // ==========================================
-        carregarExames();
 
         btnAnexarDocumento.setOnClickListener(v -> abrirSeletorDocumento());
 
-        // ==========================================
-        // BOTÃO INÍCIO
-        // ==========================================
-        btnInicio.setOnClickListener(v -> {
-            // Já estamos na tela inicial.
-        });
-
-        // ==========================================
-        // BOTÃO TREINOS
-        // ==========================================
         btnTreinos.setOnClickListener(v -> {
             Intent intent = new Intent(AlunoActivity.this, OpcoesActivity.class);
             intent.putExtra("opcao", "treinos");
             startActivity(intent);
         });
 
-        // ==========================================
-        // BOTÃO PLANOS
-        // ==========================================
         btnPlanos.setOnClickListener(v -> {
             Intent intent = new Intent(AlunoActivity.this, OpcoesActivity.class);
             intent.putExtra("opcao", "planos");
             startActivity(intent);
         });
 
-        // ==========================================
-        // BOTÃO PERFIL
-        // ==========================================
         btnPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(AlunoActivity.this, PerfilActivity.class);
             intent.putExtra("opcao", "perfil");
             startActivity(intent);
         });
+
+        carregarExames();
     }
 
-
-// ==========================================
-// BUSCAR DADOS FÍSICOS
-// ==========================================
+    // ==========================================
+    // VALIDAR CAMPOS E SALVAR PESO/ALTURA
+    // ==========================================
 
     // ==========================================
-// BUSCAR DADOS FÍSICOS
-// ==========================================
+    // VALIDAR CAMPOS E INICIAR SALVAMENTO
+    // ==========================================
+    private void processarESalvarDados() {
+        try {
+            String pesoTexto = edtPeso.getText().toString().trim().replace(",", ".");
+            String alturaTexto = edtAltura.getText().toString().trim().replace(",", ".");
 
+            if (pesoTexto.isEmpty() || alturaTexto.isEmpty()) {
+                Toast.makeText(this, "Informe peso e altura.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double peso = Double.parseDouble(pesoTexto);
+            double altura = Double.parseDouble(alturaTexto);
+
+            if (peso <= 0 || altura <= 0) {
+                Toast.makeText(this, "Informe valores válidos.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            calcularIMC();
+
+            // Bloqueia os dois botões possíveis para evitar múltiplos cliques
+            if (btnSalvarDadosFisicos != null) {
+                btnSalvarDadosFisicos.setEnabled(false);
+                btnSalvarDadosFisicos.setText("SALVANDO...");
+            }
+
+            salvarPesoEAltura(peso, altura);
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Digite apenas números válidos.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // ==========================================
+    // SALVAR DADOS FÍSICOS NA API
+    // ==========================================
+    private void salvarPesoEAltura(double novoPeso, double novaAltura) {
+
+        if (idUser == -1) {
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Usuário não identificado.", Toast.LENGTH_SHORT).show();
+                restaurarBotaoSalvar();
+            });
+            return;
+        }
+
+        new Thread(() -> {
+            HttpURLConnection conexao = null;
+            try {
+                String urlApi = "https://sga-api.miguel-r-hoff.workers.dev/atualizar-perfil?id_alunos=" + idUser;
+
+                URL url = new URL(urlApi);
+                conexao = (HttpURLConnection) url.openConnection();
+                conexao.setRequestMethod("POST");
+                conexao.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                conexao.setRequestProperty("Accept", "application/json");
+                conexao.setDoOutput(true);
+
+                // Define limites de tempo para não ficar "SALVANDO..." infinitamente
+                conexao.setConnectTimeout(10000);
+                conexao.setReadTimeout(10000);
+
+                JSONObject body = new JSONObject();
+                body.put("peso", novoPeso);
+                body.put("altura", novaAltura);
+
+                // Escreve e FORÇA o envio (flush)
+                java.io.OutputStream os = conexao.getOutputStream();
+                os.write(body.toString().getBytes("UTF-8"));
+                os.flush();
+                os.close();
+
+                int codigo = conexao.getResponseCode();
+
+                // LER A RESPOSTA É OBRIGATÓRIO PARA DESTRAVAR A CONEXÃO
+                java.io.InputStream is = (codigo >= 200 && codigo < 300) ? conexao.getInputStream() : conexao.getErrorStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder resposta = new StringBuilder();
+                String linha;
+                while ((linha = reader.readLine()) != null) {
+                    resposta.append(linha);
+                }
+                reader.close();
+
+                if (codigo == 200) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Dados salvos com sucesso!", Toast.LENGTH_SHORT).show();
+                        restaurarBotaoSalvar();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Erro " + codigo + " ao salvar.", Toast.LENGTH_SHORT).show();
+                        restaurarBotaoSalvar();
+                    });
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Erro de conexão ao salvar dados.", Toast.LENGTH_SHORT).show();
+                    restaurarBotaoSalvar();
+                });
+            } finally {
+                if (conexao != null) {
+                    conexao.disconnect();
+                }
+            }
+        }).start();
+    }
+
+    // ==========================================
+    // RESTAURAR BOTÕES
+    // ==========================================
+    private void restaurarBotaoSalvar() {
+        if (btnSalvarDadosFisicos != null) {
+            btnSalvarDadosFisicos.setEnabled(true);
+            btnSalvarDadosFisicos.setText("SALVAR");
+        }
+
+    }
     private void buscarDadosFisicos() {
 
         new Thread(() -> {
@@ -707,18 +781,6 @@ public class AlunoActivity extends AppCompatActivity {
                     parametrosBotao
             );
 
-            parametrosBotao.setMargins(
-                    0,
-                    14,
-                    0,
-                    0
-            );
-
-            btnExcluir.setLayoutParams(
-                    parametrosBotao
-            );
-
-
             item.addView(
                     btnExcluir
             );
@@ -1006,8 +1068,101 @@ public class AlunoActivity extends AppCompatActivity {
     }
 
     // ==========================================
-    // PEGAR NOME DO ARQUIVO
-    // ==========================================
+// BUSCAR PERFIL E CALCULAR IMC
+// ==========================================
+// A API não usa token/Bearer: a identificação é feita pelo id_user,
+// exatamente como em buscarDadosFisicos(). Por isso usamos aqui a
+// mesma constante URL_PERFIL que já existia na classe.
+    private void carregarPerfilAluno() {
+
+        if (idUser == -1) {
+            runOnUiThread(() -> txtIMC.setText("--"));
+            return;
+        }
+
+        new Thread(() -> {
+
+            HttpURLConnection conexao = null;
+
+            try {
+
+                URL url = new URL(URL_PERFIL + idUser);
+                conexao = (HttpURLConnection) url.openConnection();
+                conexao.setRequestMethod("GET");
+                conexao.setConnectTimeout(8000);
+                conexao.setReadTimeout(8000);
+
+                int codigo = conexao.getResponseCode();
+
+                if (codigo == 200) {
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+                    StringBuilder resposta = new StringBuilder();
+                    String linha;
+
+                    while ((linha = reader.readLine()) != null) {
+                        resposta.append(linha);
+                    }
+                    reader.close();
+
+                    JSONObject json = new JSONObject(resposta.toString());
+
+                    if (json.optBoolean("sucesso", false)) {
+                        JSONObject usuario = json.getJSONObject("usuario");
+
+                        double peso = usuario.optDouble("peso", 0.0);
+                        double altura = usuario.optDouble("altura", 0.0);
+
+                        runOnUiThread(() -> {
+
+                            if (peso > 0) {
+                                edtPeso.setText(String.format(java.util.Locale.getDefault(), "%.1f", peso));
+                            }
+
+                            if (altura > 0) {
+                                edtAltura.setText(String.format(java.util.Locale.getDefault(), "%.2f", altura));
+                            }
+
+                            calcularEExibirIMC(peso, altura);
+                        });
+
+                    } else {
+                        runOnUiThread(() -> txtIMC.setText("--"));
+                    }
+
+                } else {
+                    runOnUiThread(() -> txtIMC.setText("--"));
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> txtIMC.setText("--"));
+            } finally {
+                if (conexao != null) {
+                    conexao.disconnect();
+                }
+            }
+
+        }).start();
+    }
+
+    private void calcularEExibirIMC(double peso, double altura) {
+        if (peso > 0 && altura > 0) {
+            // Se a altura estiver cadastrada em centímetros (ex: 175 cm), converte para metros (1.75 m)
+            if (altura > 3.0) {
+                altura = altura / 100.0;
+            }
+
+            double imc = peso / (altura * altura);
+            txtIMC.setText(String.format(java.util.Locale.getDefault(), "%.1f", imc));
+        } else {
+            txtIMC.setText("--");
+        }
+    }
+
+    // A API identifica o aluno pelo id_user (sem token). Usamos a mesma
+    // URL_PERFIL usada em carregarPerfilAluno().
+
 
     private String obterNomeArquivo(Uri uri) {
         String nome = null;
@@ -1031,7 +1186,6 @@ public class AlunoActivity extends AppCompatActivity {
         if (nome == null) {
             nome = uri.getLastPathSegment();
         }
-
         return nome != null ? nome : "Arquivo selecionado";
     }
 }

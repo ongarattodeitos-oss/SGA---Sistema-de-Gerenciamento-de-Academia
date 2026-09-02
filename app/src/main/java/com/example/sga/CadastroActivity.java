@@ -35,7 +35,8 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText edtUsuario;
     private EditText edtSenha;
     private EditText edtConfirmarSenha;
-
+    private EditText edtPeso;
+    private EditText edtAltura;
     private Button btnCadastrar;
 
 
@@ -66,7 +67,8 @@ public class CadastroActivity extends AppCompatActivity {
         edtTelefone = findViewById(R.id.edtTelefone);
         edtCpf = findViewById(R.id.edtCpf);
         edtNascimento = findViewById(R.id.edtNascimento);
-
+        edtPeso = findViewById(R.id.edtPeso);
+        edtAltura = findViewById(R.id.edtAltura);
         aplicarMascaraCpf();
         aplicarMascaraData();
 
@@ -131,11 +133,27 @@ public class CadastroActivity extends AppCompatActivity {
         String usuario = edtUsuario.getText().toString().trim();
         String senha = edtSenha.getText().toString();
         String confirmarSenha = edtConfirmarSenha.getText().toString();
+        String pesoStr = edtPeso.getText().toString().trim();
+        String alturaStr = edtAltura.getText().toString().trim();
+        double peso = Double.parseDouble(pesoStr.replace(",", "."));
+        double altura = Double.parseDouble(alturaStr.replace(",", "."));
 
 
         // ==========================================
         // VALIDAÇÕES
         // ==========================================
+        if (pesoStr.isEmpty()) {
+            edtPeso.setError("Digite seu peso");
+            edtPeso.requestFocus();
+            return;
+        }
+
+        if (alturaStr.isEmpty()) {
+            edtAltura.setError("Digite sua altura");
+            edtAltura.requestFocus();
+            return;
+        }
+
 
         if (nome.isEmpty()) {
 
@@ -241,7 +259,8 @@ public class CadastroActivity extends AppCompatActivity {
                 dados.put("data", nascimento);
                 dados.put("telefone", telefone);
                 dados.put("cpf", cpf);
-
+                dados.put("peso", peso);
+                dados.put("altura", altura);
 
                 URL url = new URL(URL_CADASTRO);
 
