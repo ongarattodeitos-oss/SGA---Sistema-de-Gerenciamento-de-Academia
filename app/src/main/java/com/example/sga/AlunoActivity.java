@@ -77,7 +77,7 @@ public class AlunoActivity extends AppCompatActivity {
         exameRepository = new ExameRepository(this);
 
         // Recupera ID do usuário
-        idUser = getIntent().getIntExtra("id_user", -1);
+        idUser = getIntent().getIntExtra("id_usuario", -1);
 
         if (idUser == -1) {
             Toast.makeText(this, "Usuário não identificado.", Toast.LENGTH_LONG).show();

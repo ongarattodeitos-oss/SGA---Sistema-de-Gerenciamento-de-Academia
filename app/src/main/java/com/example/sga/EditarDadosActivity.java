@@ -3,12 +3,15 @@ package com.example.sga;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Outline;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,7 +39,7 @@ public class EditarDadosActivity extends AppCompatActivity {
     private Button btnVoltar, btnAlterarFoto, btnSalvarAlteracoes;
 
     private SharedPreferences preferences;
-    private FotoPerfilRepository fotoRepository;
+    private FotoPerfilProfessorRepository fotoRepository;
 
     private String originalNome = "";
     private String originalUsuario = "";
@@ -51,9 +54,18 @@ public class EditarDadosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editar_dados);
 
         preferences = getSharedPreferences("login", MODE_PRIVATE);
-        fotoRepository = new FotoPerfilRepository(this);
+        fotoRepository = new FotoPerfilProfessorRepository(this);
 
         imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
+
+        imgFotoPerfil.setClipToOutline(true);
+        imgFotoPerfil.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setOval(0, 0, view.getWidth(), view.getHeight());
+            }
+        });
+
         edtNome = findViewById(R.id.edtNome);
         edtUsuario = findViewById(R.id.edtUsuario);
         edtEmail = findViewById(R.id.edtEmail);
@@ -163,7 +175,7 @@ public class EditarDadosActivity extends AppCompatActivity {
             byte[] bytesImagem = uriParaByteArray(fotoSelecionadaUri);
 
             if (bytesImagem != null) {
-                fotoRepository.enviarFoto(bytesImagem, new FotoPerfilRepository.FotoCallback() {
+                fotoRepository.enviarFoto(bytesImagem, new FotoPerfilProfessorRepository.UploadCallback() {
                     @Override
                     public void onSuccess(String resposta) {
                         try {
@@ -198,15 +210,14 @@ public class EditarDadosActivity extends AppCompatActivity {
 
     private void enviarDadosTextoServidor(String nome, String usuario, String email, String senha) {
         String token = preferences.getString("token", "");
-        int idUser = preferences.getInt("id_user", -1);
-        String tipo = preferences.getString("tipo", "professor");
+        int idFuncionario = preferences.getInt("id_funcionario", -1);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
             try {
-                boolean sucesso = atualizarDadosTexto(idUser, nome, usuario, email, senha, tipo, token);
+                boolean sucesso = atualizarDadosTexto(idFuncionario, nome, usuario, email, senha, token);
                 handler.post(() -> {
                     if (sucesso) {
                         SharedPreferences.Editor editor = preferences.edit();
@@ -231,8 +242,8 @@ public class EditarDadosActivity extends AppCompatActivity {
         });
     }
 
-    private boolean atualizarDadosTexto(int idUser, String nome, String usuario, String email, String senha, String tipo, String token) throws Exception {
-        URL url = new URL("https://sga-api.miguel-r-hoff.workers.dev/atualizar-perfil");
+    private boolean atualizarDadosTexto(int idFuncionario, String nome, String usuario, String email, String senha, String token) throws Exception {
+        URL url = new URL("https://sga-api.miguel-r-hoff.workers.dev/atualizar-perfil?id_funcionario=" + idFuncionario);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
@@ -240,11 +251,10 @@ public class EditarDadosActivity extends AppCompatActivity {
         conn.setDoOutput(true);
 
         JSONObject body = new JSONObject();
-        body.put("id_user", idUser);
+        body.put("id_funcionario", idFuncionario);
         body.put("nome_completo", nome);
         body.put("nome_user", usuario);
         body.put("email", email);
-        body.put("tipo", tipo);
         if (!senha.isEmpty()) body.put("senha", senha);
 
         try (OutputStream os = conn.getOutputStream()) {

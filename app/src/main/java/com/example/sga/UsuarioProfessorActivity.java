@@ -26,6 +26,10 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+import android.graphics.Outline;
+import android.view.View;
+import android.view.ViewOutlineProvider;
+
 public class UsuarioProfessorActivity extends AppCompatActivity {
 
     private FotoPerfilProfessorRepository fotoPerfilProfessorRepository;
@@ -66,6 +70,14 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         imgFotoProfessor = findViewById(R.id.imgFotoProfessor);
+
+        imgFotoProfessor.setClipToOutline(true);
+        imgFotoProfessor.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setOval(0, 0, view.getWidth(), view.getHeight());
+            }
+        });
 
         fotoPerfilProfessorRepository =
                 new FotoPerfilProfessorRepository(this);
