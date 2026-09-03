@@ -244,12 +244,12 @@
 
             <!-- SALVAR -->
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSalvarAlteracoes"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="#03C6FC"
+                android:background="@drawable/bg_button_professor"
                 android:text="SALVAR ALTERAÇÕES"
                 android:textColor="#080B12"
                 android:textSize="13sp"

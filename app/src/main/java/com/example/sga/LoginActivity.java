@@ -115,32 +115,114 @@ public class LoginActivity extends AppCompatActivity {
                         btnLogin.setText("ENTRAR");
 
                         try {
-                            int idUser = usuarioJson.getInt("id_user");
-                            String nomeCompleto = usuarioJson.getString("nome_completo");
-                            String nomeUser = usuarioJson.getString("nome_user");
-                            String email = usuarioJson.getString("email");
-                            String tipo = usuarioJson.getString("tipo");
 
-                            // ==========================================
-                            // SALVA DADOS NO SHAREDPFERENCES
-                            // ==========================================
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putInt("id_user", idUser);
+                            String nomeCompleto =
+                                    usuarioJson.getString("nome_completo");
+
+                            String nomeUser =
+                                    usuarioJson.getString("nome_user");
+
+                            String email =
+                                    usuarioJson.getString("email");
+
+                            String tipo =
+                                    usuarioJson.getString("tipo");
+
+
+                            SharedPreferences.Editor editor =
+                                    preferences.edit();
+
+                            // ======================================================
+                            // TOKEN E DADOS GERAIS
+                            // ======================================================
+
                             editor.putString("token", token);
                             editor.putString("nome_completo", nomeCompleto);
                             editor.putString("nome_user", nomeUser);
                             editor.putString("email", email);
                             editor.putString("tipo", tipo);
 
-                            if (checkLembrar.isChecked()) {
-                                editor.putBoolean("lembrar", true);
-                                editor.putString("usuario", usuario);
+
+                            // ======================================================
+                            // ID DO USUÁRIO
+                            // ======================================================
+
+                            int idUsuario;
+
+
+                            if ("aluno".equalsIgnoreCase(tipo)) {
+
+                                // --------------------------------------------------
+                                // ALUNO
+                                // --------------------------------------------------
+
+                                int idAluno =
+                                        usuarioJson.getInt("id_alunos");
+
+                                editor.putInt(
+                                        "id_alunos",
+                                        idAluno
+                                );
+
+                                idUsuario = idAluno;
+
+                            } else if ("professor".equalsIgnoreCase(tipo)) {
+
+                                // --------------------------------------------------
+                                // PROFESSOR
+                                // --------------------------------------------------
+
+                                int idFuncionario =
+                                        usuarioJson.getInt("id_funcionario");
+
+                                editor.putInt(
+                                        "id_funcionario",
+                                        idFuncionario
+                                );
+
+                                idUsuario = idFuncionario;
+
                             } else {
+
+                                Toast.makeText(
+                                        LoginActivity.this,
+                                        "Tipo de usuário inválido.",
+                                        Toast.LENGTH_LONG
+                                ).show();
+
+                                return;
+                            }
+
+
+                            // ======================================================
+                            // LEMBRAR LOGIN
+                            // ======================================================
+
+                            if (checkLembrar.isChecked()) {
+
+                                editor.putBoolean(
+                                        "lembrar",
+                                        true
+                                );
+
+                                editor.putString(
+                                        "usuario",
+                                        usuario
+                                );
+
+                            } else {
+
                                 editor.remove("lembrar");
                                 editor.remove("usuario");
                             }
 
+
+                            // ======================================================
+                            // SALVAR
+                            // ======================================================
+
                             editor.apply();
+
 
                             Toast.makeText(
                                     LoginActivity.this,
@@ -148,30 +230,61 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
 
+
+                            // ======================================================
+                            // ABRIR TELA CORRETA
+                            // ======================================================
+
                             Intent intent;
 
+
                             if ("aluno".equalsIgnoreCase(tipo)) {
-                                intent = new Intent(LoginActivity.this, AlunoActivity.class);
-                            } else if ("professor".equalsIgnoreCase(tipo)) {
-                                intent = new Intent(LoginActivity.this, ProfessorActivity.class);
-                            } else {
-                                Toast.makeText(
+
+                                intent = new Intent(
                                         LoginActivity.this,
-                                        "Tipo de usuário inválido.",
-                                        Toast.LENGTH_LONG
-                                ).show();
-                                return;
+                                        AlunoActivity.class
+                                );
+
+                            } else {
+
+                                intent = new Intent(
+                                        LoginActivity.this,
+                                        ProfessorActivity.class
+                                );
                             }
 
-                            intent.putExtra("id_user", idUser);
-                            intent.putExtra("nome_completo", nomeCompleto);
-                            intent.putExtra("nome_user", nomeUser);
-                            intent.putExtra("email", email);
+
+                            // ======================================================
+                            // PASSAR ID PARA A ACTIVITY
+                            // ======================================================
+
+                            intent.putExtra(
+                                    "id_usuario",
+                                    idUsuario
+                            );
+
+                            intent.putExtra(
+                                    "nome_completo",
+                                    nomeCompleto
+                            );
+
+                            intent.putExtra(
+                                    "nome_user",
+                                    nomeUser
+                            );
+
+                            intent.putExtra(
+                                    "email",
+                                    email
+                            );
+
 
                             startActivity(intent);
                             finish();
 
+
                         } catch (Exception e) {
+
                             Toast.makeText(
                                     LoginActivity.this,
                                     "Erro ao processar os dados do usuário.",

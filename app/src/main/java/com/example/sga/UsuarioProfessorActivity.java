@@ -2,6 +2,13 @@ package com.example.sga;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.ImageRequest;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,11 +23,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 public class UsuarioProfessorActivity extends AppCompatActivity {
 
+    private FotoPerfilProfessorRepository fotoPerfilProfessorRepository;
     private final int COR_SELECIONADO = 0xFF03C6FC;
     private final int COR_NORMAL = 0xFF657086;
-
+    private RequestQueue requestQueue;
     private ImageView imgFotoProfessor;
     private TextView txtNomeProfessor;
     private TextView txtCargoProfessor;
@@ -52,7 +63,13 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
                 }
         );
 
+        requestQueue = Volley.newRequestQueue(this);
+
         imgFotoProfessor = findViewById(R.id.imgFotoProfessor);
+
+        fotoPerfilProfessorRepository =
+                new FotoPerfilProfessorRepository(this);
+
         txtNomeProfessor = findViewById(R.id.txtNomeProfessor);
         txtCargoProfessor = findViewById(R.id.txtCargoProfessor);
         txtUsuario = findViewById(R.id.txtUsuario);
@@ -115,17 +132,111 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
     }
 
     private void carregarDadosProfessor() {
-        SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
 
-        String nomeCompleto = preferences.getString("nome_completo", "Professor");
-        String cargo = preferences.getString("tipo", "PROFESSOR").toUpperCase();
-        String usuario = preferences.getString("nome_user", "sem_usuario");
-        String email = preferences.getString("email", "email@nao.informado");
+        SharedPreferences preferences =
+                getSharedPreferences(
+                        "login",
+                        MODE_PRIVATE
+                );
+
+        String nomeCompleto =
+                preferences.getString(
+                        "nome_completo",
+                        "Professor"
+                );
+
+        String cargo =
+                preferences.getString(
+                        "tipo",
+                        "PROFESSOR"
+                ).toUpperCase();
+
+        String usuario =
+                preferences.getString(
+                        "nome_user",
+                        "sem_usuario"
+                );
+
+        String email =
+                preferences.getString(
+                        "email",
+                        "email@nao.informado"
+                );
+
+
+        // ========================================================
+        // DADOS
+        // ========================================================
 
         txtNomeProfessor.setText(nomeCompleto);
         txtCargoProfessor.setText(cargo);
         txtUsuario.setText(usuario);
         txtEmailProfessor.setText(email);
+
+
+        // ========================================================
+        // FOTO
+        // ========================================================
+
+        carregarFotoProfessor();
+    }
+
+    private void carregarFotoProfessor() {
+
+        fotoPerfilProfessorRepository.carregarFoto(
+                new FotoPerfilProfessorRepository.FotoCallback() {
+
+                    @Override
+                    public void onFotoCarregada(String fotoUrl) {
+
+                        ImageRequest request =
+                                new ImageRequest(
+                                        fotoUrl,
+
+                                        bitmap -> {
+
+                                            imgFotoProfessor.setImageBitmap(
+                                                    bitmap
+                                            );
+                                        },
+
+                                        0,
+                                        0,
+
+                                        ImageView.ScaleType.CENTER_CROP,
+
+                                        Bitmap.Config.RGB_565,
+
+                                        error -> {
+
+                                            imgFotoProfessor.setImageResource(
+                                                    R.drawable.img_perfil
+                                            );
+                                        }
+                                );
+
+                        request.setShouldCache(false);
+
+                        requestQueue.add(request);
+                    }
+
+                    @Override
+                    public void onFotoNaoEncontrada() {
+
+                        imgFotoProfessor.setImageResource(
+                                R.drawable.img_perfil
+                        );
+                    }
+
+                    @Override
+                    public void onError(String mensagem) {
+
+                        imgFotoProfessor.setImageResource(
+                                R.drawable.img_perfil
+                        );
+                    }
+                }
+        );
     }
 
     private void confirmarSaida() {
