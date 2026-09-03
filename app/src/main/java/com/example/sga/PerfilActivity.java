@@ -22,6 +22,10 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView txtNomeCompleto;
     private TextView txtNomeUser;
     private TextView txtEmail;
+    private Button btnInicio;
+    private Button btnTreinos;
+    private Button btnPlanos;
+    private Button btnPerfil;
     private TextView txtTelefone;
     private TextView txtCpf;
     private TextView txtData;
@@ -58,7 +62,29 @@ public class PerfilActivity extends AppCompatActivity {
         // ==========================================
         // COMPONENTES
         // ==========================================
+        btnInicio = findViewById(R.id.btnInicio);
+        btnTreinos = findViewById(R.id.btnTreinos);
+        btnPlanos = findViewById(R.id.btnPlanos);
+        btnPerfil = findViewById(R.id.btnPerfil);
+        btnInicio.setOnClickListener(v -> finish());
 
+        btnTreinos.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilActivity.this, OpcoesActivity.class);
+            intent.putExtra("opcao", "treinos");
+            startActivity(intent);
+            finish();
+        });
+
+        btnPlanos.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilActivity.this, OpcoesActivity.class);
+            intent.putExtra("opcao", "planos");
+            startActivity(intent);
+            finish();
+        });
+
+        btnPerfil.setOnClickListener(v -> {
+            // Já está na tela de perfil
+        });
         imgPerfil =
                 findViewById(R.id.imgPerfil);
 

@@ -1,344 +1,361 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#080B12">
+
+        <!-- ========================================== -->
+        <!-- ÁREA DE CONTEÚDO ROLÁVEL -->
+        <!-- ========================================== -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                        <!-- TÍTULO -->
+                        <TextView
+                            android:id="@+id/txtTituloPerfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="MEU PERFIL"
+                            android:textColor="@color/ciano_sga"
+                            android:textSize="26sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.15"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="24dp" />
+
+                        <!-- CARTÃO DO PERFIL -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cardBackgroundColor="#111722"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/ciano_sga"
+                            app:strokeWidth="1dp"
+                            android:layout_marginBottom="32dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:padding="24dp">
+
+                                        <ImageView
+                                            android:id="@+id/imgPerfil"
+                                            android:layout_width="100dp"
+                                            android:layout_height="100dp"
+                                            android:scaleType="centerCrop"
+                                            app:srcCompat="@drawable/img_perfil" />
+
+                                        <TextView
+                                            android:id="@+id/txtNomeCompleto"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="16dp"
+                                            android:text="Carregando..."
+                                            android:textColor="@android:color/white"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:gravity="center"
+                                            android:fontFamily="sans-serif-condensed" />
+
+                                        <TextView
+                                            android:id="@+id/txtNomeUser"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="4dp"
+                                            android:text="Carregando..."
+                                            android:textColor="@color/cinza_sga"
+                                            android:textSize="14sp"
+                                            android:gravity="center"
+                                            android:letterSpacing="0.05" />
+
+                                        <com.google.android.material.button.MaterialButton
+                                            android:id="@+id/btnAlterarFoto"
+                                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="20dp"
+                                            android:text="ALTERAR FOTO"
+                                            android:textColor="@color/ciano_sga"
+                                            app:strokeColor="@color/ciano_sga"
+                                            app:strokeWidth="1dp"
+                                            app:cornerRadius="8dp"
+                                            android:letterSpacing="0.08" />
+
+                                </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- INFORMAÇÕES PESSOAIS -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="INFORMAÇÕES PESSOAIS"
+                            android:textColor="@color/ciano_sga"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.1"
+                            android:layout_marginBottom="12dp" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cardBackgroundColor="#111722"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#1E2638"
+                            app:strokeWidth="1dp"
+                            android:layout_marginBottom="32dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="16dp">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="E-MAIL"
+                                            android:textColor="@color/cinza_sga"
+                                            android:textSize="11sp"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/txtEmail"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Carregando..."
+                                            android:textColor="@android:color/white"
+                                            android:textSize="16sp"
+                                            android:layout_marginTop="2dp"
+                                            android:layout_marginBottom="16dp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="TELEFONE"
+                                            android:textColor="@color/cinza_sga"
+                                            android:textSize="11sp"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/txtTelefone"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Carregando..."
+                                            android:textColor="@android:color/white"
+                                            android:textSize="16sp"
+                                            android:layout_marginTop="2dp"
+                                            android:layout_marginBottom="16dp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="CPF"
+                                            android:textColor="@color/cinza_sga"
+                                            android:textSize="11sp"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/txtCpf"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Carregando..."
+                                            android:textColor="@android:color/white"
+                                            android:textSize="16sp"
+                                            android:layout_marginTop="2dp"
+                                            android:layout_marginBottom="16dp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="DATA DE NASCIMENTO"
+                                            android:textColor="@color/cinza_sga"
+                                            android:textSize="11sp"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/txtData"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Carregando..."
+                                            android:textColor="@android:color/white"
+                                            android:textSize="16sp"
+                                            android:layout_marginTop="2dp" />
+
+                                </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- DADOS FÍSICOS -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="MÉTRICAS FÍSICAS"
+                            android:textColor="@color/ciano_sga"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.1"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false"
+                            android:layout_marginBottom="24dp">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="8dp"
+                                    app:cardBackgroundColor="#111722"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="0dp"
+                                    app:strokeColor="#1E2638"
+                                    app:strokeWidth="1dp">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical"
+                                            android:gravity="center"
+                                            android:padding="16dp">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="PESO"
+                                                    android:textColor="@color/cinza_sga"
+                                                    android:textSize="11sp"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:id="@+id/txtPeso"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="--"
+                                                    android:textColor="@color/ciano_sga"
+                                                    android:textSize="22sp"
+                                                    android:textStyle="bold"
+                                                    android:layout_marginTop="4dp" />
+                                        </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    app:cardBackgroundColor="#111722"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="0dp"
+                                    app:strokeColor="#1E2638"
+                                    app:strokeWidth="1dp">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical"
+                                            android:gravity="center"
+                                            android:padding="16dp">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="ALTURA"
+                                                    android:textColor="@color/cinza_sga"
+                                                    android:textSize="11sp"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:id="@+id/txtAltura"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="--"
+                                                    android:textColor="@color/ciano_sga"
+                                                    android:textSize="22sp"
+                                                    android:textStyle="bold"
+                                                    android:layout_marginTop="4dp" />
+                                        </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+                </LinearLayout>
+        </ScrollView>
+
+        <!-- ========================================== -->
+        <!-- BARRA INFERIOR DE NAVEGAÇÃO -->
+        <!-- ========================================== -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1E2638" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:background="#111722"
+            android:gravity="center_vertical">
 
-                <!-- ========================================== -->
-                <!-- TÍTULO -->
-                <!-- ========================================== -->
+                <Button
+                    android:id="@+id/btnInicio"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="INÍCIO"
+                    android:textColor="@color/cinza_sga"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/txtTituloPerfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="MEU PERFIL"
+                <Button
+                    android:id="@+id/btnTreinos"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="TREINOS"
+                    android:textColor="@color/cinza_sga"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnPlanos"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="PLANOS"
+                    android:textColor="@color/cinza_sga"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnPerfil"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="PERFIL"
                     android:textColor="@color/ciano_sga"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:letterSpacing="0.08"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="20dp" />
-
-
-                <!-- ========================================== -->
-                <!-- CARTÃO DO PERFIL -->
-                <!-- ========================================== -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:padding="22dp"
-                    android:background="@drawable/bg_card_perfil">
-
-                        <!-- FOTO -->
-
-                        <ImageView
-                            android:id="@+id/imgPerfil"
-                            android:layout_width="130dp"
-                            android:layout_height="130dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_launcher_foreground"
-                            android:scaleType="centerCrop"
-                            android:background="@drawable/bg_foto_perfil"
-                            android:padding="3dp"
-                            android:clipToOutline="true"
-                            android:contentDescription="Foto de perfil" />
-
-                        <!-- ESPAÇO -->
-
-                        <Space
-                            android:layout_width="match_parent"
-                            android:layout_height="12dp" />
-
-
-                        <!-- NOME -->
-
-                        <TextView
-                            android:id="@+id/txtNomeCompleto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@android:color/white"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:ellipsize="end" />
-
-
-                        <!-- USUÁRIO -->
-
-                        <TextView
-                            android:id="@+id/txtNomeUser"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@color/cinza_sga"
-                            android:textSize="15sp"
-                            android:gravity="center"
-                            android:layout_marginTop="4dp" />
-
-
-                        <!-- BOTÃO FOTO -->
-
-                        <Button
-                            android:id="@+id/btnAlterarFoto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ALTERAR FOTO"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold"
-                            android:layout_marginTop="16dp"
-                            android:paddingStart="22dp"
-                            android:paddingEnd="22dp" />
-
-                </LinearLayout>
-
-
-                <!-- ========================================== -->
-                <!-- ESPAÇO -->
-                <!-- ========================================== -->
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp" />
-
-
-                <!-- ========================================== -->
-                <!-- INFORMAÇÕES PESSOAIS -->
-                <!-- ========================================== -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="INFORMAÇÕES PESSOAIS"
-                    android:textColor="@color/ciano_sga"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05"
-                    android:layout_marginBottom="10dp" />
-
-
-                <!-- ========================================== -->
-                <!-- EMAIL -->
-                <!-- ========================================== -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_info_perfil"
-                    android:layout_marginBottom="10dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="E-MAIL"
-                            android:textColor="@color/cinza_sga"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-
-
-                <!-- ========================================== -->
-                <!-- TELEFONE -->
-                <!-- ========================================== -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_info_perfil"
-                    android:layout_marginBottom="10dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="TELEFONE"
-                            android:textColor="@color/cinza_sga"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtTelefone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-
-
-                <!-- ========================================== -->
-                <!-- CPF -->
-                <!-- ========================================== -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_info_perfil"
-                    android:layout_marginBottom="10dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="CPF"
-                            android:textColor="@color/cinza_sga"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtCpf"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-
-
-                <!-- ========================================== -->
-                <!-- DATA DE NASCIMENTO -->
-                <!-- ========================================== -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_info_perfil"
-                    android:layout_marginBottom="10dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="DATA DE NASCIMENTO"
-                            android:textColor="@color/cinza_sga"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtData"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-
-
-                <!-- ========================================== -->
-                <!-- DADOS FÍSICOS -->
-                <!-- ========================================== -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="DADOS FÍSICOS"
-                    android:textColor="@color/ciano_sga"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp" />
-
-
-                <!-- ========================================== -->
-                <!-- PESO -->
-                <!-- ========================================== -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_info_perfil"
-                    android:layout_marginBottom="10dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="PESO"
-                            android:textColor="@color/cinza_sga"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtPeso"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-
-
-                <!-- ========================================== -->
-                <!-- ALTURA -->
-                <!-- ========================================== -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_info_perfil"
-                    android:layout_marginBottom="24dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="ALTURA"
-                            android:textColor="@color/cinza_sga"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtAltura"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Carregando..."
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:layout_marginTop="4dp" />
-
-                </LinearLayout>
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
 
         </LinearLayout>
 
-</ScrollView>
+</LinearLayout>
