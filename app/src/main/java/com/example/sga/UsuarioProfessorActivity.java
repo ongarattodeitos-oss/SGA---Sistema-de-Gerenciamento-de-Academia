@@ -1,8 +1,15 @@
 package com.example.sga;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.ImageRequest;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,395 +23,240 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 public class UsuarioProfessorActivity extends AppCompatActivity {
 
-    // =========================================================
-    // CORES
-    // =========================================================
-
+    private FotoPerfilProfessorRepository fotoPerfilProfessorRepository;
     private final int COR_SELECIONADO = 0xFF03C6FC;
     private final int COR_NORMAL = 0xFF657086;
-
-    // =========================================================
-    // COMPONENTES DO PERFIL
-    // =========================================================
-
+    private RequestQueue requestQueue;
     private ImageView imgFotoProfessor;
-
     private TextView txtNomeProfessor;
     private TextView txtCargoProfessor;
     private TextView txtUsuario;
     private TextView txtEmailProfessor;
 
-    // =========================================================
-    // AÇÕES DA CONTA
-    // =========================================================
-
     private LinearLayout btnEditarDados;
     private LinearLayout btnCadastrarProfessor;
     private LinearLayout btnSairConta;
-
-    // =========================================================
-    // BOTÕES DO MENU INFERIOR
-    // =========================================================
 
     private Button btnInicio;
     private Button btnAlunos;
     private Button btnTreinos;
     private Button btnPerfil;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // =====================================================
-        // EDGE TO EDGE
-        // =====================================================
-
         EdgeToEdge.enable(this);
-
-        setContentView(
-                R.layout.activity_usuario_professor
-        );
-
-        // =====================================================
-        // CONFIGURAÇÃO DAS BARRAS DO SISTEMA
-        // =====================================================
+        setContentView(R.layout.activity_usuario_professor);
 
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(R.id.main),
                 (v, insets) -> {
-
-                    Insets systemBars =
-                            insets.getInsets(
-                                    WindowInsetsCompat.Type.systemBars()
-                            );
-
-                    v.setPadding(
-                            systemBars.left,
-                            systemBars.top,
-                            systemBars.right,
-                            systemBars.bottom
-                    );
-
+                    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                     return insets;
                 }
         );
 
-        // =====================================================
-        // COMPONENTES DO PERFIL
-        // =====================================================
+        requestQueue = Volley.newRequestQueue(this);
 
-        imgFotoProfessor =
-                findViewById(
-                        R.id.imgFotoProfessor
-                );
+        imgFotoProfessor = findViewById(R.id.imgFotoProfessor);
 
-        txtNomeProfessor =
-                findViewById(
-                        R.id.txtNomeProfessor
-                );
+        fotoPerfilProfessorRepository =
+                new FotoPerfilProfessorRepository(this);
 
-        txtCargoProfessor =
-                findViewById(
-                        R.id.txtCargoProfessor
-                );
+        txtNomeProfessor = findViewById(R.id.txtNomeProfessor);
+        txtCargoProfessor = findViewById(R.id.txtCargoProfessor);
+        txtUsuario = findViewById(R.id.txtUsuario);
+        txtEmailProfessor = findViewById(R.id.txtEmailProfessor);
 
-        txtUsuario =
-                findViewById(
-                        R.id.txtUsuario
-                );
+        btnEditarDados = findViewById(R.id.btnEditarDados);
+        btnCadastrarProfessor = findViewById(R.id.btnCadastrarProfessor);
+        btnSairConta = findViewById(R.id.btnSairConta);
 
-        txtEmailProfessor =
-                findViewById(
-                        R.id.txtEmailProfessor
-                );
-
-        // =====================================================
-        // BOTÕES / AÇÕES DA CONTA
-        // =====================================================
-
-        btnEditarDados =
-                findViewById(
-                        R.id.btnEditarDados
-                );
-
-        btnCadastrarProfessor =
-                findViewById(
-                        R.id.btnCadastrarProfessor
-                );
-
-        btnSairConta =
-                findViewById(
-                        R.id.btnSairConta
-                );
-
-        // =====================================================
-        // BOTÕES DO MENU INFERIOR
-        // =====================================================
-
-        btnInicio =
-                findViewById(
-                        R.id.btnInicioProfessor
-                );
-
-        btnAlunos =
-                findViewById(
-                        R.id.btnAlunosProfessor
-                );
-
-        btnTreinos =
-                findViewById(
-                        R.id.btnTreinosProfessor
-                );
-
-        btnPerfil =
-                findViewById(
-                        R.id.btnPerfilProfessor
-                );
-
-        // =====================================================
-        // CONFIGURAR MENU INFERIOR
-        // =====================================================
+        btnInicio = findViewById(R.id.btnInicioProfessor);
+        btnAlunos = findViewById(R.id.btnAlunosProfessor);
+        btnTreinos = findViewById(R.id.btnTreinosProfessor);
+        btnPerfil = findViewById(R.id.btnPerfilProfessor);
 
         configurarMenuInferior();
-
-        // =====================================================
-        // PERFIL SELECIONADO
-        // =====================================================
-
         selecionarBotao(btnPerfil);
 
-        // =====================================================
-        // BOTÃO EDITAR DADOS
-        // =====================================================
-
         btnEditarDados.setOnClickListener(v -> {
-
-           Intent intent = new Intent(UsuarioProfessorActivity.this, EditarDadosActivity.class);
-             startActivity(intent);
-
+            Intent intent = new Intent(UsuarioProfessorActivity.this, EditarDadosActivity.class);
+            startActivity(intent);
         });
-
-        // =====================================================
-        // BOTÃO CADASTRAR PROFESSOR
-        // =====================================================
 
         btnCadastrarProfessor.setOnClickListener(v -> {
-
-           // Intent intent = new Intent(UsuarioProfessorActivity.this, CadastroProfessorActivity.class);
-
-            //startActivity(intent);
-
+            // Futuro cadastro
         });
 
-        // =====================================================
-        // BOTÃO SAIR DA CONTA
-        // =====================================================
-
-        btnSairConta.setOnClickListener(v -> {
-
-            confirmarSaida();
-
-        });
-
-        // =====================================================
-        // CARREGAR DADOS INICIAIS
-        // =====================================================
+        btnSairConta.setOnClickListener(v -> confirmarSaida());
 
         carregarDadosProfessor();
     }
 
-
-    // =============================================================
-    // CONFIGURAR MENU INFERIOR
-    // =============================================================
-
     private void configurarMenuInferior() {
-
-        // =====================================================
-        // BOTÃO INÍCIO
-        // =====================================================
-
         btnInicio.setOnClickListener(v -> {
-
-            Intent intent =
-                    new Intent(
-                            UsuarioProfessorActivity.this,
-                            ProfessorActivity.class
-                    );
-
+            Intent intent = new Intent(UsuarioProfessorActivity.this, ProfessorActivity.class);
             startActivity(intent);
-
             finish();
-
         });
-
-        // =====================================================
-        // BOTÃO ALUNOS
-        // =====================================================
 
         btnAlunos.setOnClickListener(v -> {
-
-            Intent intent =
-                    new Intent(
-                            UsuarioProfessorActivity.this,
-                            AlunosListaActivity.class
-                    );
-
+            Intent intent = new Intent(UsuarioProfessorActivity.this, AlunosListaActivity.class);
             startActivity(intent);
-
             finish();
-
         });
-
-        // =====================================================
-        // BOTÃO TREINOS
-        // =====================================================
 
         btnTreinos.setOnClickListener(v -> {
-
             selecionarBotao(btnTreinos);
-
-            // -------------------------------------------------
-            // Aqui vamos colocar a Activity de treinos depois.
-            // -------------------------------------------------
-
-            Toast.makeText(
-                    UsuarioProfessorActivity.this,
-                    "Área de treinos",
-                    Toast.LENGTH_SHORT
-            ).show();
-
+            Toast.makeText(UsuarioProfessorActivity.this, "Área de treinos", Toast.LENGTH_SHORT).show();
         });
 
-        // =====================================================
-        // BOTÃO PERFIL
-        // =====================================================
-
-        btnPerfil.setOnClickListener(v -> {
-
-            selecionarBotao(btnPerfil);
-
-        });
+        btnPerfil.setOnClickListener(v -> selecionarBotao(btnPerfil));
     }
-
-
-    // =============================================================
-    // SELECIONAR BOTÃO DO MENU
-    // =============================================================
 
     private void selecionarBotao(Button botaoSelecionado) {
+        btnInicio.setTextColor(COR_NORMAL);
+        btnAlunos.setTextColor(COR_NORMAL);
+        btnTreinos.setTextColor(COR_NORMAL);
+        btnPerfil.setTextColor(COR_NORMAL);
 
-        btnInicio.setTextColor(
-                COR_NORMAL
-        );
-
-        btnAlunos.setTextColor(
-                COR_NORMAL
-        );
-
-        btnTreinos.setTextColor(
-                COR_NORMAL
-        );
-
-        btnPerfil.setTextColor(
-                COR_NORMAL
-        );
-
-        botaoSelecionado.setTextColor(
-                COR_SELECIONADO
-        );
+        botaoSelecionado.setTextColor(COR_SELECIONADO);
     }
-
-
-    // =============================================================
-    // CARREGAR DADOS DO PROFESSOR
-    // =============================================================
 
     private void carregarDadosProfessor() {
 
-        /*
-         * Por enquanto vamos colocar dados temporários
-         * apenas para testar a interface.
-         *
-         * Depois vamos substituir este método pela chamada
-         * da API /perfil usando o token salvo no aparelho.
-         */
+        SharedPreferences preferences =
+                getSharedPreferences(
+                        "login",
+                        MODE_PRIVATE
+                );
 
-        txtNomeProfessor.setText(
-                "Nome do Professor"
-        );
+        String nomeCompleto =
+                preferences.getString(
+                        "nome_completo",
+                        "Professor"
+                );
 
-        txtCargoProfessor.setText(
-                "PROFESSOR"
-        );
+        String cargo =
+                preferences.getString(
+                        "tipo",
+                        "PROFESSOR"
+                ).toUpperCase();
 
-        txtUsuario.setText(
-                "professor"
-        );
+        String usuario =
+                preferences.getString(
+                        "nome_user",
+                        "sem_usuario"
+                );
 
-        txtEmailProfessor.setText(
-                "professor@email.com"
+        String email =
+                preferences.getString(
+                        "email",
+                        "email@nao.informado"
+                );
+
+
+        // ========================================================
+        // DADOS
+        // ========================================================
+
+        txtNomeProfessor.setText(nomeCompleto);
+        txtCargoProfessor.setText(cargo);
+        txtUsuario.setText(usuario);
+        txtEmailProfessor.setText(email);
+
+
+        // ========================================================
+        // FOTO
+        // ========================================================
+
+        carregarFotoProfessor();
+    }
+
+    private void carregarFotoProfessor() {
+
+        fotoPerfilProfessorRepository.carregarFoto(
+                new FotoPerfilProfessorRepository.FotoCallback() {
+
+                    @Override
+                    public void onFotoCarregada(String fotoUrl) {
+
+                        ImageRequest request =
+                                new ImageRequest(
+                                        fotoUrl,
+
+                                        bitmap -> {
+
+                                            imgFotoProfessor.setImageBitmap(
+                                                    bitmap
+                                            );
+                                        },
+
+                                        0,
+                                        0,
+
+                                        ImageView.ScaleType.CENTER_CROP,
+
+                                        Bitmap.Config.RGB_565,
+
+                                        error -> {
+
+                                            imgFotoProfessor.setImageResource(
+                                                    R.drawable.img_perfil
+                                            );
+                                        }
+                                );
+
+                        request.setShouldCache(false);
+
+                        requestQueue.add(request);
+                    }
+
+                    @Override
+                    public void onFotoNaoEncontrada() {
+
+                        imgFotoProfessor.setImageResource(
+                                R.drawable.img_perfil
+                        );
+                    }
+
+                    @Override
+                    public void onError(String mensagem) {
+
+                        imgFotoProfessor.setImageResource(
+                                R.drawable.img_perfil
+                        );
+                    }
+                }
         );
     }
 
-
-    // =============================================================
-    // CONFIRMAR SAÍDA
-    // =============================================================
-
     private void confirmarSaida() {
-
-        new AlertDialog.Builder(
-                UsuarioProfessorActivity.this
-        )
-
-                .setTitle(
-                        "Sair da conta"
-                )
-
-                .setMessage(
-                        "Deseja realmente sair da sua conta?"
-                )
-
-                .setNegativeButton(
-                        "Cancelar",
-                        null
-                )
-
-                .setPositiveButton(
-                        "Sair",
-                        (dialog, which) -> {
-
-                            sairDaConta();
-
-                        }
-                )
-
+        new AlertDialog.Builder(this)
+                .setTitle("Sair da conta")
+                .setMessage("Deseja realmente sair da sua conta?")
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Sair", (dialog, which) -> sairDaConta())
                 .show();
     }
 
-
-    // =============================================================
-    // SAIR DA CONTA
-    // =============================================================
-
     private void sairDaConta() {
+        SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
+        preferences.edit().clear().apply();
 
-        /*
-         * Aqui vamos limpar o token salvo no SharedPreferences.
-         *
-         * Quando você me mostrar como está salvando o token
-         * atualmente, fazemos a limpeza exatamente de acordo
-         * com o seu sistema de autenticação.
-         */
+        Toast.makeText(this, "Sessão encerrada.", Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(
-                UsuarioProfessorActivity.this,
-                "Sessão encerrada.",
-                Toast.LENGTH_SHORT
-        ).show();
+        Intent intent = new Intent(UsuarioProfessorActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

@@ -171,7 +171,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
-                        android:hint="Ex.: 1,75"
+                        android:hint="Ex.: 1.75"
                         android:inputType="numberDecimal"
                         android:paddingStart="15dp"
                         android:paddingEnd="10dp"
@@ -272,7 +272,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:textColor="#080B12"
-                    android:backgroundTint="#2DF733"
+                    android:background="@drawable/bg_button"
                     android:padding="0dp" />
 
             </LinearLayout>
@@ -404,6 +404,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:textColor="#080B12"
+                    android:background="@drawable/bg_button"
                     android:backgroundTint="#2DF733"
                     android:padding="0dp" />
 
