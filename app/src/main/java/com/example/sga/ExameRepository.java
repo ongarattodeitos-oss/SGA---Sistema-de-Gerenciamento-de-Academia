@@ -89,7 +89,7 @@ public class ExameRepository {
             // ==========================================
             // DADOS DO EXAME
             // ==========================================
-            request.addStringPart("id_user", String.valueOf(idUser));
+            request.addStringPart("id_alunos", String.valueOf(idUser));
             request.addStringPart("nome_arquivo", nomeArquivo);
             request.addStringPart("tipo_arquivo", tipoArquivo);
             request.addStringPart("descricao", descricao != null ? descricao : "");
@@ -330,7 +330,6 @@ public class ExameRepository {
     // =================================================
     // MULTIPART REQUEST
     // =================================================
-
     private static class MultipartRequest extends Request<JSONObject> {
 
         private final Response.Listener<JSONObject> listener;
@@ -345,98 +344,53 @@ public class ExameRepository {
                 Response.ErrorListener errorListener
         ) {
             super(method, url, errorListener);
-
             this.listener = listener;
-
-            // ==========================================
-            // CRIA UM ÚNICO BOUNDARY
-            // ==========================================
             this.boundary = "----SGAFormBoundary" + System.currentTimeMillis();
         }
-
-        // =================================================
-        // CAMPO DE TEXTO
-        // =================================================
 
         public void addStringPart(String name, String value) {
             params.put(name, value);
         }
 
-        // =================================================
-        // ARQUIVO
-        // =================================================
-
         public void addFilePart(String fieldName, String fileName, String mimeType, byte[] data) {
             files.put(fieldName, new FilePart(fileName, mimeType, data));
         }
-
-        // =================================================
-        // CONTENT TYPE
-        // =================================================
 
         @Override
         public String getBodyContentType() {
             return "multipart/form-data; boundary=" + boundary;
         }
 
-        // =================================================
-        // BODY
-        // =================================================
-
         @Override
         public byte[] getBody() throws AuthFailureError {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
 
             try {
-
-                // ==========================================
-                // CAMPOS DE TEXTO
-                // ==========================================
+                // 1. Escreve os parâmetros de texto (ex: id_alunos, nome_arquivo)
                 for (Map.Entry<String, String> entry : params.entrySet()) {
                     output.write(("--" + boundary + "\r\n").getBytes(StandardCharsets.UTF_8));
-
-                    output.write(
-                            ("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"\r\n\r\n")
-                                    .getBytes(StandardCharsets.UTF_8)
-                    );
-
-                    output.write(entry.getValue().getBytes(StandardCharsets.UTF_8));
-                    output.write("\r\n".getBytes(StandardCharsets.UTF_8));
+                    output.write(("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"\r\n\r\n").getBytes(StandardCharsets.UTF_8));
+                    output.write((entry.getValue() + "\r\n").getBytes(StandardCharsets.UTF_8));
                 }
 
-                // ==========================================
-                // ARQUIVOS
-                // ==========================================
+                // 2. Escreve os arquivos binários
                 for (Map.Entry<String, FilePart> entry : files.entrySet()) {
-                    FilePart file = entry.getValue();
-
+                    FilePart filePart = entry.getValue();
                     output.write(("--" + boundary + "\r\n").getBytes(StandardCharsets.UTF_8));
-
-                    output.write(
-                            ("Content-Disposition: form-data; name=\"" + entry.getKey()
-                                    + "\"; filename=\"" + file.fileName + "\"\r\n")
-                                    .getBytes(StandardCharsets.UTF_8)
-                    );
-
-                    output.write(
-                            ("Content-Type: " + file.mimeType + "\r\n\r\n")
-                                    .getBytes(StandardCharsets.UTF_8)
-                    );
-
-                    output.write(file.data);
+                    output.write(("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"; filename=\"" + filePart.fileName + "\"\r\n").getBytes(StandardCharsets.UTF_8));
+                    output.write(("Content-Type: " + filePart.mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
+                    output.write(filePart.data);
                     output.write("\r\n".getBytes(StandardCharsets.UTF_8));
                 }
 
-                // ==========================================
-                // FINALIZA O MULTIPART
-                // ==========================================
+                // 3. Delimitador final do formulário multipart
                 output.write(("--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8));
 
-                return output.toByteArray();
-
             } catch (IOException e) {
-                throw new AuthFailureError(e.getMessage());
+                e.printStackTrace();
             }
+
+            return output.toByteArray();
         }
 
         @Override
@@ -454,12 +408,7 @@ public class ExameRepository {
             listener.onResponse(response);
         }
 
-        // =================================================
-        // CLASSE DO ARQUIVO
-        // =================================================
-
         private static class FilePart {
-
             String fileName;
             String mimeType;
             byte[] data;
