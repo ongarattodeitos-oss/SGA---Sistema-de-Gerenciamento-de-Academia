@@ -32,9 +32,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class EditarDadosActivity extends AppCompatActivity {
+public class EditarDadosProfessorActivity extends AppCompatActivity {
 
-    private ImageView imgFotoPerfil;
+    private ImageView imgFotoProfessor;
     private EditText edtNome, edtUsuario, edtEmail, edtSenha;
     private Button btnVoltar, btnAlterarFoto, btnSalvarAlteracoes;
 
@@ -51,15 +51,15 @@ public class EditarDadosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editar_dados);
+        setContentView(R.layout.activity_editar_dados_professor);
 
         preferences = getSharedPreferences("login", MODE_PRIVATE);
         fotoRepository = new FotoPerfilProfessorRepository(this);
 
-        imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
+        imgFotoProfessor = findViewById(R.id.imgFotoProfessor);
 
-        imgFotoPerfil.setClipToOutline(true);
-        imgFotoPerfil.setOutlineProvider(new ViewOutlineProvider() {
+        imgFotoProfessor.setClipToOutline(true);
+        imgFotoProfessor.setOutlineProvider(new ViewOutlineProvider() {
             @Override
             public void getOutline(View view, Outline outline) {
                 outline.setOval(0, 0, view.getWidth(), view.getHeight());
@@ -80,7 +80,7 @@ public class EditarDadosActivity extends AppCompatActivity {
                 uri -> {
                     if (uri != null) {
                         fotoSelecionadaUri = uri;
-                        imgFotoPerfil.setImageURI(uri);
+                        imgFotoProfessor.setImageURI(uri);
                         verificarAlteracoes();
                     }
                 }
@@ -117,7 +117,7 @@ public class EditarDadosActivity extends AppCompatActivity {
             try {
                 InputStream in = new URL(urlFoto).openStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(in);
-                handler.post(() -> imgFotoPerfil.setImageBitmap(bitmap));
+                handler.post(() -> imgFotoProfessor.setImageBitmap(bitmap));
             } catch (Exception ignored) {}
         });
     }
@@ -188,14 +188,14 @@ public class EditarDadosActivity extends AppCompatActivity {
 
                             enviarDadosTextoServidor(nome, usuario, email, senha);
                         } catch (Exception e) {
-                            Toast.makeText(EditarDadosActivity.this, "Erro ao processar resposta da foto.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarDadosProfessorActivity.this, "Erro ao processar resposta da foto.", Toast.LENGTH_SHORT).show();
                             restaurarBotaoSalvar();
                         }
                     }
 
                     @Override
                     public void onError(String mensagem) {
-                        Toast.makeText(EditarDadosActivity.this, mensagem, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditarDadosProfessorActivity.this, mensagem, Toast.LENGTH_SHORT).show();
                         restaurarBotaoSalvar();
                     }
                 });
@@ -226,16 +226,16 @@ public class EditarDadosActivity extends AppCompatActivity {
                         editor.putString("email", email);
                         editor.apply();
 
-                        Toast.makeText(EditarDadosActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditarDadosProfessorActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(EditarDadosActivity.this, "Erro ao atualizar dados.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditarDadosProfessorActivity.this, "Erro ao atualizar dados.", Toast.LENGTH_SHORT).show();
                         restaurarBotaoSalvar();
                     }
                 });
             } catch (Exception e) {
                 handler.post(() -> {
-                    Toast.makeText(EditarDadosActivity.this, "Erro: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditarDadosProfessorActivity.this, "Erro: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     restaurarBotaoSalvar();
                 });
             }

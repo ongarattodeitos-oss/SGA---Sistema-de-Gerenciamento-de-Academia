@@ -3,9 +3,7 @@ package com.example.sga;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import com.android.volley.Request;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.toolbox.ImageRequest;
@@ -22,9 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 import android.graphics.Outline;
 import android.view.View;
@@ -100,7 +95,7 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
         selecionarBotao(btnPerfil);
 
         btnEditarDados.setOnClickListener(v -> {
-            Intent intent = new Intent(UsuarioProfessorActivity.this, EditarDadosActivity.class);
+            Intent intent = new Intent(UsuarioProfessorActivity.this, EditarDadosProfessorActivity.class);
             startActivity(intent);
         });
 

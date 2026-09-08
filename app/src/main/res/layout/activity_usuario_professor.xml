@@ -2,7 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+    android:id="@+id/activity_usuario_professor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -55,16 +55,28 @@
             <!-- PERFIL DO PROFESSOR -->
             <!-- ========================================= -->
 
-            <ImageView
-                android:id="@+id/imgFotoProfessor"
+            <FrameLayout
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_marginTop="28dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/img_perfil"
-                android:scaleType="centerCrop"
-                android:background="@drawable/bg_professor_foto_perfil"
-                android:padding="3dp" />
+                android:layout_gravity="center_horizontal">
+
+                <!-- ANEL AZUL (fundo) -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_professor_foto_perfil" />
+
+                <!-- FOTO, menor que o anel = cria o "padding" visual -->
+                <ImageView
+                    android:id="@+id/imgFotoProfessor"
+                    android:layout_width="98dp"
+                    android:layout_height="98dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_perfil" />
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/txtNomeProfessor"

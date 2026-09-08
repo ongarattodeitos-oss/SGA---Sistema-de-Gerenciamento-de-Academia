@@ -72,16 +72,28 @@
 
             <!-- FOTO -->
 
-            <ImageView
-                android:id="@+id/imgFotoPerfil"
+            <FrameLayout
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:layout_marginTop="30dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/img_perfil"
-                android:scaleType="centerCrop"
-                android:background="@drawable/bg_professor_foto_perfil"
-                android:padding="3dp" />
+                android:layout_marginTop="28dp"
+                android:layout_gravity="center_horizontal">
+
+                <!-- ANEL AZUL (fundo) -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_professor_foto_perfil" />
+
+                <!-- FOTO, menor que o anel = cria o "padding" visual -->
+                <ImageView
+                    android:id="@+id/imgFotoProfessor"
+                    android:layout_width="98dp"
+                    android:layout_height="98dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_perfil" />
+
+            </FrameLayout>
 
             <Button
                 android:id="@+id/btnAlterarFoto"

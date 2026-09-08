@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SGA">
         <activity
-            android:name=".EditarDadosActivity"
+            android:name=".EditarDadosProfessorActivity"
             android:exported="false" />
         <activity
             android:name=".UsuarioProfessorActivity"
@@ -39,7 +39,7 @@
             android:name=".CadastroActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".CadastrarProfessorActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
