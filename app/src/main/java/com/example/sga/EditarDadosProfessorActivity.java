@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -31,6 +32,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import android.graphics.Matrix;
+import androidx.exifinterface.media.ExifInterface;
 
 public class EditarDadosProfessorActivity extends AppCompatActivity {
 
@@ -80,7 +84,12 @@ public class EditarDadosProfessorActivity extends AppCompatActivity {
                 uri -> {
                     if (uri != null) {
                         fotoSelecionadaUri = uri;
-                        imgFotoProfessor.setImageURI(uri);
+                        try {
+                            Bitmap preview = corrigirRotacaoECrop(uri);
+                            imgFotoProfessor.setImageBitmap(preview);
+                        } catch (Exception e) {
+                            imgFotoProfessor.setImageURI(uri); // fallback
+                        }
                         verificarAlteracoes();
                     }
                 }
@@ -269,11 +278,11 @@ public class EditarDadosProfessorActivity extends AppCompatActivity {
 
     private byte[] uriParaByteArray(Uri uri) {
         try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            if (bitmap == null) return null;
+            Bitmap bitmapQuadrado = corrigirRotacaoECrop(uri);
+            if (bitmapQuadrado == null) return null;
 
-            Bitmap bitmapRedimensionado = Bitmap.createScaledBitmap(bitmap, 600, 600, true);
+            Bitmap bitmapRedimensionado =
+                    Bitmap.createScaledBitmap(bitmapQuadrado, 600, 600, true);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmapRedimensionado.compress(Bitmap.CompressFormat.JPEG, 80, baos);
@@ -281,6 +290,49 @@ public class EditarDadosProfessorActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private Bitmap corrigirRotacaoECrop(Uri uri) throws IOException {
+        // Decodifica a imagem original
+        Bitmap bitmap;
+        try (InputStream input = getContentResolver().openInputStream(uri)) {
+            bitmap = BitmapFactory.decodeStream(input);
+        }
+        if (bitmap == null) return null;
+
+        // Corrige a rotação usando o EXIF
+        int rotacao = obterRotacaoExif(uri);
+        if (rotacao != 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotacao);
+            bitmap = Bitmap.createBitmap(
+                    bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true
+            );
+        }
+
+        // Faz um crop central quadrado (igual ao centerCrop do ImageView)
+        // em vez de esticar a imagem inteira
+        int lado = Math.min(bitmap.getWidth(), bitmap.getHeight());
+        int x = (bitmap.getWidth() - lado) / 2;
+        int y = (bitmap.getHeight() - lado) / 2;
+
+        return Bitmap.createBitmap(bitmap, x, y, lado, lado);
+    }
+
+    private int obterRotacaoExif(Uri uri) throws IOException {
+        try (InputStream input = getContentResolver().openInputStream(uri)) {
+            ExifInterface exif = new ExifInterface(input);
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL
+            );
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:  return 90;
+                case ExifInterface.ORIENTATION_ROTATE_180: return 180;
+                case ExifInterface.ORIENTATION_ROTATE_270: return 270;
+                default: return 0;
+            }
         }
     }
 
