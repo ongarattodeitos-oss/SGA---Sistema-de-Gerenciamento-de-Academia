@@ -100,7 +100,8 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
         });
 
         btnCadastrarProfessor.setOnClickListener(v -> {
-            // Futuro cadastro
+            Intent intent = new Intent(UsuarioProfessorActivity.this, CadastroProfessorActivity.class);
+            startActivity(intent);
         });
 
         btnSairConta.setOnClickListener(v -> confirmarSaida());
