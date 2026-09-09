@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="E-mail: -"
-                    android:textColor="#8E9AAF"
+                    android:textColor="#ffffff"
                     android:textSize="15sp" />
 
                 <TextView
