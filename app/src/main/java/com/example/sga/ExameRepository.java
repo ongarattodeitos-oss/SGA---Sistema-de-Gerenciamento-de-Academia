@@ -9,8 +9,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,8 +33,11 @@ public class ExameRepository {
     private final Context context;
 
     public ExameRepository(Context context) {
+
         this.context = context.getApplicationContext();
-        requestQueue = Volley.newRequestQueue(this.context);
+
+        requestQueue =
+                Volley.newRequestQueue(this.context);
     }
 
     // =================================================
@@ -48,165 +52,209 @@ public class ExameRepository {
             String descricao,
             ExameCallback callback
     ) {
+
         try {
 
             // ==========================================
             // LER ARQUIVO
             // ==========================================
-            byte[] arquivoBytes = lerArquivo(arquivoUri);
 
-            if (arquivoBytes == null || arquivoBytes.length == 0) {
-                callback.onError("Não foi possível ler o arquivo.");
+            byte[] arquivoBytes =
+                    lerArquivo(arquivoUri);
+
+            if (arquivoBytes == null ||
+                    arquivoBytes.length == 0) {
+
+                callback.onError(
+                        "Não foi possível ler o arquivo."
+                );
+
                 return;
             }
 
             // ==========================================
             // CRIAR REQUEST
             // ==========================================
-            MultipartRequest request = new MultipartRequest(
-                    Request.Method.POST,
-                    URL_EXAMES,
 
-                    response -> {
-                        try {
-                            boolean sucesso = response.getBoolean("success");
+            MultipartRequest request =
+                    new MultipartRequest(
+                            Request.Method.POST,
+                            URL_EXAMES,
 
-                            if (sucesso) {
-                                JSONObject exame = response.getJSONObject("exame");
-                                callback.onSuccess(exame);
-                            } else {
-                                String erro = response.optString("error", "Erro ao cadastrar exame.");
-                                callback.onError(erro);
-                            }
-                        } catch (JSONException e) {
-                            callback.onError("Resposta inválida da API.");
-                        }
-                    },
+                            response -> {
 
-                    error -> tratarErro(error, callback)
-            );
+                                try {
+
+                                    boolean sucesso =
+                                            response.getBoolean(
+                                                    "success"
+                                            );
+
+                                    if (sucesso) {
+
+                                        JSONObject exame =
+                                                response.getJSONObject(
+                                                        "exame"
+                                                );
+
+                                        callback.onSuccess(
+                                                exame
+                                        );
+
+                                    } else {
+
+                                        String erro =
+                                                response.optString(
+                                                        "error",
+                                                        "Erro ao cadastrar exame."
+                                                );
+
+                                        callback.onError(
+                                                erro
+                                        );
+                                    }
+
+                                } catch (JSONException e) {
+
+                                    callback.onError(
+                                            "Resposta inválida da API."
+                                    );
+                                }
+                            },
+
+                            error ->
+                                    tratarErro(
+                                            error,
+                                            callback
+                                    )
+                    );
 
             // ==========================================
             // DADOS DO EXAME
             // ==========================================
-            request.addStringPart("id_alunos", String.valueOf(idUser));
-            request.addStringPart("nome_arquivo", nomeArquivo);
-            request.addStringPart("tipo_arquivo", tipoArquivo);
-            request.addStringPart("descricao", descricao != null ? descricao : "");
+
+            request.addStringPart(
+                    "id_alunos",
+                    String.valueOf(idUser)
+            );
+
+            request.addStringPart(
+                    "nome_arquivo",
+                    nomeArquivo
+            );
+
+            request.addStringPart(
+                    "tipo_arquivo",
+                    tipoArquivo
+            );
+
+            request.addStringPart(
+                    "descricao",
+                    descricao != null
+                            ? descricao
+                            : ""
+            );
 
             // ==========================================
             // ARQUIVO
             // ==========================================
-            request.addFilePart("arquivo", nomeArquivo, tipoArquivo, arquivoBytes);
+
+            request.addFilePart(
+                    "arquivo",
+                    nomeArquivo,
+                    tipoArquivo,
+                    arquivoBytes
+            );
 
             // ==========================================
             // ENVIA
             // ==========================================
+
             requestQueue.add(request);
 
         } catch (Exception e) {
-            callback.onError("Erro ao preparar o arquivo: " + e.getMessage());
+
+            callback.onError(
+                    "Erro ao preparar o arquivo: "
+                            + e.getMessage()
+            );
         }
     }
 
     // =================================================
-    // LISTAR EXAMES DO USUÁRIO
+    // LISTAR EXAMES
     // =================================================
 
-    public void listarExames(int idUser, ListaExamesCallback callback) {
-        String url = URL_EXAMES + "/" + idUser;
+    public void listarExames(
+            int idAluno,
+            ListaExamesCallback callback
+    ) {
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null,
+        String url =
+                URL_EXAMES + "/" + idAluno;
 
-                response -> {
-                    try {
-                        boolean sucesso = response.getBoolean("success");
+        JsonObjectRequest request =
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        url,
+                        null,
 
-                        if (sucesso) {
-                            JSONArray exames = response.getJSONArray("exames");
-                            callback.onSuccess(exames);
-                        } else {
-                            String erro = response.optString("error", "Erro ao buscar exames.");
-                            callback.onError(erro);
-                        }
-                    } catch (JSONException e) {
-                        callback.onError("Resposta inválida da API.");
-                    }
-                },
+                        response -> {
 
-                error -> callback.onError("Não foi possível buscar os exames.")
-        );
+                            try {
+
+                                boolean sucesso =
+                                        response.getBoolean(
+                                                "success"
+                                        );
+
+                                if (sucesso) {
+
+                                    JSONArray exames =
+                                            response.optJSONArray(
+                                                    "exames"
+                                            );
+
+                                    callback.onSuccess(
+                                            exames != null
+                                                    ? exames
+                                                    : new JSONArray()
+                                    );
+
+                                } else {
+
+                                    String erro =
+                                            response.optString(
+                                                    "error",
+                                                    "Erro ao listar exames."
+                                            );
+
+                                    callback.onError(
+                                            erro
+                                    );
+                                }
+
+                            } catch (JSONException e) {
+
+                                callback.onError(
+                                        "Resposta inválida da API."
+                                );
+                            }
+                        },
+
+                        error ->
+                                tratarErroGenerico(
+                                        error,
+                                        callback::onError
+                                )
+                );
 
         requestQueue.add(request);
     }
 
     // =================================================
-    // LER ARQUIVO
+    // EXCLUIR EXAME
     // =================================================
-
-    private byte[] lerArquivo(Uri uri) throws IOException {
-        InputStream inputStream = context.getContentResolver().openInputStream(uri);
-
-        if (inputStream == null) {
-            return null;
-        }
-
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        byte[] buffer = new byte[8192];
-        int quantidade;
-
-        while ((quantidade = inputStream.read(buffer)) != -1) {
-            output.write(buffer, 0, quantidade);
-        }
-
-        inputStream.close();
-
-        return output.toByteArray();
-    }
-
-    // =================================================
-    // TRATAR ERROS
-    // =================================================
-
-    private void tratarErro(VolleyError error, ExameCallback callback) {
-        if (error.networkResponse != null) {
-            int codigo = error.networkResponse.statusCode;
-
-            switch (codigo) {
-                case 400:
-                    callback.onError("Dados do exame inválidos.");
-                    break;
-
-                case 404:
-                    callback.onError("Usuário não encontrado.");
-                    break;
-
-                case 405:
-                    callback.onError("Método não permitido.");
-                    break;
-
-                case 413:
-                    callback.onError("Arquivo muito grande.");
-                    break;
-
-                case 500:
-                    callback.onError("Erro interno no servidor.");
-                    break;
-
-                default:
-                    callback.onError("Erro na API: HTTP " + codigo);
-                    break;
-            }
-        } else {
-            callback.onError("Não foi possível conectar à API.");
-        }
-    }
-// =================================================
-// EXCLUIR EXAME
-// =================================================
 
     public void excluirExame(
             int idExame,
@@ -227,7 +275,9 @@ public class ExameRepository {
                             try {
 
                                 boolean sucesso =
-                                        response.getBoolean("success");
+                                        response.getBoolean(
+                                                "success"
+                                        );
 
                                 if (sucesso) {
 
@@ -241,7 +291,9 @@ public class ExameRepository {
                                                     "Erro ao excluir exame."
                                             );
 
-                                    callback.onError(erro);
+                                    callback.onError(
+                                            erro
+                                    );
                                 }
 
                             } catch (JSONException e) {
@@ -252,89 +304,239 @@ public class ExameRepository {
                             }
                         },
 
-                        error -> {
-
-                            if (error.networkResponse != null) {
-
-                                int codigo =
-                                        error.networkResponse.statusCode;
-
-                                switch (codigo) {
-
-                                    case 404:
-
-                                        callback.onError(
-                                                "Exame não encontrado."
-                                        );
-
-                                        break;
-
-                                    case 405:
-
-                                        callback.onError(
-                                                "Método não permitido."
-                                        );
-
-                                        break;
-
-                                    case 500:
-
-                                        callback.onError(
-                                                "Erro interno no servidor."
-                                        );
-
-                                        break;
-
-                                    default:
-
-                                        callback.onError(
-                                                "Erro na API: HTTP "
-                                                        + codigo
-                                        );
-
-                                        break;
-                                }
-
-                            } else {
-
-                                callback.onError(
-                                        "Não foi possível conectar à API."
-                                );
-                            }
-                        }
+                        error ->
+                                tratarErroGenerico(
+                                        error,
+                                        callback::onError
+                                )
                 );
 
         requestQueue.add(request);
     }
+
     // =================================================
-    // CALLBACKS
+    // LER ARQUIVO
+    // =================================================
+
+    private byte[] lerArquivo(Uri uri)
+            throws IOException {
+
+        InputStream inputStream =
+                context.getContentResolver()
+                        .openInputStream(uri);
+
+        if (inputStream == null) {
+            return null;
+        }
+
+        ByteArrayOutputStream output =
+                new ByteArrayOutputStream();
+
+        byte[] buffer =
+                new byte[8192];
+
+        int quantidade;
+
+        while (
+                (quantidade =
+                        inputStream.read(buffer)) != -1
+        ) {
+
+            output.write(
+                    buffer,
+                    0,
+                    quantidade
+            );
+        }
+
+        inputStream.close();
+
+        return output.toByteArray();
+    }
+
+    // =================================================
+    // TRATAR ERROS
+    // =================================================
+
+    private void tratarErro(
+            VolleyError error,
+            ExameCallback callback
+    ) {
+
+        if (error.networkResponse != null) {
+
+            int codigo =
+                    error.networkResponse.statusCode;
+
+            switch (codigo) {
+
+                case 400:
+
+                    callback.onError(
+                            "Dados do exame inválidos."
+                    );
+
+                    break;
+
+                case 404:
+
+                    callback.onError(
+                            "Usuário não encontrado."
+                    );
+
+                    break;
+
+                case 405:
+
+                    callback.onError(
+                            "Método não permitido."
+                    );
+
+                    break;
+
+                case 413:
+
+                    callback.onError(
+                            "Arquivo muito grande."
+                    );
+
+                    break;
+
+                case 500:
+
+                    callback.onError(
+                            "Erro interno no servidor."
+                    );
+
+                    break;
+
+                default:
+
+                    callback.onError(
+                            "Erro na API: HTTP "
+                                    + codigo
+                    );
+
+                    break;
+            }
+
+        } else {
+
+            callback.onError(
+                    "Não foi possível conectar à API."
+            );
+        }
+    }
+
+    // =================================================
+    // TRATAR ERROS (GENÉRICO)
+    // =================================================
+
+    private void tratarErroGenerico(
+            VolleyError error,
+            java.util.function.Consumer<String> onError
+    ) {
+
+        if (error.networkResponse != null) {
+
+            int codigo =
+                    error.networkResponse.statusCode;
+
+            switch (codigo) {
+
+                case 400:
+
+                    onError.accept(
+                            "Requisição inválida."
+                    );
+
+                    break;
+
+                case 404:
+
+                    onError.accept(
+                            "Exame ou usuário não encontrado."
+                    );
+
+                    break;
+
+                case 405:
+
+                    onError.accept(
+                            "Método não permitido."
+                    );
+
+                    break;
+
+                case 500:
+
+                    onError.accept(
+                            "Erro interno no servidor."
+                    );
+
+                    break;
+
+                default:
+
+                    onError.accept(
+                            "Erro na API: HTTP "
+                                    + codigo
+                    );
+
+                    break;
+            }
+
+        } else {
+
+            onError.accept(
+                    "Não foi possível conectar à API."
+            );
+        }
+    }
+
+    // =================================================
+    // CALLBACK
     // =================================================
 
     public interface ExameCallback {
+
         void onSuccess(JSONObject exame);
 
         void onError(String mensagem);
     }
 
     public interface ListaExamesCallback {
+
         void onSuccess(JSONArray exames);
 
         void onError(String mensagem);
     }
+
     public interface ExcluirExameCallback {
 
         void onSuccess();
 
         void onError(String mensagem);
     }
+
     // =================================================
     // MULTIPART REQUEST
     // =================================================
-    private static class MultipartRequest extends Request<JSONObject> {
 
-        private final Response.Listener<JSONObject> listener;
-        private final Map<String, String> params = new HashMap<>();
-        private final Map<String, FilePart> files = new HashMap<>();
+    private static class MultipartRequest
+            extends Request<JSONObject> {
+
+        private final Response.Listener<JSONObject>
+                listener;
+
+        private final Map<String, String>
+                params =
+                new HashMap<>();
+
+        private final Map<String, FilePart>
+                files =
+                new HashMap<>();
+
         private final String boundary;
 
         public MultipartRequest(
@@ -343,77 +545,226 @@ public class ExameRepository {
                 Response.Listener<JSONObject> listener,
                 Response.ErrorListener errorListener
         ) {
-            super(method, url, errorListener);
+
+            super(
+                    method,
+                    url,
+                    errorListener
+            );
+
             this.listener = listener;
-            this.boundary = "----SGAFormBoundary" + System.currentTimeMillis();
+
+            // ==========================================
+            // CRIA UM ÚNICO BOUNDARY
+            // ==========================================
+
+            this.boundary =
+                    "----SGAFormBoundary"
+                            + System.currentTimeMillis();
         }
 
-        public void addStringPart(String name, String value) {
-            params.put(name, value);
+        // =================================================
+        // CAMPO DE TEXTO
+        // =================================================
+
+        public void addStringPart(
+                String name,
+                String value
+        ) {
+
+            params.put(
+                    name,
+                    value
+            );
         }
 
-        public void addFilePart(String fieldName, String fileName, String mimeType, byte[] data) {
-            files.put(fieldName, new FilePart(fileName, mimeType, data));
+        // =================================================
+        // ARQUIVO
+        // =================================================
+
+        public void addFilePart(
+                String fieldName,
+                String fileName,
+                String mimeType,
+                byte[] data
+        ) {
+
+            files.put(
+                    fieldName,
+                    new FilePart(
+                            fileName,
+                            mimeType,
+                            data
+                    )
+            );
         }
+
+        // =================================================
+        // CONTENT TYPE
+        // =================================================
 
         @Override
         public String getBodyContentType() {
-            return "multipart/form-data; boundary=" + boundary;
+
+            return "multipart/form-data; boundary="
+                    + boundary;
         }
 
+        // =================================================
+        // BODY
+        // =================================================
+
         @Override
-        public byte[] getBody() throws AuthFailureError {
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
+        public byte[] getBody()
+                throws AuthFailureError {
+
+            ByteArrayOutputStream output =
+                    new ByteArrayOutputStream();
+
+            final String lineEnd = "\r\n";
+            final String twoHyphens = "--";
 
             try {
-                // 1. Escreve os parâmetros de texto (ex: id_alunos, nome_arquivo)
+
+                // ==========================================
+                // CAMPOS DE TEXTO
+                // ==========================================
+
                 for (Map.Entry<String, String> entry : params.entrySet()) {
-                    output.write(("--" + boundary + "\r\n").getBytes(StandardCharsets.UTF_8));
-                    output.write(("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"\r\n\r\n").getBytes(StandardCharsets.UTF_8));
-                    output.write((entry.getValue() + "\r\n").getBytes(StandardCharsets.UTF_8));
+
+                    output.write(
+                            (twoHyphens + boundary + lineEnd)
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            ("Content-Disposition: form-data; name=\""
+                                    + entry.getKey() + "\"" + lineEnd)
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            lineEnd.getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            entry.getValue().getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            lineEnd.getBytes(StandardCharsets.UTF_8)
+                    );
                 }
 
-                // 2. Escreve os arquivos binários
+                // ==========================================
+                // ARQUIVOS
+                // ==========================================
+
                 for (Map.Entry<String, FilePart> entry : files.entrySet()) {
+
                     FilePart filePart = entry.getValue();
-                    output.write(("--" + boundary + "\r\n").getBytes(StandardCharsets.UTF_8));
-                    output.write(("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"; filename=\"" + filePart.fileName + "\"\r\n").getBytes(StandardCharsets.UTF_8));
-                    output.write(("Content-Type: " + filePart.mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
+
+                    output.write(
+                            (twoHyphens + boundary + lineEnd)
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            ("Content-Disposition: form-data; name=\""
+                                    + entry.getKey() + "\"; filename=\""
+                                    + filePart.fileName + "\"" + lineEnd)
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            ("Content-Type: " + filePart.mimeType + lineEnd)
+                                    .getBytes(StandardCharsets.UTF_8)
+                    );
+
+                    output.write(
+                            lineEnd.getBytes(StandardCharsets.UTF_8)
+                    );
+
                     output.write(filePart.data);
-                    output.write("\r\n".getBytes(StandardCharsets.UTF_8));
+
+                    output.write(
+                            lineEnd.getBytes(StandardCharsets.UTF_8)
+                    );
                 }
 
-                // 3. Delimitador final do formulário multipart
-                output.write(("--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8));
+                // ==========================================
+                // BOUNDARY FINAL
+                // ==========================================
+
+                output.write(
+                        (twoHyphens + boundary + twoHyphens + lineEnd)
+                                .getBytes(StandardCharsets.UTF_8)
+                );
 
             } catch (IOException e) {
-                e.printStackTrace();
+
+                throw new AuthFailureError(
+                        "Erro ao montar corpo multipart: " + e.getMessage()
+                );
             }
 
             return output.toByteArray();
         }
+        // =================================================
+        // RESPOSTA DA API
+        // =================================================
 
         @Override
-        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+        protected Response<JSONObject>
+        parseNetworkResponse(
+                NetworkResponse response
+        ) {
+
             try {
-                String json = new String(response.data, StandardCharsets.UTF_8);
-                return Response.success(new JSONObject(json), null);
+
+                String json =
+                        new String(
+                                response.data,
+                                StandardCharsets.UTF_8
+                        );
+
+                return Response.success(
+                        new JSONObject(json),
+                        null
+                );
+
             } catch (Exception e) {
-                return Response.error(new VolleyError(e));
+
+                return Response.error(
+                        new VolleyError(e)
+                );
             }
         }
 
         @Override
-        protected void deliverResponse(JSONObject response) {
+        protected void deliverResponse(
+                JSONObject response
+        ) {
+
             listener.onResponse(response);
         }
 
+        // =================================================
+        // CLASSE DO ARQUIVO
+        // =================================================
+
         private static class FilePart {
+
             String fileName;
             String mimeType;
             byte[] data;
 
-            FilePart(String fileName, String mimeType, byte[] data) {
+            FilePart(
+                    String fileName,
+                    String mimeType,
+                    byte[] data
+            ) {
+
                 this.fileName = fileName;
                 this.mimeType = mimeType;
                 this.data = data;
