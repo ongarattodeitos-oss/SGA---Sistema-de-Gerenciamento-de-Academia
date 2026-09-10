@@ -47,7 +47,7 @@ public class AlunoActivity extends AppCompatActivity {
     private Button btnSalvarDadosFisicos;
     private ExameRepository exameRepository;
     private static final String URL_PERFIL = "https://sga-api.miguel-r-hoff.workers.dev/perfil?id_user=";
-    private int idUser = -1;
+    private int idUser;
 
     // ==========================================
     // CICLO DE VIDA
@@ -77,13 +77,26 @@ public class AlunoActivity extends AppCompatActivity {
         exameRepository = new ExameRepository(this);
 
         // Recupera ID do usuário
-        idUser = getIntent().getIntExtra("id_usuario", -1);
+        idUser = getIntent().getIntExtra("id_alunos", -1);
 
         if (idUser == -1) {
-            Toast.makeText(this, "Usuário não identificado.", Toast.LENGTH_LONG).show();
+
+            idUser = getSharedPreferences("login", MODE_PRIVATE)
+                    .getInt("id_alunos", -1);
+        }
+
+        if (idUser == -1) {
+
+            Toast.makeText(
+                    this,
+                    "Usuário não identificado.",
+                    Toast.LENGTH_LONG
+            ).show();
+
         } else {
-            // Usa apenas ESTA função para buscar os dados ao abrir a tela
+
             buscarDadosFisicos();
+            carregarExames();
         }
 
         // Cálculo de IMC em tempo real

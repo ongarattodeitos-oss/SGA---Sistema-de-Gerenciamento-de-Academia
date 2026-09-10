@@ -297,65 +297,12 @@
                 </LinearLayout>
         </ScrollView>
 
-        <!-- ========================================== -->
-        <!-- BARRA INFERIOR DE NAVEGAÇÃO -->
-        <!-- ========================================== -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#1E2638" />
+        <!-- ================================================= -->
+        <!-- MENU INFERIOR -->
+        <!-- ================================================= -->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:background="#111722"
-            android:gravity="center_vertical">
-
-                <Button
-                    android:id="@+id/btnInicio"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="INÍCIO"
-                    android:textColor="@color/cinza_sga"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnTreinos"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="TREINOS"
-                    android:textColor="@color/cinza_sga"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnPlanos"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="PLANOS"
-                    android:textColor="@color/cinza_sga"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnPerfil"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="PERFIL"
-                    android:textColor="@color/ciano_sga"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-
-        </LinearLayout>
+        <include
+            android:id="@+id/menuAluno"
+            layout="@layout/menu_aluno" />
 
 </LinearLayout>

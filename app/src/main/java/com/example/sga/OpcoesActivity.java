@@ -17,6 +17,8 @@ public class OpcoesActivity extends AppCompatActivity {
     private Button btnPlanos;
     private Button btnPerfil;
 
+    private int idAlunoAtual = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class OpcoesActivity extends AppCompatActivity {
         btnTreinos = findViewById(R.id.btnTreinos);
         btnPlanos = findViewById(R.id.btnPlanos);
         btnPerfil = findViewById(R.id.btnPerfil);
+
 
 
         // ==========================================
@@ -99,8 +102,15 @@ public class OpcoesActivity extends AppCompatActivity {
 
         btnInicio.setOnClickListener(v -> {
 
-            finish();
+            Intent intent = new Intent(
+                    OpcoesActivity.this,
+                    AlunoActivity.class
+            );
 
+            intent.putExtra("id_alunos", idAlunoAtual);
+
+            startActivity(intent);
+            finish();
         });
     }
 

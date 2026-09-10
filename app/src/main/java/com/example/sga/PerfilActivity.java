@@ -31,6 +31,9 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView txtData;
     private TextView txtPeso;
     private TextView txtAltura;
+    private int idAlunoAtual = -1;
+    private final int COR_SELECIONADO = 0xFF2DF733; // verde, mesmo do XML
+    private final int COR_NORMAL = 0xFF657086;
 
 
     // ==========================================
@@ -59,32 +62,13 @@ public class PerfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_perfil);
 
 
-        // ==========================================
-        // COMPONENTES
-        // ==========================================
         btnInicio = findViewById(R.id.btnInicio);
         btnTreinos = findViewById(R.id.btnTreinos);
         btnPlanos = findViewById(R.id.btnPlanos);
         btnPerfil = findViewById(R.id.btnPerfil);
-        btnInicio.setOnClickListener(v -> finish());
 
-        btnTreinos.setOnClickListener(v -> {
-            Intent intent = new Intent(PerfilActivity.this, OpcoesActivity.class);
-            intent.putExtra("opcao", "treinos");
-            startActivity(intent);
-            finish();
-        });
-
-        btnPlanos.setOnClickListener(v -> {
-            Intent intent = new Intent(PerfilActivity.this, OpcoesActivity.class);
-            intent.putExtra("opcao", "planos");
-            startActivity(intent);
-            finish();
-        });
-
-        btnPerfil.setOnClickListener(v -> {
-            // Já está na tela de perfil
-        });
+        configurarMenuInferior();
+        selecionarBotao(btnPerfil);
         imgPerfil =
                 findViewById(R.id.imgPerfil);
 
@@ -347,6 +331,8 @@ public class PerfilActivity extends AppCompatActivity {
 
                         try {
 
+                            idAlunoAtual = usuario.optInt("id_alunos", -1);
+
                             // ==================================
                             // NOME
                             // ==================================
@@ -517,5 +503,41 @@ public class PerfilActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void configurarMenuInferior() {
+
+        btnInicio.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilActivity.this, AlunoActivity.class);
+            intent.putExtra("id_alunos", idAlunoAtual);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
+
+        btnTreinos.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilActivity.this, OpcoesActivity.class);
+            intent.putExtra("opcao", "treinos");
+            startActivity(intent);
+            finish();
+        });
+
+        btnPlanos.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilActivity.this, OpcoesActivity.class);
+            intent.putExtra("opcao", "planos");
+            startActivity(intent);
+            finish();
+        });
+
+        btnPerfil.setOnClickListener(v -> selecionarBotao(btnPerfil));
+    }
+
+    private void selecionarBotao(Button botaoSelecionado) {
+        btnInicio.setTextColor(COR_NORMAL);
+        btnTreinos.setTextColor(COR_NORMAL);
+        btnPlanos.setTextColor(COR_NORMAL);
+        btnPerfil.setTextColor(COR_NORMAL);
+
+        botaoSelecionado.setTextColor(COR_SELECIONADO);
     }
 }
