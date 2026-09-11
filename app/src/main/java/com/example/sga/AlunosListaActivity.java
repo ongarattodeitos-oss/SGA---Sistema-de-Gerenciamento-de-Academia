@@ -145,9 +145,20 @@ public class AlunosListaActivity extends AppCompatActivity {
         // BOTÃO TREINOS
         // =========================================================
 
+        // =========================================================
+        // BOTÃO TREINOS
+        // =========================================================
+
+
         btnTreinos.setOnClickListener(v -> {
 
-            selecionarBotao(btnTreinos);
+            Intent intent = new Intent(
+                    AlunosListaActivity.this,
+                    ProfessorListaTreinosActivity.class
+            );
+
+            startActivity(intent);
+            finish();
 
         });
 
@@ -468,7 +479,7 @@ public class AlunosListaActivity extends AppCompatActivity {
                 );
 
                 String email = aluno.optString(
-                        "email",
+                        "nome_user",
                         ""
                 );
 
@@ -479,7 +490,7 @@ public class AlunosListaActivity extends AppCompatActivity {
 
                 txtNomeAluno.setText(nome);
 
-                txtEmailAluno.setText(email);
+                txtEmailAluno.setText("@"+email);
 
                 if (!plano.isEmpty()) {
 

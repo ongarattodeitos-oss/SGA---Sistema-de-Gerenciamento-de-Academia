@@ -80,11 +80,18 @@ public class ProfessorActivity extends AppCompatActivity {
         // BOTÃO TREINOS
         // =========================================================
 
-        btnTreinos.setOnClickListener(v -> {
 
-            selecionarBotao(btnTreinos);
+            btnTreinos.setOnClickListener(v -> {
 
-        });
+                Intent intent = new Intent(
+                        ProfessorActivity.this,
+                        ProfessorListaTreinosActivity.class
+                );
+
+                startActivity(intent);
+                finish();
+
+            });
 
         // =========================================================
         // BOTÃO PERFIL

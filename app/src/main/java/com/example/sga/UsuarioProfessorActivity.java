@@ -122,9 +122,21 @@ public class UsuarioProfessorActivity extends AppCompatActivity {
             finish();
         });
 
+        // =========================================================
+        // BOTÃO TREINOS
+        // =========================================================
+
+
         btnTreinos.setOnClickListener(v -> {
-            selecionarBotao(btnTreinos);
-            Toast.makeText(UsuarioProfessorActivity.this, "Área de treinos", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(
+                    UsuarioProfessorActivity.this,
+                    ProfessorListaTreinosActivity.class
+            );
+
+            startActivity(intent);
+            finish();
+
         });
 
         btnPerfil.setOnClickListener(v -> selecionarBotao(btnPerfil));
