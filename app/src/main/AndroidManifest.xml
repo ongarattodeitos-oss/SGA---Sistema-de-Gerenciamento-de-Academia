@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SGA">
         <activity
+            android:name=".FichasTreinoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfessorListaTreinosActivity"
+            android:exported="false" />
+        <activity
             android:name=".CadastroProfessorActivity"
             android:exported="false" />
         <activity
