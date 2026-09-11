@@ -510,18 +510,26 @@ public class AlunoActivity extends AppCompatActivity {
     private String obterClassificacaoIMC(double imc) {
 
         if (imc < 18.5) {
-            return "Abaixo de 18,5";
+            return "Abaixo do peso";
         }
 
         if (imc < 25.0) {
-            return "Faixa de 18,5 a 24,9";
+            return "Peso normal";
         }
 
         if (imc < 30.0) {
-            return "Faixa de 25,0 a 29,9";
+            return "Sobrepeso";
         }
 
-        return "30,0 ou mais";
+        if (imc < 35.0) {
+            return "Obesidade grau I";
+        }
+
+        if (imc < 40.0) {
+            return "Obesidade grau II (severa)";
+        }
+
+        return "Obesidade grau III (mórbida)";
     }
     // ==========================================
 // CALCULAR IMC AUTOMATICAMENTE
@@ -780,11 +788,16 @@ public class AlunoActivity extends AppCompatActivity {
                     Color.WHITE
             );
 
+            btnExcluir.setTypeface(
+                    null,
+                    Typeface.BOLD
+            );
+
             btnExcluir.setBackgroundColor(
                     Color.rgb(
-                            80,
-                            30,
-                            30
+                            229,
+                            57,
+                            53
                     )
             );
 
@@ -1077,6 +1090,11 @@ public class AlunoActivity extends AppCompatActivity {
                                 "Documento registrado com sucesso!",
                                 Toast.LENGTH_SHORT
                         ).show();
+
+                        // ==========================================
+                        // ATUALIZA A LISTA NA TELA
+                        // ==========================================
+                        carregarExames();
                     }
 
                     @Override

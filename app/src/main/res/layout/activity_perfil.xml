@@ -198,7 +198,13 @@
 
                                 </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
-
+                        <ImageButton
+                            android:id="@+id/btnEditarPerfil"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@android:drawable/ic_menu_edit"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Editar Perfil" />
                         <!-- DADOS FÍSICOS -->
                         <TextView
                             android:layout_width="match_parent"

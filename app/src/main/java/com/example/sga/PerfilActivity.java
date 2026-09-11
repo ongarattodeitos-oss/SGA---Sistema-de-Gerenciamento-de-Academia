@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,8 +53,7 @@ public class PerfilActivity extends AppCompatActivity {
 
     private PerfilRepository perfilRepository;
     private FotoPerfilRepository fotoPerfilRepository;
-
-
+    private ImageButton btnEditarPerfil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -61,7 +61,9 @@ public class PerfilActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_perfil);
 
+        btnEditarPerfil = findViewById(R.id.btnEditarPerfil);
 
+        btnEditarPerfil.setOnClickListener(v -> abrirModalEdicao());
         btnInicio = findViewById(R.id.btnInicio);
         btnTreinos = findViewById(R.id.btnTreinos);
         btnPlanos = findViewById(R.id.btnPlanos);
@@ -313,7 +315,53 @@ public class PerfilActivity extends AppCompatActivity {
         }
     }
 
+    private void abrirModalEdicao() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Editar Perfil");
 
+        // Layout simples contendo inputs para Nome e Telefone (exemplo)
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        final android.widget.EditText inputNome = new android.widget.EditText(this);
+        inputNome.setHint("Nome completo");
+        inputNome.setText(txtNomeCompleto.getText().toString());
+        layout.addView(inputNome);
+
+        final android.widget.EditText inputTelefone = new android.widget.EditText(this);
+        inputTelefone.setHint("Telefone");
+        inputTelefone.setText(txtTelefone.getText().toString());
+        layout.addView(inputTelefone);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Salvar", (dialog, which) -> {
+            try {
+                JSONObject dadosNovos = new JSONObject();
+                dadosNovos.put("nome_completo", inputNome.getText().toString());
+                dadosNovos.put("telefone", inputTelefone.getText().toString());
+
+                perfilRepository.atualizarPerfil(dadosNovos, new PerfilRepository.PerfilCallback() {
+                    @Override
+                    public void onSuccess(JSONObject usuario) {
+                        Toast.makeText(PerfilActivity.this, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+                        carregarPerfil(); // Recarrega as informações na tela
+                    }
+
+                    @Override
+                    public void onError(String mensagem) {
+                        Toast.makeText(PerfilActivity.this, mensagem, Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
     // ============================================================
     // CARREGAR PERFIL
     // ============================================================
