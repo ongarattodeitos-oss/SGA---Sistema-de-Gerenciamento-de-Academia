@@ -56,6 +56,7 @@ public class CriarFichaTreinoActivity extends AppCompatActivity {
     private TextView btnSugestaoTreinoA;
     private TextView btnSugestaoTreinoB;
     private TextView btnSugestaoFullBody;
+    private TextView btnSugestaoTreinoC;
 
 
     // ============================================================
@@ -145,6 +146,8 @@ public class CriarFichaTreinoActivity extends AppCompatActivity {
                 findViewById(
                         R.id.btnSugestaoFullBody
                 );
+
+        btnSugestaoTreinoC = findViewById(R.id.btnSugestaoTreinoC);
 
 
         // ========================================================
@@ -256,6 +259,20 @@ public class CriarFichaTreinoActivity extends AppCompatActivity {
 
             edtNomeFicha.setText(
                     "Treino B"
+            );
+
+            edtNomeFicha.setSelection(
+                    edtNomeFicha.length()
+            );
+
+            edtNomeFicha.requestFocus();
+
+        });
+
+        btnSugestaoTreinoC.setOnClickListener(v -> {
+
+            edtNomeFicha.setText(
+                    "Treino C"
             );
 
             edtNomeFicha.setSelection(
