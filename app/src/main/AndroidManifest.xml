@@ -14,7 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SGA">
         <activity
-            android:name=".FichasTreinoActivity"
+            android:name=".ExerciciosProfessorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CriarFichaTreinoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FichaTreinoActivity"
             android:exported="false" />
         <activity
             android:name=".ProfessorListaTreinosActivity"
@@ -46,9 +52,6 @@
             android:exported="false" />
         <activity
             android:name=".CadastroActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CadastrarProfessorActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

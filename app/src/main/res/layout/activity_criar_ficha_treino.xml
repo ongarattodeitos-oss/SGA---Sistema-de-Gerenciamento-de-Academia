@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#080B12">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- ================================================= -->
+            <!-- TOPO -->
+            <!-- ================================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/btnVoltarCriarFicha"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    android:text="‹"
+                    android:textColor="#FFFFFF"
+                    android:textSize="34sp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nova ficha"
+                        android:textColor="#FFFFFF"
+                        android:textSize="25sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="Crie uma nova ficha de treino"
+                        android:textColor="#8B95A7"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!-- ================================================= -->
+            <!-- LINHA CYAN -->
+            <!-- ================================================= -->
+
+            <View
+                android:layout_width="55dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="18dp"
+                android:background="#03C6FC"/>
+
+
+            <!-- ================================================= -->
+            <!-- ALUNO -->
+            <!-- ================================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:padding="18dp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_professor">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ALUNO"
+                    android:textColor="#657086"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtNomeAlunoCriarFicha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Nome do aluno"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtUsuarioAlunoCriarFicha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="Usuario"
+                    android:textColor="#03C6FC"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+
+            <!-- ================================================= -->
+            <!-- TÍTULO DA SEÇÃO -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="Informações da ficha"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Defina um nome para identificar este treino."
+                android:textColor="#657086"
+                android:textSize="13sp"/>
+
+
+            <!-- ================================================= -->
+            <!-- NOME DA FICHA -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Nome da ficha"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/edtNomeFicha"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:background="@drawable/bg_input_professor"
+                android:hint="Ex.: Treino A"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#657086"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:maxLength="100"/>
+
+
+            <!-- ================================================= -->
+            <!-- SUGESTÕES -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Sugestões"
+                android:textColor="#657086"
+                android:textSize="12sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btnSugestaoTreinoA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="Treino A"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:background="@drawable/bg_chip_professor"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/btnSugestaoTreinoB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="Treino B"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:background="@drawable/bg_chip_professor"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/btnSugestaoTreinoC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="Treino C"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:background="@drawable/bg_chip_professor"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/btnSugestaoFullBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="Full Body"
+                    android:textColor="#03C6FC"
+                    android:textSize="13sp"
+                    android:background="@drawable/bg_chip_professor"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+            </LinearLayout>
+
+
+            <!-- ================================================= -->
+            <!-- INFORMAÇÃO -->
+            <!-- ================================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:padding="17dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_card_professor">
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="i"
+                    android:textColor="#03C6FC"
+                    android:textSize="19sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:text="Depois de criar a ficha, você poderá adicionar os exercícios e organizar os dias de treino."
+                    android:textColor="#8B95A7"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="2dp"/>
+
+            </LinearLayout>
+
+
+            <!-- ================================================= -->
+            <!-- BOTÃO CRIAR -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:id="@+id/btnCriarFicha"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
+                android:text="CRIAR FICHA"
+                android:textColor="#080B12"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_button_professor"
+                android:clickable="true"
+                android:focusable="true"/>
+
+
+            <!-- ESPAÇO FINAL -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="25dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

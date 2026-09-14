@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:padding="17dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_card_professor"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- ÍCONE -->
+    <TextView
+        android:id="@+id/txtIconeFicha"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="▣"
+        android:textColor="#03C6FC"
+        android:textSize="23sp"/>
+
+
+    <!-- INFORMAÇÕES -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtNomeFicha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Treino A"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtInfoFicha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="8 exercícios"
+            android:textColor="#03C6FC"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/txtDataFicha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Criado em 14/09/2026"
+            android:textColor="#657086"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
+
+    <!-- SETA -->
+    <TextView
+        android:id="@+id/txtAcaoFicha"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="›"
+        android:textColor="#03C6FC"
+        android:textSize="28sp"/>
+
+</LinearLayout>
