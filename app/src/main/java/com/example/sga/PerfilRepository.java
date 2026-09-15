@@ -110,15 +110,20 @@ public class PerfilRepository {
                         if (sucesso) {
                             callback.onSuccess(response.optJSONObject("usuario"));
                         } else {
-                            callback.onError(
-                                    response.optString("mensagem", "Erro ao atualizar perfil.")
-                            );
+                            callback.onError(response.optString("mensagem", "Erro ao atualizar perfil."));
                         }
                     } catch (Exception e) {
                         callback.onError("Resposta inválida da API.");
                     }
                 },
-                error -> callback.onError("Erro ao conectar à API para atualização.")
+                error -> {
+                    if (error.networkResponse != null) {
+                        int codigo = error.networkResponse.statusCode;
+                        callback.onError("Erro na API: HTTP " + codigo);
+                    } else {
+                        callback.onError("Falha na conexão de rede ou CORS.");
+                    }
+                }
         ) {
             @Override
             public Map<String, String> getHeaders() {
@@ -128,10 +133,8 @@ public class PerfilRepository {
                 return headers;
             }
         };
-
         requestQueue.add(request);
     }
-
     // ==========================================
     // CALLBACK
     // ==========================================

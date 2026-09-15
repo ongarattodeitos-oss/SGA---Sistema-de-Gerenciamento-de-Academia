@@ -1,15 +1,16 @@
 package com.example.sga;
+
 import com.bumptech.glide.Glide;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.card.MaterialCardView;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -53,7 +54,8 @@ public class PerfilActivity extends AppCompatActivity {
 
     private PerfilRepository perfilRepository;
     private FotoPerfilRepository fotoPerfilRepository;
-    private ImageButton btnEditarPerfil;
+    private MaterialCardView btnEditarPerfil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -71,46 +73,24 @@ public class PerfilActivity extends AppCompatActivity {
 
         configurarMenuInferior();
         selecionarBotao(btnPerfil);
-        imgPerfil =
-                findViewById(R.id.imgPerfil);
-
-        btnAlterarFoto =
-                findViewById(R.id.btnAlterarFoto);
-
-        txtNomeCompleto =
-                findViewById(R.id.txtNomeCompleto);
-
-        txtNomeUser =
-                findViewById(R.id.txtNomeUser);
-
-        txtEmail =
-                findViewById(R.id.txtEmail);
-
-        txtTelefone =
-                findViewById(R.id.txtTelefone);
-
-        txtCpf =
-                findViewById(R.id.txtCpf);
-
-        txtData =
-                findViewById(R.id.txtData);
-
-        txtPeso =
-                findViewById(R.id.txtPeso);
-
-        txtAltura =
-                findViewById(R.id.txtAltura);
+        imgPerfil = findViewById(R.id.imgPerfil);
+        btnAlterarFoto = findViewById(R.id.btnAlterarFoto);
+        txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
+        txtNomeUser = findViewById(R.id.txtNomeUser);
+        txtEmail = findViewById(R.id.txtEmail);
+        txtTelefone = findViewById(R.id.txtTelefone);
+        txtCpf = findViewById(R.id.txtCpf);
+        txtData = findViewById(R.id.txtData);
+        txtPeso = findViewById(R.id.txtPeso);
+        txtAltura = findViewById(R.id.txtAltura);
 
 
         // ==========================================
         // REPOSITORIES
         // ==========================================
 
-        perfilRepository =
-                new PerfilRepository(this);
-
-        fotoPerfilRepository =
-                new FotoPerfilRepository(this);
+        perfilRepository = new PerfilRepository(this);
+        fotoPerfilRepository = new FotoPerfilRepository(this);
 
 
         // ==========================================
@@ -118,9 +98,7 @@ public class PerfilActivity extends AppCompatActivity {
         // ==========================================
 
         btnAlterarFoto.setOnClickListener(v -> {
-
             abrirGaleria();
-
         });
 
 
@@ -138,20 +116,14 @@ public class PerfilActivity extends AppCompatActivity {
 
     private void abrirGaleria() {
 
-        Intent intent =
-                new Intent(
-                        Intent.ACTION_PICK
-                );
+        Intent intent = new Intent(Intent.ACTION_PICK);
 
         intent.setDataAndType(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 "image/*"
         );
 
-        startActivityForResult(
-                intent,
-                PICK_IMAGE
-        );
+        startActivityForResult(intent, PICK_IMAGE);
     }
 
 
@@ -166,12 +138,7 @@ public class PerfilActivity extends AppCompatActivity {
             Intent data
     ) {
 
-        super.onActivityResult(
-                requestCode,
-                resultCode,
-                data
-        );
-
+        super.onActivityResult(requestCode, resultCode, data);
 
         if (
                 requestCode == PICK_IMAGE &&
@@ -179,9 +146,7 @@ public class PerfilActivity extends AppCompatActivity {
                         data != null
         ) {
 
-            Uri imagemUri =
-                    data.getData();
-
+            Uri imagemUri = data.getData();
 
             if (imagemUri != null) {
 
@@ -195,18 +160,11 @@ public class PerfilActivity extends AppCompatActivity {
     // ENVIAR IMAGEM
     // ============================================================
 
-    private void enviarImagem(
-            Uri imagemUri
-    ) {
+    private void enviarImagem(Uri imagemUri) {
 
         try {
 
-            InputStream inputStream =
-                    getContentResolver()
-                            .openInputStream(
-                                    imagemUri
-                            );
-
+            InputStream inputStream = getContentResolver().openInputStream(imagemUri);
 
             if (inputStream == null) {
 
@@ -224,36 +182,19 @@ public class PerfilActivity extends AppCompatActivity {
             // TRANSFORMAR IMAGEM EM BYTES
             // ==========================================
 
-            ByteArrayOutputStream output =
-                    new ByteArrayOutputStream();
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-
-            byte[] buffer =
-                    new byte[4096];
-
+            byte[] buffer = new byte[4096];
 
             int quantidade;
 
-
-            while (
-                    (quantidade =
-                            inputStream.read(buffer))
-                            != -1
-            ) {
-
-                output.write(
-                        buffer,
-                        0,
-                        quantidade
-                );
+            while ((quantidade = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, quantidade);
             }
-
 
             inputStream.close();
 
-
-            byte[] imagem =
-                    output.toByteArray();
+            byte[] imagem = output.toByteArray();
 
 
             // ==========================================
@@ -270,15 +211,11 @@ public class PerfilActivity extends AppCompatActivity {
             // ==========================================
 
             fotoPerfilRepository.enviarFoto(
-
                     imagem,
-
                     new FotoPerfilRepository.FotoCallback() {
 
                         @Override
-                        public void onSuccess(
-                                String resposta
-                        ) {
+                        public void onSuccess(String resposta) {
 
                             Toast.makeText(
                                     PerfilActivity.this,
@@ -289,9 +226,7 @@ public class PerfilActivity extends AppCompatActivity {
 
 
                         @Override
-                        public void onError(
-                                String mensagem
-                        ) {
+                        public void onError(String mensagem) {
 
                             Toast.makeText(
                                     PerfilActivity.this,
@@ -316,37 +251,45 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void abrirModalEdicao() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        builder.setTitle("Editar Perfil");
+        // Infla o layout customizado
+        android.view.View dialogView = getLayoutInflater().inflate(R.layout.dialog_editar_perfil, null);
 
-        // Layout simples contendo inputs para Nome e Telefone (exemplo)
-        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
-        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
-        layout.setPadding(50, 40, 50, 10);
+        com.google.android.material.textfield.TextInputEditText edtNome = dialogView.findViewById(R.id.edtNome);
+        com.google.android.material.textfield.TextInputEditText edtEmail = dialogView.findViewById(R.id.edtEmail);
+        com.google.android.material.textfield.TextInputEditText edtTelefone = dialogView.findViewById(R.id.edtTelefone);
 
-        final android.widget.EditText inputNome = new android.widget.EditText(this);
-        inputNome.setHint("Nome completo");
-        inputNome.setText(txtNomeCompleto.getText().toString());
-        layout.addView(inputNome);
+        com.google.android.material.button.MaterialButton btnCancelar = dialogView.findViewById(R.id.btnCancelarModal);
+        com.google.android.material.button.MaterialButton btnSalvar = dialogView.findViewById(R.id.btnSalvarModal);
 
-        final android.widget.EditText inputTelefone = new android.widget.EditText(this);
-        inputTelefone.setHint("Telefone");
-        inputTelefone.setText(txtTelefone.getText().toString());
-        layout.addView(inputTelefone);
+        // Preenche com os dados atuais da tela
+        edtNome.setText(txtNomeCompleto.getText().toString());
+        edtEmail.setText(txtEmail.getText().toString());
+        edtTelefone.setText(txtTelefone.getText().toString());
 
-        builder.setView(layout);
+        androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
 
-        builder.setPositiveButton("Salvar", (dialog, which) -> {
+        // Torna o fundo padrão do dialog transparente para manter as bordas arredondadas
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        btnCancelar.setOnClickListener(v -> dialog.dismiss());
+
+        btnSalvar.setOnClickListener(v -> {
             try {
                 JSONObject dadosNovos = new JSONObject();
-                dadosNovos.put("nome_completo", inputNome.getText().toString());
-                dadosNovos.put("telefone", inputTelefone.getText().toString());
+                dadosNovos.put("nome_completo", edtNome.getText().toString());
+                dadosNovos.put("email", edtEmail.getText().toString());
+                dadosNovos.put("telefone", edtTelefone.getText().toString());
 
                 perfilRepository.atualizarPerfil(dadosNovos, new PerfilRepository.PerfilCallback() {
                     @Override
                     public void onSuccess(JSONObject usuario) {
                         Toast.makeText(PerfilActivity.this, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-                        carregarPerfil(); // Recarrega as informações na tela
+                        dialog.dismiss();
+                        carregarPerfil(); // Recarrega os dados atualizados
                     }
 
                     @Override
@@ -359,9 +302,9 @@ public class PerfilActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
-        builder.show();
+        dialog.show();
     }
+
     // ============================================================
     // CARREGAR PERFIL
     // ============================================================
@@ -369,13 +312,10 @@ public class PerfilActivity extends AppCompatActivity {
     private void carregarPerfil() {
 
         perfilRepository.buscarPerfil(
-
                 new PerfilRepository.PerfilCallback() {
 
                     @Override
-                    public void onSuccess(
-                            JSONObject usuario
-                    ) {
+                    public void onSuccess(JSONObject usuario) {
 
                         try {
 
@@ -385,96 +325,54 @@ public class PerfilActivity extends AppCompatActivity {
                             // NOME
                             // ==================================
 
-                            txtNomeCompleto.setText(
-                                    usuario.optString(
-                                            "nome_completo",
-                                            "-"
-                                    )
-                            );
+                            txtNomeCompleto.setText(usuario.optString("nome_completo", "-"));
 
 
                             // ==================================
                             // USUÁRIO
                             // ==================================
 
-                            txtNomeUser.setText(
-                                    usuario.optString(
-                                            "nome_user",
-                                            "-"
-                                    )
-                            );
+                            txtNomeUser.setText(usuario.optString("nome_user", "-"));
 
 
                             // ==================================
                             // EMAIL
                             // ==================================
 
-                            txtEmail.setText(
-                                    usuario.optString(
-                                            "email",
-                                            "-"
-                                    )
-                            );
+                            txtEmail.setText(usuario.optString("email", "-"));
 
 
                             // ==================================
                             // TELEFONE
                             // ==================================
 
-                            txtTelefone.setText(
-                                    usuario.optString(
-                                            "telefone",
-                                            "-"
-                                    )
-                            );
+                            txtTelefone.setText(usuario.optString("telefone", "-"));
 
 
                             // ==================================
                             // CPF
                             // ==================================
 
-                            txtCpf.setText(
-                                    usuario.optString(
-                                            "cpf",
-                                            "-"
-                                    )
-                            );
+                            txtCpf.setText(usuario.optString("cpf", "-"));
 
 
                             // ==================================
                             // DATA
                             // ==================================
 
-                            txtData.setText(
-                                    usuario.optString(
-                                            "data",
-                                            "-"
-                                    )
-                            );
+                            txtData.setText(usuario.optString("data", "-"));
 
 
                             // ==================================
                             // PESO
                             // ==================================
 
-                            double peso =
-                                    usuario.optDouble(
-                                            "peso",
-                                            0
-                                    );
-
+                            double peso = usuario.optDouble("peso", 0);
 
                             if (peso > 0) {
-
-                                txtPeso.setText(
-                                        peso + " kg"
-                                );
-
+                                txtPeso.setText(peso + " kg");
                             } else {
-
-                                txtPeso.setText(
-                                        "Não informado"
-                                );
+                                txtPeso.setText("Não informado");
                             }
 
 
@@ -482,24 +380,12 @@ public class PerfilActivity extends AppCompatActivity {
                             // ALTURA
                             // ==================================
 
-                            double altura =
-                                    usuario.optDouble(
-                                            "altura",
-                                            0
-                                    );
-
+                            double altura = usuario.optDouble("altura", 0);
 
                             if (altura > 0) {
-
-                                txtAltura.setText(
-                                        altura + " cm"
-                                );
-
+                                txtAltura.setText(altura + " cm");
                             } else {
-
-                                txtAltura.setText(
-                                        "Não informado"
-                                );
+                                txtAltura.setText("Não informado");
                             }
 
 
@@ -507,18 +393,9 @@ public class PerfilActivity extends AppCompatActivity {
                             // FOTO DE PERFIL
                             // ==========================================
 
-                            String fotoUrl =
-                                    usuario.optString(
-                                            "foto_url",
-                                            ""
-                                    );
+                            String fotoUrl = usuario.optString("foto_url", "");
 
-
-                            if (
-                                    !fotoUrl.isEmpty() &&
-                                            !fotoUrl.equals("null")
-                            ) {
-
+                            if (!fotoUrl.isEmpty() && !fotoUrl.equals("null")) {
                                 Glide.with(PerfilActivity.this)
                                         .load(fotoUrl)
                                         .circleCrop()
@@ -539,9 +416,7 @@ public class PerfilActivity extends AppCompatActivity {
 
 
                     @Override
-                    public void onError(
-                            String mensagem
-                    ) {
+                    public void onError(String mensagem) {
 
                         Toast.makeText(
                                 PerfilActivity.this,
