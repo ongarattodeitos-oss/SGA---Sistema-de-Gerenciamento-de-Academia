@@ -663,7 +663,7 @@ public class ProfessorListaTreinosActivity extends AppCompatActivity {
                     Intent intent =
                             new Intent(
                                     ProfessorListaTreinosActivity.this,
-                                    FichasTreinoActivity.class
+                                    FichaTreinoActivity.class
                             );
 
                     intent.putExtra(
