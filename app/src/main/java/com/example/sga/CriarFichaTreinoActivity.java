@@ -25,6 +25,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.animation.OvershootInterpolator;
+import androidx.core.content.ContextCompat;
+
 public class CriarFichaTreinoActivity extends AppCompatActivity {
 
     // ============================================================
@@ -57,6 +66,17 @@ public class CriarFichaTreinoActivity extends AppCompatActivity {
     private TextView btnSugestaoTreinoB;
     private TextView btnSugestaoFullBody;
     private TextView btnSugestaoTreinoC;
+
+    private TextView[] botoesSugestao;
+    private TransitionDrawable[] transicoesFundoChip;
+    private TextView chipSelecionado = null;
+
+    private static final int COR_TEXTO_PADRAO = 0xFF03C6FC;
+    private static final int COR_TEXTO_SELECIONADO = 0xFF080B12;
+    private static final int DURACAO_ANIMACAO = 220;
+
+    private boolean[] estadoSelecionadoAtual;
+
 
 
     // ============================================================
@@ -240,64 +260,7 @@ public class CriarFichaTreinoActivity extends AppCompatActivity {
         // SUGESTÕES
         // ========================================================
 
-        btnSugestaoTreinoA.setOnClickListener(v -> {
-
-            edtNomeFicha.setText(
-                    "Treino A"
-            );
-
-            edtNomeFicha.setSelection(
-                    edtNomeFicha.length()
-            );
-
-            edtNomeFicha.requestFocus();
-
-        });
-
-
-        btnSugestaoTreinoB.setOnClickListener(v -> {
-
-            edtNomeFicha.setText(
-                    "Treino B"
-            );
-
-            edtNomeFicha.setSelection(
-                    edtNomeFicha.length()
-            );
-
-            edtNomeFicha.requestFocus();
-
-        });
-
-        btnSugestaoTreinoC.setOnClickListener(v -> {
-
-            edtNomeFicha.setText(
-                    "Treino C"
-            );
-
-            edtNomeFicha.setSelection(
-                    edtNomeFicha.length()
-            );
-
-            edtNomeFicha.requestFocus();
-
-        });
-
-
-        btnSugestaoFullBody.setOnClickListener(v -> {
-
-            edtNomeFicha.setText(
-                    "Full Body"
-            );
-
-            edtNomeFicha.setSelection(
-                    edtNomeFicha.length()
-            );
-
-            edtNomeFicha.requestFocus();
-
-        });
-
+        configurarSelecaoSugestoes();
 
         // ========================================================
         // CRIAR FICHA
@@ -644,6 +607,147 @@ public class CriarFichaTreinoActivity extends AppCompatActivity {
 
         }).start();
 
+    }
+
+    private void configurarSelecaoSugestoes() {
+
+        botoesSugestao = new TextView[]{
+                btnSugestaoTreinoA,
+                btnSugestaoTreinoB,
+                btnSugestaoTreinoC,
+                btnSugestaoFullBody
+        };
+
+        estadoSelecionadoAtual = new boolean[botoesSugestao.length];
+        transicoesFundoChip = new TransitionDrawable[botoesSugestao.length];
+
+        for (int i = 0; i < botoesSugestao.length; i++) {
+
+            TextView botao = botoesSugestao[i];
+
+            Drawable normal =
+                    ContextCompat.getDrawable(this, R.drawable.bg_chip_professor).mutate();
+
+            Drawable selecionado =
+                    ContextCompat.getDrawable(this, R.drawable.bg_chip_professor_selecionado).mutate();
+
+            TransitionDrawable transicao =
+                    new TransitionDrawable(new Drawable[]{normal, selecionado});
+
+            transicao.setCrossFadeEnabled(true);
+
+            botao.setBackground(transicao);
+
+            transicoesFundoChip[i] = transicao;
+
+            final int index = i;
+
+            botao.setOnClickListener(v -> {
+
+                edtNomeFicha.setText(botao.getText());
+                edtNomeFicha.setSelection(edtNomeFicha.length());
+                edtNomeFicha.requestFocus();
+
+                selecionarChip(botao);
+
+                // pequeno "bounce" de feedback ao tocar
+                botao.animate()
+                        .scaleX(0.93f)
+                        .scaleY(0.93f)
+                        .setDuration(80)
+                        .withEndAction(() ->
+                                botao.animate()
+                                        .scaleX(1f)
+                                        .scaleY(1f)
+                                        .setDuration(160)
+                                        .setInterpolator(new OvershootInterpolator())
+                                        .start()
+                        ).start();
+            });
+        }
+
+        // Desmarca o chip se o texto for alterado manualmente
+        edtNomeFicha.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (chipSelecionado == null) return;
+
+                String textoAtual = s.toString();
+                String textoChip = chipSelecionado.getText().toString();
+
+                if (!textoAtual.equals(textoChip)) {
+                    deselecionarTodos();
+                }
+            }
+        });
+    }
+
+    private void selecionarChip(TextView clicado) {
+
+        chipSelecionado = clicado;
+
+        for (int i = 0; i < botoesSugestao.length; i++) {
+            aplicarEstadoChip(i, botoesSugestao[i] == clicado);
+        }
+    }
+
+    private void deselecionarTodos() {
+
+        if (chipSelecionado == null) return;
+
+        chipSelecionado = null;
+
+        for (int i = 0; i < botoesSugestao.length; i++) {
+            aplicarEstadoChip(i, false);
+        }
+    }
+
+    private void aplicarEstadoChip(int index, boolean selecionado) {
+
+        TextView botao = botoesSugestao[index];
+        TransitionDrawable transicao = transicoesFundoChip[index];
+
+        boolean estadoAnterior = estadoSelecionadoAtual[index];
+
+        if (selecionado == estadoAnterior) {
+            return; // já está no estado certo, não faz nada
+        }
+
+        if (selecionado) {
+
+            transicao.startTransition(DURACAO_ANIMACAO);
+
+        } else {
+
+            // só reverte se ele já tinha sido selecionado antes
+            // (ou seja, já tinha rodado startTransition alguma vez)
+            transicao.reverseTransition(DURACAO_ANIMACAO);
+        }
+
+        estadoSelecionadoAtual[index] = selecionado;
+
+        int corAtual = botao.getCurrentTextColor();
+        int corFinal = selecionado ? COR_TEXTO_SELECIONADO : COR_TEXTO_PADRAO;
+
+        if (corAtual != corFinal) {
+            animarCorTexto(botao, corAtual, corFinal);
+        }
+    }
+
+    private void animarCorTexto(TextView textView, int corAtual, int corFinal) {
+
+        ValueAnimator animador = ValueAnimator.ofObject(new ArgbEvaluator(), corAtual, corFinal);
+        animador.setDuration(DURACAO_ANIMACAO);
+        animador.addUpdateListener(anim -> textView.setTextColor((int) anim.getAnimatedValue()));
+        animador.start();
     }
 
 }
