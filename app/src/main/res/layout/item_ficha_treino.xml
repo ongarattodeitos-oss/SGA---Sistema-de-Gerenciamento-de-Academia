@@ -58,6 +58,17 @@
             android:textColor="#657086"
             android:textSize="12sp"/>
 
+        <Button
+            android:id="@+id/btnExcluirFicha"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:text="Excluir"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:backgroundTint="#D32F2F"/>
+
     </LinearLayout>
 
 

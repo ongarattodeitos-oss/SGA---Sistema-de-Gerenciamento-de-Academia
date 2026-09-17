@@ -499,14 +499,33 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
                 TextView txtAcaoFicha = card.findViewById(R.id.txtAcaoFicha);
 
-
+                TextView btnExcluirFicha =
+                        card.findViewById(R.id.btnExcluirFicha);
                 // ------------------------------------------------
                 // DADOS
                 // ------------------------------------------------
 
                 int idFicha = ficha.optInt("id_ficha", -1);
 
+                final int idFichaSelecionada = idFicha;
 
+                btnExcluirFicha.setOnClickListener(v -> {
+
+                    if (idFichaSelecionada == -1) {
+
+                        Toast.makeText(
+                                FichaTreinoActivity.this,
+                                "ID da ficha inválido.",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        return;
+                    }
+
+                    confirmarExclusaoFicha(
+                            idFichaSelecionada
+                    );
+                });
                 String nomeFicha = ficha.optString("nome_ficha", "Ficha de treino");
 
 
@@ -560,7 +579,7 @@ public class FichaTreinoActivity extends AppCompatActivity {
                 // CLICK
                 // ------------------------------------------------
 
-                final int idFichaSelecionada = idFicha;
+
 
 
                 final String nomeFichaSelecionada = nomeFicha;
@@ -620,8 +639,170 @@ public class FichaTreinoActivity extends AppCompatActivity {
         }
 
     }
+    private void confirmarExclusaoFicha(int idFicha) {
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Excluir ficha?")
+                .setMessage(
+                        "Essa ação irá excluir a ficha e todos os exercícios dela."
+                )
+                .setNegativeButton(
+                        "Cancelar",
+                        null
+                )
+                .setPositiveButton(
+                        "Excluir",
+                        (dialog, which) -> {
+
+                            excluirFicha(idFicha);
+
+                        }
+                )
+                .show();
+    }
+    private void excluirFicha(int idFicha) {
+
+        new Thread(() -> {
+
+            HttpURLConnection conexao = null;
+
+            try {
+
+                String endereco =
+                        URL_FICHAS +
+                                "?id_ficha=" +
+                                idFicha;
+
+                URL url =
+                        new URL(endereco);
+
+                conexao =
+                        (HttpURLConnection)
+                                url.openConnection();
+
+                conexao.setRequestMethod("DELETE");
+
+                conexao.setConnectTimeout(10000);
+
+                conexao.setReadTimeout(10000);
+
+                int codigo =
+                        conexao.getResponseCode();
+
+                InputStream inputStream;
+
+                if (
+                        codigo >= 200 &&
+                                codigo < 300
+                ) {
+
+                    inputStream =
+                            conexao.getInputStream();
+
+                } else {
+
+                    inputStream =
+                            conexao.getErrorStream();
+                }
+
+                BufferedReader reader =
+                        new BufferedReader(
+                                new InputStreamReader(
+                                        inputStream
+                                )
+                        );
+
+                StringBuilder resposta =
+                        new StringBuilder();
+
+                String linha;
+
+                while (
+                        (linha = reader.readLine())
+                                != null
+                ) {
+
+                    resposta.append(linha);
+
+                }
+
+                reader.close();
 
 
+                JSONObject json =
+                        new JSONObject(
+                                resposta.toString()
+                        );
+
+                boolean sucesso =
+                        json.optBoolean(
+                                "sucesso",
+                                false
+                        );
+
+                String mensagem =
+                        json.optString(
+                                "mensagem",
+                                "Erro ao excluir ficha."
+                        );
+
+
+                runOnUiThread(() -> {
+
+                    if (
+                            sucesso &&
+                                    codigo >= 200 &&
+                                    codigo < 300
+                    ) {
+
+                        Toast.makeText(
+                                FichaTreinoActivity.this,
+                                "Ficha excluída com sucesso!",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        // Atualiza a lista
+                        carregarFichas();
+
+                    } else {
+
+                        Toast.makeText(
+                                FichaTreinoActivity.this,
+                                mensagem,
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    }
+
+                });
+
+
+            } catch (Exception erro) {
+
+                erro.printStackTrace();
+
+                runOnUiThread(() -> {
+
+                    Toast.makeText(
+                            FichaTreinoActivity.this,
+                            "Erro de conexão com o servidor.",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                });
+
+            } finally {
+
+                if (conexao != null) {
+
+                    conexao.disconnect();
+
+                }
+
+            }
+
+        }).start();
+    }
     // ============================================================
     // FORMATAR DATA
     // ============================================================
