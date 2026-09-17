@@ -12,15 +12,17 @@
     android:clickable="true"
     android:focusable="true">
 
-    <!-- ÍCONE -->
-    <TextView
-        android:id="@+id/txtIconeFicha"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:text="▣"
-        android:textColor="#03C6FC"
-        android:textSize="23sp"/>
+    <ImageView
+        android:id="@+id/btnExcluirFicha"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="6dp"
+        android:src="@drawable/img_delete"
+        android:scaleType="fitCenter"
+        android:clickable="true"
+        android:focusable="true">
+
+    </ImageView>
 
 
     <!-- INFORMAÇÕES -->
@@ -58,18 +60,9 @@
             android:textColor="#657086"
             android:textSize="12sp"/>
 
-        <Button
-            android:id="@+id/btnExcluirFicha"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:text="Excluir"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            android:backgroundTint="#D32F2F"/>
-
     </LinearLayout>
+
+
 
 
     <!-- SETA -->

@@ -221,22 +221,6 @@
             <!-- BOTÃO EDITAR / SALVAR -->
             <!-- ================================================= -->
 
-            <TextView
-                android:id="@+id/btnEditarFichas"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="EDITAR"
-                android:textColor="#080B12"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:background="@drawable/bg_button_professor"
-                android:clickable="true"
-                android:focusable="true"/>
-
-
-
 
             <!-- ================================================= -->
             <!-- TÍTULO -->
