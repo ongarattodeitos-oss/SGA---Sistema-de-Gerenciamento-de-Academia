@@ -2,6 +2,7 @@ package com.example.sga;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.widget.ImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -25,6 +26,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ExerciciosProfessorActivity extends AppCompatActivity {
 
     // ============================================================
@@ -44,6 +49,8 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
 
     private String nomeFicha;
 
+    private LinearLayout cardNenhumExercicio;
+
 
     // ============================================================
     // CAMPOS
@@ -58,6 +65,8 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
     private TextView btnAdicionarExercicio;
 
     private TextView btnEditarSalvar;
+
+    private List<String[]> snapshotExercicios = new ArrayList<>();
 
 
     // ============================================================
@@ -116,6 +125,7 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
         // REFERÊNCIAS
         // ========================================================
 
+
         btnVoltar =
                 findViewById(
                         R.id.btnVoltarExercicios
@@ -140,6 +150,13 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
                 findViewById(
                         R.id.btnEditarSalvar
                 );
+
+        cardNenhumExercicio =
+                findViewById(
+                        R.id.cardNenhumExercicio
+                );
+
+
 
 
         // ========================================================
@@ -232,6 +249,9 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
             if (!modoEdicao) {
                 return;
             }
+
+            // Some com a mensagem de "nenhum exercício" ao criar o primeiro campo
+            cardNenhumExercicio.setVisibility(View.GONE);
 
             adicionarExercicioVazio();
 
@@ -471,7 +491,7 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
 
         if (exercicios.length() == 0) {
 
-            adicionarExercicioVazio();
+            mostrarEstadoVazio();
 
             return;
         }
@@ -507,8 +527,15 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
                                 0
                         );
 
+                int idExercicio =
+                        exercicio.optInt(
+                                "id_exercicios",
+                                0
+                        );
+
 
                 adicionarExercicio(
+                        idExercicio,
                         nome,
                         series,
                         repeticoes
@@ -523,7 +550,7 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
 
         }
 
-
+        cardNenhumExercicio.setVisibility(View.GONE);
         bloquearCampos();
 
     }
@@ -536,6 +563,7 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
     private void adicionarExercicioVazio() {
 
         adicionarExercicio(
+                0,
                 "",
                 0,
                 0
@@ -549,6 +577,7 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
     // ============================================================
 
     private void adicionarExercicio(
+            int idExercicio,
             String nome,
             int series,
             int repeticoes
@@ -581,6 +610,17 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
                 view.findViewById(
                         R.id.edtRepeticoesExercicio
                 );
+
+        ImageView btnExcluir =
+                view.findViewById(
+                        R.id.btnExcluirExercicio
+                );
+
+
+        // Guarda o ID do exercício na própria view (0 = ainda não existe no banco)
+        view.setTag(
+                idExercicio
+        );
 
 
         int numero =
@@ -615,6 +655,47 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
         }
 
 
+        edtNome.setEnabled(modoEdicao);
+        edtSeries.setEnabled(modoEdicao);
+        edtRepeticoes.setEnabled(modoEdicao);
+
+        btnExcluir.setVisibility(
+                modoEdicao ? View.VISIBLE : View.GONE
+        );
+
+        btnExcluir.setOnClickListener(v -> {
+
+            new android.app.AlertDialog.Builder(ExerciciosProfessorActivity.this)
+                    .setMessage("Deseja excluir esse exercício?")
+                    .setPositiveButton("Sim", (dialog, which) -> {
+
+                        int idSalvo =
+                                (int) view.getTag();
+
+                        if (idSalvo > 0) {
+
+                            // Já existe no banco → exclui de verdade via API
+                            excluirExercicio(idSalvo, view);
+
+                        } else {
+
+                            // Ainda não foi salvo → só remove localmente
+                            containerExercicios.removeView(view);
+                            renumerarExercicios();
+
+                            if (containerExercicios.getChildCount() == 0) {
+                                cardNenhumExercicio.setVisibility(View.VISIBLE);
+                            }
+
+                        }
+
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+
+        });
+
+
         containerExercicios.addView(
                 view
         );
@@ -628,12 +709,21 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
 
     private void ativarEdicao() {
 
+        snapshotExercicios = capturarSnapshotAtual();
+
         modoEdicao = true;
 
+        // Se estiver vazio, mantém a mensagem visível e só libera o botão de adicionar
+        if (containerExercicios.getChildCount() == 0) {
+
+            btnAdicionarExercicio.setVisibility(View.VISIBLE);
+            btnEditarSalvar.setText("SALVAR DADOS");
+
+            return;
+        }
 
         int quantidade =
                 containerExercicios.getChildCount();
-
 
         for (
                 int i = 0;
@@ -659,10 +749,17 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
                             R.id.edtRepeticoesExercicio
                     );
 
+            ImageView btnExcluir =
+                    view.findViewById(
+                            R.id.btnExcluirExercicio
+                    );
+
 
             edtNome.setEnabled(true);
             edtSeries.setEnabled(true);
             edtRepeticoes.setEnabled(true);
+
+            btnExcluir.setVisibility(View.VISIBLE);
 
         }
 
@@ -686,16 +783,15 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
 
         modoEdicao = false;
 
+        int quantidade = containerExercicios.getChildCount();
 
-        int quantidade =
-                containerExercicios.getChildCount();
+        if (quantidade == 0) {
 
+            mostrarEstadoVazio();
+            return;
+        }
 
-        for (
-                int i = 0;
-                i < quantidade;
-                i++
-        ) {
+        for (int i = 0; i < quantidade; i++) {
 
             View view =
                     containerExercicios.getChildAt(i);
@@ -715,10 +811,17 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
                             R.id.edtRepeticoesExercicio
                     );
 
+            ImageView btnExcluir =
+                    view.findViewById(
+                            R.id.btnExcluirExercicio
+                    );
+
 
             edtNome.setEnabled(false);
             edtSeries.setEnabled(false);
             edtRepeticoes.setEnabled(false);
+
+            btnExcluir.setVisibility(View.GONE);
 
         }
 
@@ -733,6 +836,20 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
 
     }
 
+    private void mostrarEstadoVazio() {
+
+        modoEdicao = false;
+
+        containerExercicios.removeAllViews();
+
+        cardNenhumExercicio.setVisibility(View.VISIBLE);
+
+        btnAdicionarExercicio.setVisibility(View.GONE);
+
+        btnEditarSalvar.setText("EDITAR DADOS");
+
+    }
+
 
     // ============================================================
     // SALVAR EXERCÍCIOS
@@ -740,202 +857,129 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
 
     private void salvarExercicios() {
 
-        int quantidade =
-                containerExercicios.getChildCount();
+        int quantidade = containerExercicios.getChildCount();
 
-
-        if (quantidade == 0) {
-
-            Toast.makeText(
-                    this,
-                    "Adicione pelo menos um exercício.",
-                    Toast.LENGTH_SHORT
-            ).show();
-
-            return;
-        }
-
-
-        JSONArray exercicios =
-                new JSONArray();
-
+        List<View> viewsVazias = new ArrayList<>();
+        List<String[]> valoresPreenchidos = new ArrayList<>();
 
         try {
 
-            for (
-                    int i = 0;
-                    i < quantidade;
-                    i++
-            ) {
+            for (int i = 0; i < quantidade; i++) {
 
-                View view =
-                        containerExercicios.getChildAt(i);
+                View view = containerExercicios.getChildAt(i);
 
+                EditText edtNome = view.findViewById(R.id.edtNomeExercicio);
+                EditText edtSeries = view.findViewById(R.id.edtSeriesExercicio);
+                EditText edtRepeticoes = view.findViewById(R.id.edtRepeticoesExercicio);
 
-                EditText edtNome =
-                        view.findViewById(
-                                R.id.edtNomeExercicio
-                        );
+                String nome = edtNome.getText().toString().trim();
+                String textoSeries = edtSeries.getText().toString().trim();
+                String textoRepeticoes = edtRepeticoes.getText().toString().trim();
 
-                EditText edtSeries =
-                        view.findViewById(
-                                R.id.edtSeriesExercicio
-                        );
+                boolean tudoVazio =
+                        nome.isEmpty() &&
+                                textoSeries.isEmpty() &&
+                                textoRepeticoes.isEmpty();
 
-                EditText edtRepeticoes =
-                        view.findViewById(
-                                R.id.edtRepeticoesExercicio
-                        );
-
-
-                String nome =
-                        edtNome.getText()
-                                .toString()
-                                .trim();
-
-
-                String textoSeries =
-                        edtSeries.getText()
-                                .toString()
-                                .trim();
-
-
-                String textoRepeticoes =
-                        edtRepeticoes.getText()
-                                .toString()
-                                .trim();
-
+                if (tudoVazio) {
+                    // Exercício em branco: ignora e será removido da tela depois
+                    viewsVazias.add(view);
+                    continue;
+                }
 
                 if (nome.isEmpty()) {
-
-                    Toast.makeText(
-                            this,
-                            "Preencha o nome do exercício " +
-                                    (i + 1) +
-                                    ".",
-                            Toast.LENGTH_SHORT
-                    ).show();
-
+                    Toast.makeText(this, "Preencha o nome do exercício " + (i + 1) + ".", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
 
                 if (textoSeries.isEmpty()) {
-
-                    Toast.makeText(
-                            this,
-                            "Informe as séries do exercício " +
-                                    (i + 1) +
-                                    ".",
-                            Toast.LENGTH_SHORT
-                    ).show();
-
+                    Toast.makeText(this, "Informe as séries do exercício " + (i + 1) + ".", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
 
                 if (textoRepeticoes.isEmpty()) {
-
-                    Toast.makeText(
-                            this,
-                            "Informe as repetições do exercício " +
-                                    (i + 1) +
-                                    ".",
-                            Toast.LENGTH_SHORT
-                    ).show();
-
+                    Toast.makeText(this, "Informe as repetições do exercício " + (i + 1) + ".", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
+                // valida que são números válidos
+                Integer.parseInt(textoSeries);
+                Integer.parseInt(textoRepeticoes);
 
-                int series =
-                        Integer.parseInt(
-                                textoSeries
-                        );
-
-                int repeticoes =
-                        Integer.parseInt(
-                                textoRepeticoes
-                        );
-
-
-                JSONObject exercicio =
-                        new JSONObject();
-
-
-                exercicio.put(
-                        "nome",
-                        nome
-                );
-
-                exercicio.put(
-                        "series",
-                        series
-                );
-
-                exercicio.put(
-                        "repeticoes",
-                        repeticoes
-                );
-
-
-                exercicio.put(
-                        "ordem",
-                        i + 1
-                );
-
-
-                exercicios.put(
-                        exercicio
-                );
-
+                valoresPreenchidos.add(new String[]{nome, textoSeries, textoRepeticoes});
             }
-
 
         } catch (Exception erro) {
 
-            Toast.makeText(
-                    this,
-                    "Verifique os valores informados.",
-                    Toast.LENGTH_SHORT
-            ).show();
-
+            Toast.makeText(this, "Verifique os valores informados.", Toast.LENGTH_SHORT).show();
             return;
-
         }
 
 
-        JSONObject dados =
-                new JSONObject();
+        // Se não sobrou nenhum exercício preenchido, mas ANTES da edição já existia algo salvo,
+        // bloqueia — não faz sentido apagar tudo silenciosamente.
+        // Remove da tela os campos em branco (não serão salvos)
+        for (View viewVazia : viewsVazias) {
+            containerExercicios.removeView(viewVazia);
+        }
 
+        renumerarExercicios();
+
+        if (valoresPreenchidos.isEmpty()) {
+
+            mostrarEstadoVazio();
+            return;
+        }
+
+
+        // Nada mudou em relação ao snapshot original? Só volta pra visualização, sem chamar API.
+        if (valoresIguaisAoSnapshot(valoresPreenchidos)) {
+
+            bloquearCampos();
+            return;
+        }
+
+
+        // Monta o JSON e envia normalmente
+        JSONArray exercicios = new JSONArray();
 
         try {
 
-            dados.put(
-                    "id_ficha",
-                    idFicha
-            );
+            for (int i = 0; i < valoresPreenchidos.size(); i++) {
 
-            dados.put(
-                    "id_alunos",
-                    idAluno
-            );
+                String[] valores = valoresPreenchidos.get(i);
 
-            dados.put(
-                    "exercicios",
-                    exercicios
-            );
+                JSONObject exercicio = new JSONObject();
+
+                exercicio.put("nome", valores[0]);
+                exercicio.put("series", Integer.parseInt(valores[1]));
+                exercicio.put("repeticoes", Integer.parseInt(valores[2]));
+                exercicio.put("ordem", i + 1);
+
+                exercicios.put(exercicio);
+            }
 
         } catch (Exception erro) {
 
+            Toast.makeText(this, "Verifique os valores informados.", Toast.LENGTH_SHORT).show();
             return;
         }
 
 
-        enviarExercicios(
-                dados
-        );
+        JSONObject dados = new JSONObject();
 
+        try {
+
+            dados.put("id_ficha", idFicha);
+            dados.put("id_alunos", idAluno);
+            dados.put("exercicios", exercicios);
+
+        } catch (Exception erro) {
+            return;
+        }
+
+
+        enviarExercicios(dados);
     }
 
 
@@ -1123,6 +1167,272 @@ public class ExerciciosProfessorActivity extends AppCompatActivity {
                     Toast.makeText(
                             ExerciciosProfessorActivity.this,
                             "Erro ao salvar os exercícios.",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                });
+
+
+            } finally {
+
+                if (conexao != null) {
+
+                    conexao.disconnect();
+
+                }
+
+            }
+
+        }).start();
+
+    }
+
+    private List<String[]> capturarSnapshotAtual() {
+
+        List<String[]> lista = new ArrayList<>();
+
+        int quantidade = containerExercicios.getChildCount();
+
+        for (int i = 0; i < quantidade; i++) {
+
+            View view = containerExercicios.getChildAt(i);
+
+            EditText edtNome = view.findViewById(R.id.edtNomeExercicio);
+            EditText edtSeries = view.findViewById(R.id.edtSeriesExercicio);
+            EditText edtRepeticoes = view.findViewById(R.id.edtRepeticoesExercicio);
+
+            String nome = edtNome.getText().toString().trim();
+            String series = edtSeries.getText().toString().trim();
+            String repeticoes = edtRepeticoes.getText().toString().trim();
+
+            lista.add(new String[]{nome, series, repeticoes});
+        }
+
+        return lista;
+    }
+
+    private boolean valoresIguaisAoSnapshot(List<String[]> atuais) {
+
+        if (atuais.size() != snapshotExercicios.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < atuais.size(); i++) {
+
+            String[] atual = atuais.get(i);
+            String[] original = snapshotExercicios.get(i);
+
+            if (
+                    !atual[0].equals(original[0]) ||
+                            !atual[1].equals(original[1]) ||
+                            !atual[2].equals(original[2])
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void renumerarExercicios() {
+
+        int quantidade = containerExercicios.getChildCount();
+
+        for (int i = 0; i < quantidade; i++) {
+
+            View view = containerExercicios.getChildAt(i);
+
+            TextView txtNumero = view.findViewById(R.id.txtNumeroExercicio);
+
+            txtNumero.setText("Exercício " + (i + 1));
+        }
+    }
+
+    // ============================================================
+    // EXCLUIR EXERCÍCIO (API)
+    // ============================================================
+
+    private void excluirExercicio(
+            int idExercicio,
+            View view
+    ) {
+
+        ImageView btnExcluir =
+                view.findViewById(
+                        R.id.btnExcluirExercicio
+                );
+
+        btnExcluir.setEnabled(
+                false
+        );
+
+
+        new Thread(() -> {
+
+            HttpURLConnection conexao = null;
+
+            try {
+
+                URL url =
+                        new URL(
+                                URL_EXERCICIOS
+                        );
+
+                conexao =
+                        (HttpURLConnection)
+                                url.openConnection();
+
+                conexao.setRequestMethod(
+                        "DELETE"
+                );
+
+                conexao.setConnectTimeout(
+                        10000
+                );
+
+                conexao.setReadTimeout(
+                        10000
+                );
+
+                conexao.setDoOutput(
+                        true
+                );
+
+                conexao.setRequestProperty(
+                        "Content-Type",
+                        "application/json"
+                );
+
+
+                JSONObject corpo =
+                        new JSONObject();
+
+                corpo.put(
+                        "id_exercicios",
+                        idExercicio
+                );
+
+
+                OutputStream output =
+                        conexao.getOutputStream();
+
+                output.write(
+                        corpo.toString()
+                                .getBytes("UTF-8")
+                );
+
+                output.flush();
+                output.close();
+
+
+                int codigo =
+                        conexao.getResponseCode();
+
+
+                InputStream inputStream;
+
+                if (
+                        codigo >= 200 &&
+                                codigo < 300
+                ) {
+
+                    inputStream =
+                            conexao.getInputStream();
+
+                } else {
+
+                    inputStream =
+                            conexao.getErrorStream();
+
+                }
+
+
+                BufferedReader reader =
+                        new BufferedReader(
+                                new InputStreamReader(
+                                        inputStream
+                                )
+                        );
+
+                StringBuilder resposta =
+                        new StringBuilder();
+
+                String linha;
+
+                while (
+                        (linha = reader.readLine())
+                                != null
+                ) {
+
+                    resposta.append(linha);
+
+                }
+
+                reader.close();
+
+
+                JSONObject json =
+                        new JSONObject(
+                                resposta.toString()
+                        );
+
+                boolean sucesso =
+                        json.optBoolean(
+                                "sucesso",
+                                false
+                        );
+
+
+                runOnUiThread(() -> {
+
+                    if (
+                            sucesso &&
+                                    codigo >= 200 &&
+                                    codigo < 300
+                    ) {
+
+                        containerExercicios.removeView(view);
+                        renumerarExercicios();
+
+                        if (containerExercicios.getChildCount() == 0) {
+                            cardNenhumExercicio.setVisibility(View.VISIBLE);
+                        }
+
+                        Toast.makeText(
+                                ExerciciosProfessorActivity.this,
+                                "Exercício excluído.",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                    } else {
+
+                        btnExcluir.setEnabled(true);
+
+                        Toast.makeText(
+                                ExerciciosProfessorActivity.this,
+                                json.optString(
+                                        "mensagem",
+                                        "Erro ao excluir o exercício."
+                                ),
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    }
+
+                });
+
+
+            } catch (Exception erro) {
+
+                erro.printStackTrace();
+
+                runOnUiThread(() -> {
+
+                    btnExcluir.setEnabled(true);
+
+                    Toast.makeText(
+                            ExerciciosProfessorActivity.this,
+                            "Erro de conexão ao excluir.",
                             Toast.LENGTH_LONG
                     ).show();
 

@@ -60,19 +60,6 @@
 
     </LinearLayout>
 
-
-    <!-- ============================================== -->
-    <!-- LINHA -->
-    <!-- ============================================== -->
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="#00D9FF"/>
-
-
     <!-- ============================================== -->
     <!-- CONTEÚDO -->
     <!-- ============================================== -->
@@ -108,6 +95,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
+
+
+            <!-- NENHUM EXERCÍCIO -->
+
+            <LinearLayout
+                android:id="@+id/cardNenhumExercicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="25dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_card_professor"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏋️"
+                    android:textSize="30sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Nenhum exercício cadastrado"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="Clique em editar dados para adicionar exercícios."
+                    android:textColor="#657086"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
 
 
             <!-- ADICIONAR -->
