@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +22,10 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class FichaTreinoActivity extends AppCompatActivity {
 
@@ -29,7 +33,8 @@ public class FichaTreinoActivity extends AppCompatActivity {
     // API
     // ============================================================
 
-    private static final String URL_FICHAS = "https://sga-api.miguel-r-hoff.workers.dev/fichas-treino";
+    private static final String URL_FICHAS =
+            "https://sga-api.miguel-r-hoff.workers.dev/fichas-treino";
 
 
     // ============================================================
@@ -50,12 +55,61 @@ public class FichaTreinoActivity extends AppCompatActivity {
     private TextView txtStatusFichas;
 
     private TextView btnNovaFicha;
+    private TextView btnEditarFichas;
 
     private TextView txtTituloFichas;
     private TextView txtStatusListaFichas;
 
     private LinearLayout containerFichas;
     private LinearLayout cardNenhumaFicha;
+
+
+    // ============================================================
+    // CONTROLE DE EDIÇÃO
+    // ============================================================
+
+    private boolean modoEdicao = false;
+
+    private final ArrayList<FichaItem> listaFichas = new ArrayList<>();
+
+    private final ArrayList<Integer> fichasExcluidas = new ArrayList<>();
+
+
+    // ============================================================
+    // MODELO DA FICHA
+    // ============================================================
+    private static class FichaItem {
+
+        int idFicha;
+
+        String nomeFicha;
+
+        String dataCriacao;
+
+        int quantidadeExercicios;
+
+        EditText campoNome;
+
+
+        FichaItem(
+                int idFicha,
+                String nomeFicha,
+                String dataCriacao,
+                int quantidadeExercicios
+        ) {
+
+            this.idFicha = idFicha;
+
+            this.nomeFicha = nomeFicha;
+
+            this.dataCriacao = dataCriacao;
+
+            this.quantidadeExercicios = quantidadeExercicios;
+
+            this.campoNome = null;
+        }
+    }
+
 
 
     // ============================================================
@@ -80,9 +134,15 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(main, (v, insets) -> {
 
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets systemBars =
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars());
 
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom
+            );
 
             return insets;
         });
@@ -92,36 +152,52 @@ public class FichaTreinoActivity extends AppCompatActivity {
         // REFERÊNCIAS XML
         // ========================================================
 
-        btnVoltarFicha = findViewById(R.id.btnVoltarFicha);
+        btnVoltarFicha =
+                findViewById(R.id.btnVoltarFicha);
 
-        txtNomeAlunoFicha = findViewById(R.id.txtNomeAlunoFicha);
+        txtNomeAlunoFicha =
+                findViewById(R.id.txtNomeAlunoFicha);
 
-        txtUsuarioAlunoFicha = findViewById(R.id.txtUsuarioAlunoFicha);
+        txtUsuarioAlunoFicha =
+                findViewById(R.id.txtUsuarioAlunoFicha);
 
-        txtQuantidadeFichas = findViewById(R.id.txtQuantidadeFichas);
+        txtQuantidadeFichas =
+                findViewById(R.id.txtQuantidadeFichas);
 
-        txtStatusFichas = findViewById(R.id.txtStatusFichas);
+        txtStatusFichas =
+                findViewById(R.id.txtStatusFichas);
 
-        btnNovaFicha = findViewById(R.id.btnNovaFicha);
+        btnNovaFicha =
+                findViewById(R.id.btnNovaFicha);
 
-        txtTituloFichas = findViewById(R.id.txtTituloFichas);
+        btnEditarFichas =
+                findViewById(R.id.btnEditarFichas);
 
-        txtStatusListaFichas = findViewById(R.id.txtStatusListaFichas);
+        txtTituloFichas =
+                findViewById(R.id.txtTituloFichas);
 
-        containerFichas = findViewById(R.id.containerFichas);
+        txtStatusListaFichas =
+                findViewById(R.id.txtStatusListaFichas);
 
-        cardNenhumaFicha = findViewById(R.id.cardNenhumaFicha);
+        containerFichas =
+                findViewById(R.id.containerFichas);
+
+        cardNenhumaFicha =
+                findViewById(R.id.cardNenhumaFicha);
 
 
         // ========================================================
-        // RECEBER DADOS DA TELA ANTERIOR
+        // RECEBER DADOS
         // ========================================================
 
-        idAluno = getIntent().getIntExtra("id_alunos", -1);
+        idAluno =
+                getIntent().getIntExtra("id_alunos", -1);
 
-        nomeAluno = getIntent().getStringExtra("nome_completo");
+        nomeAluno =
+                getIntent().getStringExtra("nome_completo");
 
-        nomeUsuario = getIntent().getStringExtra("nome_user");
+        nomeUsuario =
+                getIntent().getStringExtra("nome_user");
 
 
         // ========================================================
@@ -130,7 +206,11 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
         if (idAluno == -1) {
 
-            Toast.makeText(this, "Erro: aluno não encontrado.", Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    this,
+                    "Erro: aluno não encontrado.",
+                    Toast.LENGTH_LONG
+            ).show();
 
             finish();
 
@@ -142,7 +222,8 @@ public class FichaTreinoActivity extends AppCompatActivity {
         // PREENCHER ALUNO
         // ========================================================
 
-        if (nomeAluno == null || nomeAluno.trim().isEmpty()) {
+        if (nomeAluno == null ||
+                nomeAluno.trim().isEmpty()) {
 
             nomeAluno = "Aluno";
         }
@@ -150,14 +231,18 @@ public class FichaTreinoActivity extends AppCompatActivity {
         txtNomeAlunoFicha.setText(nomeAluno);
 
 
-        if (nomeUsuario != null && !nomeUsuario.trim().isEmpty()) {
+        if (nomeUsuario != null &&
+                !nomeUsuario.trim().isEmpty()) {
 
-            txtUsuarioAlunoFicha.setText("@" + nomeUsuario);
+            txtUsuarioAlunoFicha.setText(
+                    "@" + nomeUsuario
+            );
 
         } else {
 
-            txtUsuarioAlunoFicha.setText("Usuário não informado");
-
+            txtUsuarioAlunoFicha.setText(
+                    "Usuário não informado"
+            );
         }
 
 
@@ -167,7 +252,15 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
         btnVoltarFicha.setOnClickListener(v -> {
 
-            finish();
+            if (modoEdicao) {
+
+                sairModoEdicao();
+
+            } else {
+
+                finish();
+
+            }
 
         });
 
@@ -178,40 +271,107 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
         btnNovaFicha.setOnClickListener(v -> {
 
-            Intent intent = new Intent(FichaTreinoActivity.this, CriarFichaTreinoActivity.class);
+            if (!modoEdicao) {
 
-            intent.putExtra("id_alunos", idAluno);
+                entrarModoEdicao();
+            }
 
-            intent.putExtra("nome_completo", nomeAluno);
-
-            intent.putExtra("nome_user", nomeUsuario);
-
-            startActivity(intent);
+            adicionarNovaFicha();
 
         });
+
+
+        // ========================================================
+        // EDITAR / SALVAR
+        // ========================================================
+
+        btnEditarFichas.setOnClickListener(v -> {
+
+            if (!modoEdicao) {
+
+                entrarModoEdicao();
+
+            } else {
+
+                salvarFichas();
+
+            }
+
+        });
+
     }
+
+
+    // ============================================================
+    // RESUME
+    // ============================================================
 
     @Override
     protected void onResume() {
 
         super.onResume();
 
-        if (idAluno != -1) {
+        if (idAluno != -1 &&
+                !modoEdicao) {
 
             carregarFichas();
 
         }
+
     }
 
+
     // ============================================================
-    // BUSCAR FICHAS NA API
+    // ENTRAR NO MODO DE EDIÇÃO
+    // ============================================================
+
+    private void entrarModoEdicao() {
+
+        modoEdicao = true;
+
+        fichasExcluidas.clear();
+
+        btnEditarFichas.setText("SALVAR");
+
+        txtStatusFichas.setText("Editando");
+
+        txtStatusListaFichas.setText(
+                "Edite as fichas ou adicione novas."
+        );
+
+        mostrarFichasEdicao();
+
+    }
+
+
+    // ============================================================
+    // SAIR DO MODO DE EDIÇÃO
+    // ============================================================
+
+    private void sairModoEdicao() {
+
+        modoEdicao = false;
+
+        fichasExcluidas.clear();
+
+        btnEditarFichas.setText("EDITAR");
+
+        mostrarFichasNormal();
+
+    }
+
+
+    // ============================================================
+    // BUSCAR FICHAS
     // ============================================================
 
     private void carregarFichas() {
 
         txtStatusFichas.setText("Carregando...");
 
-        txtStatusListaFichas.setText("Buscando fichas de treino...");
+        txtStatusListaFichas.setText(
+                "Buscando fichas de treino..."
+        );
 
         cardNenhumaFicha.setVisibility(View.GONE);
 
@@ -222,17 +382,17 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
             try {
 
-                // ------------------------------------------------
-                // MONTAR URL
-                // ------------------------------------------------
+                String endereco =
+                        URL_FICHAS +
+                                "?id_alunos=" +
+                                idAluno;
 
-                String endereco = URL_FICHAS + "?id_alunos=" + idAluno;
+                URL url =
+                        new URL(endereco);
 
-
-                URL url = new URL(endereco);
-
-                conexao = (HttpURLConnection) url.openConnection();
-
+                conexao =
+                        (HttpURLConnection)
+                                url.openConnection();
 
                 conexao.setRequestMethod("GET");
 
@@ -241,84 +401,99 @@ public class FichaTreinoActivity extends AppCompatActivity {
                 conexao.setReadTimeout(10000);
 
 
-                // ------------------------------------------------
-                // RESPOSTA
-                // ------------------------------------------------
-
-                int codigoResposta = conexao.getResponseCode();
+                int codigoResposta =
+                        conexao.getResponseCode();
 
 
                 InputStream inputStream;
 
+                if (codigoResposta >= 200 &&
+                        codigoResposta < 300) {
 
-                if (codigoResposta >= 200 && codigoResposta < 300) {
-
-                    inputStream = conexao.getInputStream();
+                    inputStream =
+                            conexao.getInputStream();
 
                 } else {
 
-                    inputStream = conexao.getErrorStream();
-
+                    inputStream =
+                            conexao.getErrorStream();
                 }
 
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                BufferedReader reader =
+                        new BufferedReader(
+                                new InputStreamReader(
+                                        inputStream
+                                )
+                        );
 
 
-                StringBuilder resposta = new StringBuilder();
+                StringBuilder resposta =
+                        new StringBuilder();
 
 
                 String linha;
 
-
-                while ((linha = reader.readLine()) != null) {
+                while ((linha =
+                        reader.readLine()) != null) {
 
                     resposta.append(linha);
-
                 }
-
 
                 reader.close();
 
 
-                // ------------------------------------------------
-                // PROCESSAR
-                // ------------------------------------------------
+                if (codigoResposta >= 200 &&
+                        codigoResposta < 300) {
 
-                if (codigoResposta >= 200 && codigoResposta < 300) {
-
-                    processarFichas(resposta.toString());
+                    processarFichas(
+                            resposta.toString()
+                    );
 
                 } else {
 
                     runOnUiThread(() -> {
 
-                        txtStatusFichas.setText("Erro");
+                        txtStatusFichas.setText(
+                                "Erro"
+                        );
 
-                        txtStatusListaFichas.setText("Não foi possível carregar as fichas.");
+                        txtStatusListaFichas.setText(
+                                "Não foi possível carregar as fichas."
+                        );
 
-                        Toast.makeText(FichaTreinoActivity.this, "Erro na API: " + codigoResposta, Toast.LENGTH_LONG).show();
+                        Toast.makeText(
+                                FichaTreinoActivity.this,
+                                "Erro na API: " +
+                                        codigoResposta,
+                                Toast.LENGTH_LONG
+                        ).show();
 
                     });
 
                 }
 
-
             } catch (Exception erro) {
 
                 erro.printStackTrace();
 
-
                 runOnUiThread(() -> {
 
-                    txtStatusFichas.setText("Erro");
+                    txtStatusFichas.setText(
+                            "Erro"
+                    );
 
-                    txtStatusListaFichas.setText("Não foi possível conectar ao servidor.");
+                    txtStatusListaFichas.setText(
+                            "Não foi possível conectar ao servidor."
+                    );
 
-                    Toast.makeText(FichaTreinoActivity.this, "Erro de conexão com o servidor.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(
+                            FichaTreinoActivity.this,
+                            "Erro de conexão com o servidor.",
+                            Toast.LENGTH_LONG
+                    ).show();
 
                 });
-
 
             } finally {
 
@@ -327,7 +502,6 @@ public class FichaTreinoActivity extends AppCompatActivity {
                     conexao.disconnect();
 
                 }
-
             }
 
         }).start();
@@ -343,24 +517,39 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
         try {
 
-            JSONObject json = new JSONObject(resposta);
+            JSONObject json =
+                    new JSONObject(resposta);
 
 
-            boolean sucesso = json.optBoolean("sucesso", false);
+            boolean sucesso =
+                    json.optBoolean(
+                            "sucesso",
+                            false
+                    );
 
 
             if (!sucesso) {
 
-                String mensagem = json.optString("mensagem", "Erro ao buscar fichas.");
+                String mensagem =
+                        json.optString(
+                                "mensagem",
+                                "Erro ao buscar fichas."
+                        );
 
 
                 runOnUiThread(() -> {
 
-                    txtStatusFichas.setText("Erro");
+                    txtStatusFichas.setText(
+                            "Erro"
+                    );
 
-                    txtStatusListaFichas.setText(mensagem);
+                    txtStatusListaFichas.setText(
+                            mensagem
+                    );
 
-                    cardNenhumaFicha.setVisibility(View.VISIBLE);
+                    cardNenhumaFicha.setVisibility(
+                            View.VISIBLE
+                    );
 
                 });
 
@@ -368,38 +557,91 @@ public class FichaTreinoActivity extends AppCompatActivity {
             }
 
 
-            JSONArray fichas = json.optJSONArray("fichas");
+            JSONArray fichas =
+                    json.optJSONArray("fichas");
 
 
             if (fichas == null) {
 
-                fichas = new JSONArray();
-
+                fichas =
+                        new JSONArray();
             }
 
 
-            JSONArray fichasFinal = fichas;
+            listaFichas.clear();
 
 
-            runOnUiThread(() -> {
+            for (int i = 0;
+                 i < fichas.length();
+                 i++) {
 
-                mostrarFichas(fichasFinal);
+                JSONObject ficha =
+                        fichas.getJSONObject(i);
 
-            });
+
+                int idFicha =
+                        ficha.optInt(
+                                "id_ficha",
+                                -1
+                        );
+
+
+                String nomeFicha =
+                        ficha.optString(
+                                "nome_ficha",
+                                "Ficha de treino"
+                        );
+
+
+                String dataCriacao =
+                        ficha.optString(
+                                "data_criacao",
+                                ""
+                        );
+
+
+                int quantidadeExercicios =
+                        ficha.optInt(
+                                "quantidade_exercicios",
+                                0
+                        );
+
+
+                listaFichas.add(
+                        new FichaItem(
+                                idFicha,
+                                nomeFicha,
+                                dataCriacao,
+                                quantidadeExercicios
+                        )
+                );
+            }
+
+
+            runOnUiThread(() ->
+                    mostrarFichasNormal()
+            );
 
 
         } catch (Exception erro) {
 
             erro.printStackTrace();
 
-
             runOnUiThread(() -> {
 
-                txtStatusFichas.setText("Erro");
+                txtStatusFichas.setText(
+                        "Erro"
+                );
 
-                txtStatusListaFichas.setText("Resposta inválida do servidor.");
+                txtStatusListaFichas.setText(
+                        "Resposta inválida do servidor."
+                );
 
-                Toast.makeText(FichaTreinoActivity.this, "Erro ao processar as fichas.", Toast.LENGTH_LONG).show();
+                Toast.makeText(
+                        FichaTreinoActivity.this,
+                        "Erro ao processar as fichas.",
+                        Toast.LENGTH_LONG
+                ).show();
 
             });
 
@@ -409,215 +651,1050 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
 
     // ============================================================
-    // MOSTRAR FICHAS
+    // MOSTRAR FICHAS NORMALMENTE
     // ============================================================
 
-    private void mostrarFichas(JSONArray fichas) {
+    private void mostrarFichasNormal() {
 
         containerFichas.removeAllViews();
 
 
-        int quantidade = fichas.length();
+        int quantidade =
+                listaFichas.size();
 
 
-        // --------------------------------------------------------
-        // QUANTIDADE
-        // --------------------------------------------------------
+        txtQuantidadeFichas.setText(
+                String.valueOf(quantidade)
+        );
 
-        txtQuantidadeFichas.setText(String.valueOf(quantidade));
-
-
-        // --------------------------------------------------------
-        // NENHUMA FICHA
-        // --------------------------------------------------------
 
         if (quantidade == 0) {
 
-            txtStatusFichas.setText("Nenhuma");
+            txtStatusFichas.setText(
+                    "Nenhuma"
+            );
 
-            txtTituloFichas.setText("Fichas do aluno");
+            txtTituloFichas.setText(
+                    "Fichas do aluno"
+            );
 
-            txtStatusListaFichas.setText("Este aluno ainda não possui fichas.");
+            txtStatusListaFichas.setText(
+                    "Este aluno ainda não possui fichas."
+            );
 
-            cardNenhumaFicha.setVisibility(View.VISIBLE);
+            cardNenhumaFicha.setVisibility(
+                    View.VISIBLE
+            );
 
             return;
         }
 
 
-        // --------------------------------------------------------
-        // EXISTEM FICHAS
-        // --------------------------------------------------------
+        txtStatusFichas.setText(
+                "Ativas"
+        );
 
-        txtStatusFichas.setText("Ativas");
+        txtTituloFichas.setText(
+                "Fichas do aluno"
+        );
 
-        txtTituloFichas.setText("Fichas do aluno");
-
-        txtStatusListaFichas.setText(quantidade == 1 ? "1 ficha encontrada." : quantidade + " fichas encontradas.");
-
-
-        cardNenhumaFicha.setVisibility(View.GONE);
-
-
-        // --------------------------------------------------------
-        // INFLATER
-        // --------------------------------------------------------
-
-        LayoutInflater inflater = LayoutInflater.from(this);
+        txtStatusListaFichas.setText(
+                quantidade == 1
+                        ? "1 ficha encontrada."
+                        : quantidade +
+                        " fichas encontradas."
+        );
 
 
-        // --------------------------------------------------------
-        // LOOP
-        // --------------------------------------------------------
-
-        for (int i = 0; i < quantidade; i++) {
-
-            try {
-
-                JSONObject ficha = fichas.getJSONObject(i);
+        cardNenhumaFicha.setVisibility(
+                View.GONE
+        );
 
 
-                // ------------------------------------------------
-                // INFLAR CARD
-                // ------------------------------------------------
-
-                View card = inflater.inflate(R.layout.item_ficha_treino, containerFichas, false);
+        LayoutInflater inflater =
+                LayoutInflater.from(this);
 
 
-                // ------------------------------------------------
-                // CAMPOS
-                // ------------------------------------------------
+        for (FichaItem ficha :
+                listaFichas) {
 
-                TextView txtNomeFicha = card.findViewById(R.id.txtNomeFicha);
-
-
-                TextView txtInfoFicha = card.findViewById(R.id.txtInfoFicha);
-
-
-                TextView txtDataFicha = card.findViewById(R.id.txtDataFicha);
+            View card =
+                    inflater.inflate(
+                            R.layout.item_ficha_treino,
+                            containerFichas,
+                            false
+                    );
 
 
-                TextView txtAcaoFicha = card.findViewById(R.id.txtAcaoFicha);
+            TextView txtNomeFicha =
+                    card.findViewById(
+                            R.id.txtNomeFicha
+                    );
 
 
-                // ------------------------------------------------
-                // DADOS
-                // ------------------------------------------------
-
-                int idFicha = ficha.optInt("id_ficha", -1);
-
-
-                String nomeFicha = ficha.optString("nome_ficha", "Ficha de treino");
+            TextView txtInfoFicha =
+                    card.findViewById(
+                            R.id.txtInfoFicha
+                    );
 
 
-                String dataCriacao = ficha.optString("data_criacao", "");
+            TextView txtDataFicha =
+                    card.findViewById(
+                            R.id.txtDataFicha
+                    );
 
 
-                int quantidadeExercicios = ficha.optInt("quantidade_exercicios", 0);
+            TextView txtAcaoFicha =
+                    card.findViewById(
+                            R.id.txtAcaoFicha
+                    );
 
 
-                // ------------------------------------------------
-                // NOME
-                // ------------------------------------------------
+            TextView txtIconeFicha =
+                    card.findViewById(
+                            R.id.txtIconeFicha
+                    );
 
-                txtNomeFicha.setText(nomeFicha);
+
+            txtNomeFicha.setText(
+                    ficha.nomeFicha
+            );
 
 
-                // ------------------------------------------------
-                // EXERCÍCIOS
-                // ------------------------------------------------
+            if (ficha.quantidadeExercicios == 0) {
 
-                if (quantidadeExercicios == 0) {
+                txtInfoFicha.setText(
+                        "Nenhum exercício"
+                );
 
-                    txtInfoFicha.setText("Nenhum exercício");
+            } else if (
+                    ficha.quantidadeExercicios == 1
+            ) {
 
-                } else if (quantidadeExercicios == 1) {
+                txtInfoFicha.setText(
+                        "1 exercício"
+                );
 
-                    txtInfoFicha.setText("1 exercício");
+            } else {
 
-                } else {
+                txtInfoFicha.setText(
+                        ficha.quantidadeExercicios +
+                                " exercícios"
+                );
+            }
 
-                    txtInfoFicha.setText(quantidadeExercicios + " exercícios");
 
+            txtDataFicha.setText(
+                    formatarData(
+                            ficha.dataCriacao
+                    )
+            );
+
+
+            txtIconeFicha.setText("▣");
+
+            txtAcaoFicha.setText("›");
+
+
+            // ====================================================
+            // CLICK DA FICHA
+            // ====================================================
+
+            card.setOnClickListener(v -> {
+
+                if (modoEdicao) {
+
+                    return;
                 }
 
 
-                // ------------------------------------------------
-                // DATA
-                // ------------------------------------------------
+                if (ficha.idFicha <= 0) {
 
-                txtDataFicha.setText(formatarData(dataCriacao));
+                    Toast.makeText(
+                            FichaTreinoActivity.this,
+                            "ID da ficha inválido.",
+                            Toast.LENGTH_SHORT
+                    ).show();
 
-
-                // ------------------------------------------------
-                // AÇÃO
-                // ------------------------------------------------
-
-                txtAcaoFicha.setText("›");
+                    return;
+                }
 
 
-                // ------------------------------------------------
-                // CLICK
-                // ------------------------------------------------
-
-                final int idFichaSelecionada = idFicha;
-
-
-                final String nomeFichaSelecionada = nomeFicha;
+                Intent intent =
+                        new Intent(
+                                FichaTreinoActivity.this,
+                                ExerciciosProfessorActivity.class
+                        );
 
 
-                card.setOnClickListener(v -> {
+                intent.putExtra(
+                        "id_ficha",
+                        ficha.idFicha
+                );
 
-                    if (idFichaSelecionada == -1) {
+
+                intent.putExtra(
+                        "id_alunos",
+                        idAluno
+                );
+
+
+                intent.putExtra(
+                        "nome_ficha",
+                        ficha.nomeFicha
+                );
+
+
+                startActivity(intent);
+
+            });
+
+
+            containerFichas.addView(card);
+        }
+
+    }
+
+    private void mostrarFichasEdicao() {
+
+        containerFichas.removeAllViews();
+
+        int quantidade = listaFichas.size();
+
+        txtQuantidadeFichas.setText(
+                String.valueOf(quantidade)
+        );
+
+
+        if (quantidade == 0) {
+
+            cardNenhumaFicha.setVisibility(
+                    View.VISIBLE
+            );
+
+        } else {
+
+            cardNenhumaFicha.setVisibility(
+                    View.GONE
+            );
+        }
+
+
+        LayoutInflater inflater =
+                LayoutInflater.from(this);
+
+
+        for (int i = 0; i < listaFichas.size(); i++) {
+
+            FichaItem ficha =
+                    listaFichas.get(i);
+
+
+            View card =
+                    inflater.inflate(
+                            R.layout.item_ficha_treino,
+                            containerFichas,
+                            false
+                    );
+
+
+            TextView txtNomeFicha =
+                    card.findViewById(
+                            R.id.txtNomeFicha
+                    );
+
+            TextView txtInfoFicha =
+                    card.findViewById(
+                            R.id.txtInfoFicha
+                    );
+
+            TextView txtDataFicha =
+                    card.findViewById(
+                            R.id.txtDataFicha
+                    );
+
+            TextView txtAcaoFicha =
+                    card.findViewById(
+                            R.id.txtAcaoFicha
+                    );
+
+            TextView txtIconeFicha =
+                    card.findViewById(
+                            R.id.txtIconeFicha
+                    );
+
+
+            // ========================================================
+            // LOCAL ONDE FICAVA O NOME
+            // ========================================================
+
+            ViewGroup parent =
+                    (ViewGroup) txtNomeFicha.getParent();
+
+
+            int posicaoNome =
+                    parent.indexOfChild(
+                            txtNomeFicha
+                    );
+
+
+            // ========================================================
+            // EDITTEXT
+            // ========================================================
+
+            EditText editNome =
+                    new EditText(this);
+
+
+            ViewGroup.LayoutParams parametros =
+                    txtNomeFicha.getLayoutParams();
+
+
+            editNome.setLayoutParams(
+                    parametros
+            );
+
+
+            editNome.setText(
+                    ficha.nomeFicha
+            );
+
+
+            editNome.setTextColor(
+                    android.graphics.Color.WHITE
+            );
+
+
+            editNome.setTextSize(16);
+
+
+            editNome.setSingleLine(true);
+
+
+            editNome.setPadding(
+                    14,
+                    0,
+                    14,
+                    0
+            );
+
+
+            editNome.setHint(
+                    "Nome da ficha"
+            );
+
+
+            editNome.setHintTextColor(
+                    android.graphics.Color.parseColor(
+                            "#657086"
+                    )
+            );
+
+
+            // ========================================================
+            // FUNDO DO INPUT
+            // ========================================================
+
+            editNome.setBackgroundResource(
+                    R.drawable.bg_input_professor
+            );
+
+
+            // ========================================================
+            // GUARDAR O EDITTEXT NA FICHA
+            // ========================================================
+
+            ficha.campoNome = editNome;
+
+
+            // ========================================================
+            // SUBSTITUIR TEXTVIEW PELO EDITTEXT
+            // ========================================================
+
+            parent.removeView(
+                    txtNomeFicha
+            );
+
+
+            parent.addView(
+                    editNome,
+                    posicaoNome
+            );
+
+
+            // ========================================================
+            // INFORMAÇÕES
+            // ========================================================
+
+            if (ficha.quantidadeExercicios == 0) {
+
+                txtInfoFicha.setText(
+                        "Nenhum exercício"
+                );
+
+            } else if (
+                    ficha.quantidadeExercicios == 1
+            ) {
+
+                txtInfoFicha.setText(
+                        "1 exercício"
+                );
+
+            } else {
+
+                txtInfoFicha.setText(
+                        ficha.quantidadeExercicios +
+                                " exercícios"
+                );
+            }
+
+
+            // ========================================================
+            // DATA
+            // ========================================================
+
+            txtDataFicha.setText(
+                    formatarData(
+                            ficha.dataCriacao
+                    )
+            );
+
+
+            // ========================================================
+            // LIXEIRA
+            // ========================================================
+
+            txtIconeFicha.setText("🗑");
+
+            txtIconeFicha.setTextSize(22);
+
+
+            txtIconeFicha.setOnClickListener(v -> {
+
+                int indice =
+                        containerFichas.indexOfChild(
+                                card
+                        );
+
+
+                if (indice < 0 ||
+                        indice >= listaFichas.size()) {
+
+                    return;
+                }
+
+
+                FichaItem fichaRemovida =
+                        listaFichas.get(indice);
+
+
+                if (fichaRemovida.idFicha > 0) {
+
+                    if (!fichasExcluidas.contains(
+                            fichaRemovida.idFicha
+                    )) {
+
+                        fichasExcluidas.add(
+                                fichaRemovida.idFicha
+                        );
+                    }
+                }
+
+
+                listaFichas.remove(
+                        indice
+                );
+
+
+                mostrarFichasEdicao();
+
+            });
+
+
+            // ========================================================
+            // ESCONDER SETA
+            // ========================================================
+
+            txtAcaoFicha.setText("");
+
+
+            // ========================================================
+            // DESABILITAR CLICK DO CARD
+            // ========================================================
+
+            card.setOnClickListener(v -> {
+                // Nada
+            });
+
+
+            // ========================================================
+            // ADICIONAR CARD
+            // ========================================================
+
+            containerFichas.addView(
+                    card
+            );
+        }
+
+
+        txtStatusListaFichas.setText(
+                "Edite os nomes ou exclua fichas."
+        );
+    }
+
+
+
+    // ============================================================
+    // ADICIONAR NOVA FICHA
+    // ============================================================
+
+    private void adicionarNovaFicha() {
+
+        FichaItem novaFicha =
+                new FichaItem(
+                        0,
+                        "",
+                        "",
+                        0
+                );
+
+
+        listaFichas.add(
+                novaFicha
+        );
+
+
+        cardNenhumaFicha.setVisibility(
+                View.GONE
+        );
+
+
+        mostrarFichasEdicao();
+
+
+        // ========================================================
+        // FOCAR NO ÚLTIMO EDITTEXT
+        // ========================================================
+
+        containerFichas.post(() -> {
+
+            int ultimo =
+                    containerFichas.getChildCount() - 1;
+
+
+            if (ultimo < 0) {
+                return;
+            }
+
+
+            View card =
+                    containerFichas.getChildAt(
+                            ultimo
+                    );
+
+
+            TextView txtNome =
+                    card.findViewById(
+                            R.id.txtNomeFicha
+                    );
+
+
+            if (txtNome != null) {
+
+                txtNome.requestFocus();
+
+            } else {
+
+                EditText edit =
+                        encontrarEditText(card);
+
+                if (edit != null) {
+
+                    edit.requestFocus();
+
+                }
+            }
+
+        });
+
+    }
+
+
+    // ============================================================
+    // ENCONTRAR EDITTEXT
+    // ============================================================
+
+    private EditText encontrarEditText(View view) {
+
+        if (view instanceof EditText) {
+
+            return (EditText) view;
+        }
+
+
+        if (view instanceof ViewGroup) {
+
+            ViewGroup grupo =
+                    (ViewGroup) view;
+
+
+            for (int i = 0;
+                 i < grupo.getChildCount();
+                 i++) {
+
+                EditText resultado =
+                        encontrarEditText(
+                                grupo.getChildAt(i)
+                        );
+
+
+                if (resultado != null) {
+
+                    return resultado;
+                }
+            }
+        }
+
+
+        return null;
+    }
+
+
+    // ============================================================
+    // SALVAR FICHAS
+    // ============================================================
+
+    private void salvarFichas() {
+
+        // ========================================================
+        // PEGAR NOMES DOS EDITTEXTS
+        // ========================================================
+
+        for (int i = 0;
+             i < containerFichas.getChildCount();
+             i++) {
+
+            View card =
+                    containerFichas.getChildAt(i);
+
+
+            EditText editNome =
+                    encontrarEditText(card);
+
+
+            if (editNome == null) {
+                continue;
+            }
+
+
+            String nome =
+                    editNome.getText()
+                            .toString()
+                            .trim();
+
+
+            if (nome.isEmpty()) {
+
+                Toast.makeText(
+                        this,
+                        "Todas as fichas precisam ter um nome.",
+                        Toast.LENGTH_LONG
+                ).show();
+
+                editNome.requestFocus();
+
+                return;
+            }
+
+
+            if (nome.length() > 100) {
+
+                Toast.makeText(
+                        this,
+                        "O nome da ficha deve ter no máximo 100 caracteres.",
+                        Toast.LENGTH_LONG
+                ).show();
+
+                editNome.requestFocus();
+
+                return;
+            }
+
+
+            listaFichas.get(i).nomeFicha =
+                    nome;
+        }
+
+
+        // ========================================================
+        // EVITAR DUPLO CLIQUE
+        // ========================================================
+
+        btnEditarFichas.setEnabled(false);
+
+        btnNovaFicha.setEnabled(false);
+
+        txtStatusFichas.setText(
+                "Salvando..."
+        );
+
+        txtStatusListaFichas.setText(
+                "Salvando fichas no banco..."
+        );
+
+
+        new Thread(() -> {
+
+            HttpURLConnection conexao = null;
+
+            try {
+
+                JSONObject corpo =
+                        new JSONObject();
+
+
+                corpo.put(
+                        "id_alunos",
+                        idAluno
+                );
+
+
+                JSONArray fichasJson =
+                        new JSONArray();
+
+
+                // ==================================================
+                // FICHAS
+                // ==================================================
+
+                for (FichaItem ficha :
+                        listaFichas) {
+
+                    JSONObject objeto =
+                            new JSONObject();
+
+
+                    objeto.put(
+                            "id_ficha",
+                            ficha.idFicha
+                    );
+
+
+                    objeto.put(
+                            "nome_ficha",
+                            ficha.nomeFicha
+                    );
+
+
+                    fichasJson.put(
+                            objeto
+                    );
+                }
+
+
+                corpo.put(
+                        "fichas",
+                        fichasJson
+                );
+
+
+                // ==================================================
+                // EXCLUÍDAS
+                // ==================================================
+
+                JSONArray excluidasJson =
+                        new JSONArray();
+
+
+                for (Integer id :
+                        fichasExcluidas) {
+
+                    excluidasJson.put(id);
+                }
+
+
+                corpo.put(
+                        "excluidas",
+                        excluidasJson
+                );
+
+
+                // ==================================================
+                // CONEXÃO
+                // ==================================================
+
+                URL url =
+                        new URL(URL_FICHAS);
+
+
+                conexao =
+                        (HttpURLConnection)
+                                url.openConnection();
+
+
+                conexao.setRequestMethod(
+                        "POST"
+                );
+
+
+                conexao.setConnectTimeout(
+                        10000
+                );
+
+
+                conexao.setReadTimeout(
+                        10000
+                );
+
+
+                conexao.setDoOutput(
+                        true
+                );
+
+
+                conexao.setRequestProperty(
+                        "Content-Type",
+                        "application/json; charset=UTF-8"
+                );
+
+
+                // ==================================================
+                // ENVIAR
+                // ==================================================
+
+                OutputStream output =
+                        conexao.getOutputStream();
+
+
+                output.write(
+                        corpo.toString()
+                                .getBytes("UTF-8")
+                );
+
+
+                output.flush();
+
+                output.close();
+
+
+                // ==================================================
+                // RESPOSTA
+                // ==================================================
+
+                int codigoResposta =
+                        conexao.getResponseCode();
+
+
+                InputStream inputStream;
+
+
+                if (codigoResposta >= 200 &&
+                        codigoResposta < 300) {
+
+                    inputStream =
+                            conexao.getInputStream();
+
+                } else {
+
+                    inputStream =
+                            conexao.getErrorStream();
+                }
+
+
+                BufferedReader reader =
+                        new BufferedReader(
+                                new InputStreamReader(
+                                        inputStream
+                                )
+                        );
+
+
+                StringBuilder resposta =
+                        new StringBuilder();
+
+
+                String linha;
+
+
+                while ((linha =
+                        reader.readLine()) != null) {
+
+                    resposta.append(linha);
+                }
+
+
+                reader.close();
+
+
+                JSONObject json =
+                        new JSONObject(
+                                resposta.toString()
+                        );
+
+
+                boolean sucesso =
+                        json.optBoolean(
+                                "sucesso",
+                                false
+                        );
+
+
+                String mensagem =
+                        json.optString(
+                                "mensagem",
+                                "Erro ao salvar fichas."
+                        );
+
+
+                if (codigoResposta >= 200 &&
+                        codigoResposta < 300 &&
+                        sucesso) {
+
+
+                    // ==================================================
+                    // PEGAR DADOS DEVOLVIDOS PELA API
+                    // ==================================================
+
+                    JSONArray fichasSalvas =
+                            json.optJSONArray(
+                                    "fichas"
+                            );
+
+
+                    if (fichasSalvas != null) {
+
+                        listaFichas.clear();
+
+
+                        for (int i = 0;
+                             i < fichasSalvas.length();
+                             i++) {
+
+                            JSONObject ficha =
+                                    fichasSalvas.getJSONObject(i);
+
+
+                            listaFichas.add(
+                                    new FichaItem(
+                                            ficha.optInt(
+                                                    "id_ficha",
+                                                    -1
+                                            ),
+                                            ficha.optString(
+                                                    "nome_ficha",
+                                                    "Ficha de treino"
+                                            ),
+                                            ficha.optString(
+                                                    "data_criacao",
+                                                    ""
+                                            ),
+                                            ficha.optInt(
+                                                    "quantidade_exercicios",
+                                                    0
+                                            )
+                                    )
+                            );
+                        }
+                    }
+
+
+                    runOnUiThread(() -> {
+
+                        modoEdicao = false;
+
+                        fichasExcluidas.clear();
+
+                        btnEditarFichas.setText(
+                                "EDITAR"
+                        );
+
+                        btnEditarFichas.setEnabled(
+                                true
+                        );
+
+                        btnNovaFicha.setEnabled(
+                                true
+                        );
+
+
+                        mostrarFichasNormal();
+
 
                         Toast.makeText(
                                 FichaTreinoActivity.this,
-                                "ID da ficha inválido.",
+                                "Fichas salvas com sucesso!",
                                 Toast.LENGTH_SHORT
                         ).show();
 
-                        return;
-                    }
-
-                    Intent intent = new Intent(
-                            FichaTreinoActivity.this,
-                            ExerciciosProfessorActivity.class
-                    );
-
-                    intent.putExtra(
-                            "id_ficha",
-                            idFichaSelecionada
-                    );
-
-                    intent.putExtra(
-                            "id_alunos",
-                            idAluno
-                    );
-
-                    intent.putExtra(
-                            "nome_ficha",
-                            nomeFichaSelecionada
-                    );
-
-                    startActivity(intent);
-
-                });
+                    });
 
 
-                // ------------------------------------------------
-                // ADICIONAR
-                // ------------------------------------------------
+                } else {
 
-                containerFichas.addView(card);
+                    runOnUiThread(() -> {
+
+                        btnEditarFichas.setEnabled(
+                                true
+                        );
+
+                        btnNovaFicha.setEnabled(
+                                true
+                        );
+
+                        txtStatusFichas.setText(
+                                "Erro"
+                        );
+
+                        Toast.makeText(
+                                FichaTreinoActivity.this,
+                                mensagem,
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    });
+
+                }
 
 
             } catch (Exception erro) {
 
                 erro.printStackTrace();
 
+
+                runOnUiThread(() -> {
+
+                    btnEditarFichas.setEnabled(
+                            true
+                    );
+
+                    btnNovaFicha.setEnabled(
+                            true
+                    );
+
+
+                    txtStatusFichas.setText(
+                            "Erro"
+                    );
+
+
+                    Toast.makeText(
+                            FichaTreinoActivity.this,
+                            "Erro ao salvar as fichas.",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                });
+
+
+            } finally {
+
+                if (conexao != null) {
+
+                    conexao.disconnect();
+                }
             }
 
-        }
+        }).start();
 
     }
 
@@ -628,41 +1705,42 @@ public class FichaTreinoActivity extends AppCompatActivity {
 
     private String formatarData(String data) {
 
-        if (data == null || data.trim().isEmpty()) {
+        if (data == null ||
+                data.trim().isEmpty()) {
 
             return "Data não informada";
-
         }
 
 
         try {
 
-            // SQLite normalmente retorna:
-            // 2026-09-14 13:20:00
-
             if (data.length() >= 10) {
 
-                String ano = data.substring(0, 4);
+                String ano =
+                        data.substring(0, 4);
 
-                String mes = data.substring(5, 7);
+                String mes =
+                        data.substring(5, 7);
 
-                String dia = data.substring(8, 10);
+                String dia =
+                        data.substring(8, 10);
 
 
-                return "Criado em " + dia + "/" + mes + "/" + ano;
-
+                return "Criado em " +
+                        dia +
+                        "/" +
+                        mes +
+                        "/" +
+                        ano;
             }
-
 
         } catch (Exception erro) {
 
             erro.printStackTrace();
-
         }
 
 
         return "Criado em " + data;
-
     }
 
 }
